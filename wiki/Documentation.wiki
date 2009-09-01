@@ -8,7 +8,7 @@ To start using plug-in in your grails application just add property
 def burningImageService
 }}}
 
-in your controller / service. Grails will initialize and inject it to this variable. Now must specify what we want to manipulate and where it should be stored. Plug-in could manipulate images from two source. It could be file already stored on server:
+in your controller / service. Grails will initialize and inject it to this variable. Now we must specify what we want to manipulate and where it should be stored. Plug-in could manipulate images from two source. It could be file already stored on server:
 
 {{{
 burningImageService.loadImage('path/to/image').resultDir('path/to/output/dir')
@@ -96,5 +96,3 @@ burningImageService.loadImage('path/to/my/file')
 }}}
 
 Only path to watermark is required. Watermark location is optional. If there is no location map watermark will be put on the center of image. If you want to specify location, remember that mix of positions top-bottom and left-right is not allowed. There could be specified only one location option - in this case other will be centered. 
-
-
