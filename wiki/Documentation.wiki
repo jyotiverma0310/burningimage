@@ -1,6 +1,6 @@
-#summary One-sentence summary of this page.
+#summary BurningImage plugin usage documentation
 
-= Introduction =
+= BurningImage plugin usage documentation =
 
 Add your content here.
 
