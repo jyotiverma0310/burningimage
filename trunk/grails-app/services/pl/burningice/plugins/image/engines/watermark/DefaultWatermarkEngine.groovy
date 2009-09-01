@@ -74,19 +74,33 @@ class DefaultWatermarkEngine {
      * @return [] Array where 0 index delta from left and 1 index is delta from top of image
      */
     private def transfromPostionon(watermark, fileToMark, position){
-        // standard coordinates
-        if (position['left'] != null && position['top'] != null) {
-            return [position['left'],
-                    position['top']]
+        def left, top
+
+        if (position['left'] != null) {
+            left = position['left']
         }
-        // reversed coordinates
-        if (position['right'] != null && position['bottom'] != null) {
-            return [fileToMark.width - position['right'] - watermark.width,
-                    fileToMark.height - position['bottom'] - watermark.height]
+
+        if (position['top'] != null) {
+            top = position['top']
         }
-        // no coordinates - center
-        [(fileToMark.width - watermark.width)/2,
-         (fileToMark.height - watermark.height)/2]
+
+        if (position['right'] != null) {
+            left = fileToMark.width - position['right'] - watermark.width
+        }
+
+        if (position['bottom'] != null) {
+            top = fileToMark.height - position['bottom'] - watermark.height
+        }
+
+        if (!left) {
+            left = (fileToMark.width - watermark.width)/2
+        }
+
+        if (!top) {
+            top = (fileToMark.height - watermark.height)/2
+        }
+
+        [left, top]
     }
 }
 
