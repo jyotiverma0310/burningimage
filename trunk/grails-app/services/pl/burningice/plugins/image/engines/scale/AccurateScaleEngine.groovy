@@ -37,11 +37,20 @@ import com.sun.media.jai.codec.*;
 private class AccurateScaleEngine extends ScaleEngine {
 
     /**
+     * Sometimes scale of image is lowered by 1px and when
+     * there is crop action, exception is rised becouse
+     * crop region not match. If wee add 1px to requested size, it will corect error
+     *
+     * @var int
+     */
+    private static final SIZE_CORRECTION = 1
+
+    /**
      * @see ScaleEngine#scaleImage(image, width, height)
      */
     protected def scaleImage(image, width, height) {
-        def scaleX = width / image.width
-        def scaleY = height / image.height
+        def scaleX = (width + SIZE_CORRECTION) / image.width
+        def scaleY = (height + SIZE_CORRECTION) / image.height
 
         def scale = (scaleX < scaleY ? scaleY : scaleX)
 
@@ -60,8 +69,8 @@ private class AccurateScaleEngine extends ScaleEngine {
 
         ParameterBlock cropParams = new ParameterBlock();
         cropParams.addSource(scaledImage);
-        cropParams.add(scaledImage.width > width ? (float) Math.floor((scaledImage.width - width) / 2) : 0f)
-        cropParams.add(scaledImage.height > height ? (float) Math.floor((scaledImage.height - height) / 2) : 0f)
+        cropParams.add((float)Math.floor((scaledImage.width - width) / 2))
+        cropParams.add((float)Math.floor((scaledImage.height - height) / 2))
         cropParams.add((float) width)
         cropParams.add((float) height)
 
