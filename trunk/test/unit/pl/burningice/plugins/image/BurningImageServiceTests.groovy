@@ -22,7 +22,7 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     }
 
     void testLoadImageLocal() {
-         shouldFail(IllegalArgumentException){
+        shouldFail(IllegalArgumentException){
             burningImageService.loadImage(null)
         }
 
@@ -63,10 +63,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleApproximateLocalFileJpg() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'jpgFile.jpg', scaleResult
@@ -77,10 +77,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleApproximateLocalFileBmp() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/bmpFile.bmp')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'bmpFile.bmp', scaleResult
@@ -90,10 +90,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleApproximateLocalFileGif() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/gifFile.gif')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'gifFile.jpg', scaleResult
@@ -103,23 +103,23 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleApproximateLocalFilePng() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/pngFile.png')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'pngFile.png', scaleResult
         assertTrue new File("./resources/resultImages/${scaleResult}").exists()
     }
 
-        void testScaleApproximateLocalFileJpgNameGived() {
+    void testScaleApproximateLocalFileJpgNameGived() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute ('jpgx200x200', {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute ('jpgx200x200', {
+                scaleResult = it.scaleApproximate(200, 200)
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'jpgx200x200.jpg', scaleResult
@@ -130,10 +130,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleApproximateLocalFileBmpNameGived() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/bmpFile.bmp')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute('bmpx200x200', {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute('bmpx200x200', {
+                scaleResult = it.scaleApproximate(200, 200)
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'bmpx200x200.bmp', scaleResult
@@ -143,10 +143,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleApproximateLocalFileGifNameGived() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/gifFile.gif')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute('gifx200x200', {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute('gifx200x200', {
+                scaleResult = it.scaleApproximate(200, 200)
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'gifx200x200.jpg', scaleResult
@@ -156,10 +156,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleApproximateLocalFilePngNameGived() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/pngFile.png')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute('pngx200x200', {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute('pngx200x200', {
+                scaleResult = it.scaleApproximate(200, 200)
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'pngx200x200.png', scaleResult
@@ -169,10 +169,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleAccurateLocalFileJpg() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleAccurate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleAccurate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'jpgFile.jpg', scaleResult
@@ -183,10 +183,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleAccurateLocalFileBmp() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/bmpFile.bmp')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleAccurate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleAccurate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'bmpFile.bmp', scaleResult
@@ -196,10 +196,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleAccurateLocalFileGif() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/gifFile.gif')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleAccurate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleAccurate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'gifFile.jpg', scaleResult
@@ -209,23 +209,37 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleAccurateLocalFilePng() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/pngFile.png')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleAccurate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleAccurate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'pngFile.png', scaleResult
         assertTrue new File("./resources/resultImages/${scaleResult}").exists()
     }
 
-        void testScaleAccurateLocalFileJpgNameGived() {
+    void testScaleAccurateLocalFileJpg2() {
+        def scaleResult
+        def result = burningImageService.loadImage('./resources/testImages/1680x1050_HD_Wallpaper_153_Zixpk.jpg')
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleAccurate(178, 178)
+        }
+
+        assertTrue result instanceof BurningImageService
+        assertEquals '1680x1050_HD_Wallpaper_153_Zixpk.jpg', scaleResult
+        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+    }
+
+
+    void testScaleAccurateLocalFileJpgNameGived() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute ('jpgx200x200', {
-                                            scaleResult = it.scaleAccurate(200, 200)
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute ('jpgx200x200', {
+                scaleResult = it.scaleAccurate(200, 200)
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'jpgx200x200.jpg', scaleResult
@@ -236,10 +250,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleAccurateLocalFileBmpNameGived() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/bmpFile.bmp')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute('bmpx200x200', {
-                                            scaleResult = it.scaleAccurate(200, 200)
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute('bmpx200x200', {
+                scaleResult = it.scaleAccurate(200, 200)
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'bmpx200x200.bmp', scaleResult
@@ -249,10 +263,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleAccurateLocalFileGifNameGived() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/gifFile.gif')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute('gifx200x200', {
-                                            scaleResult = it.scaleAccurate(200, 200)
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute('gifx200x200', {
+                scaleResult = it.scaleAccurate(200, 200)
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'gifx200x200.jpg', scaleResult
@@ -262,10 +276,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testScaleAccurateLocalFilePngNameGived() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/pngFile.png')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute('pngx200x200', {
-                                            scaleResult = it.scaleAccurate(200, 200)
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute('pngx200x200', {
+                scaleResult = it.scaleAccurate(200, 200)
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'pngx200x200.png', scaleResult
@@ -282,10 +296,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
 
         def result = burningImageService.loadImage(uploadedFile)
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'jpgFile.jpg', scaleResult
@@ -303,10 +317,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
 
         def result = burningImageService.loadImage(uploadedFile)
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'gifFile.jpg', scaleResult
@@ -324,10 +338,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
 
         def result = burningImageService.loadImage(uploadedFile)
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'pngFile.png', scaleResult
@@ -345,10 +359,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
 
         def result = burningImageService.loadImage(uploadedFile)
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(200, 200)
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'bmpFile.bmp', scaleResult
@@ -359,44 +373,44 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testWatermarkError() {
         shouldFail(IllegalArgumentException){
             def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                            .resultDir('./resources/resultImages/')
-                                            .execute {
-                                                it.watermark(null, null)
-                                            }
+            .resultDir('./resources/resultImages/')
+            .execute {
+                it.watermark(null, null)
+            }
         }
 
         shouldFail(IllegalArgumentException){
             def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                            .resultDir('./resources/resultImages/')
-                                            .execute {
-                                                it.watermark('/not/exists', ['left':10, 'right': 10])
-                                            }
+            .resultDir('./resources/resultImages/')
+            .execute {
+                it.watermark('/not/exists', ['left':10, 'right': 10])
+            }
         }
 
         shouldFail(IllegalArgumentException){
             def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                            .resultDir('./resources/resultImages/')
-                                            .execute {
-                                                it.watermark('/not/exists', ['top':10, 'bottom': 10])
-                                            }
+            .resultDir('./resources/resultImages/')
+            .execute {
+                it.watermark('/not/exists', ['top':10, 'bottom': 10])
+            }
         }
 
         shouldFail(FileNotFoundException){
             def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                            .resultDir('./resources/resultImages/')
-                                            .execute {
-                                                it.watermark('/not/exists')
-                                            }
+            .resultDir('./resources/resultImages/')
+            .execute {
+                it.watermark('/not/exists')
+            }
         }
     }
 
     void testWatermarkLocalJpg() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.watermark('./resources/testImages/watermark.png')
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.watermark('./resources/testImages/watermark.png')
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'jpgFile.jpg', scaleResult
@@ -406,10 +420,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testWatermarkLocalGif() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/gifFile.gif')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.watermark('./resources/testImages/watermark.png')
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.watermark('./resources/testImages/watermark.png')
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'gifFile.jpg', scaleResult
@@ -419,10 +433,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testWatermarkLocalPng() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/pngFile.png')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.watermark('./resources/testImages/watermark.png')
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.watermark('./resources/testImages/watermark.png')
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'pngFile.png', scaleResult
@@ -433,10 +447,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testWatermarkLocalBmp() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/bmpFile.bmp')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute {
-                                            scaleResult = it.watermark('./resources/testImages/watermark.png')
-                                        }
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.watermark('./resources/testImages/watermark.png')
+        }
 
         assertTrue result instanceof BurningImageService
         assertEquals 'bmpFile.bmp', scaleResult
@@ -446,10 +460,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testWatermarkLocalJpgLocation() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute('left-top-watermark', {
-                                            scaleResult = it.watermark('./resources/testImages/watermark.png', ['left': 20, 'top': 20])
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute('left-top-watermark', {
+                scaleResult = it.watermark('./resources/testImages/watermark.png', ['left': 20, 'top': 20])
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'left-top-watermark.jpg', scaleResult
@@ -457,10 +471,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
 
         
         result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                    .resultDir('./resources/resultImages/')
-                                    .execute('right-bottom-watermark', {
-                                        scaleResult = it.watermark('./resources/testImages/watermark.png', ['right': 20, 'bottom': 20])
-                                    })
+        .resultDir('./resources/resultImages/')
+        .execute('right-bottom-watermark', {
+                scaleResult = it.watermark('./resources/testImages/watermark.png', ['right': 20, 'bottom': 20])
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'right-bottom-watermark.jpg', scaleResult
@@ -477,10 +491,10 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
         
         def result = burningImageService.loadImage(uploadedFile)
-                                        .resultDir('./resources/resultImages/')
-                                        .execute('remote-watermark', {
-                                            scaleResult = it.watermark('./resources/testImages/watermark.png')
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute('remote-watermark', {
+                scaleResult = it.watermark('./resources/testImages/watermark.png')
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'remote-watermark.png', scaleResult
@@ -490,42 +504,42 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     void testChaining() {
         def scaleResult
         def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                        .resultDir('./resources/resultImages/')
-                                        .execute('watermark-scale', {
-                                            it.watermark('./resources/testImages/watermark.png')
-                                            scaleResult = it.scaleApproximate(200, 200)
-                                        })
+        .resultDir('./resources/resultImages/')
+        .execute('watermark-scale', {
+                it.watermark('./resources/testImages/watermark.png')
+                scaleResult = it.scaleApproximate(200, 200)
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'watermark-scale.jpg', scaleResult
         assertTrue new File("./resources/resultImages/${scaleResult}").exists()
 
         result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-                                    .resultDir('./resources/resultImages/')
-                                    .execute('scale-watermark', {
-                                        it.scaleApproximate(200, 200)
-                                        scaleResult = it.watermark('./resources/testImages/watermark.png')
-                                    })
+        .resultDir('./resources/resultImages/')
+        .execute('scale-watermark', {
+                it.scaleApproximate(200, 200)
+                scaleResult = it.watermark('./resources/testImages/watermark.png')
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'scale-watermark.jpg', scaleResult
         assertTrue new File("./resources/resultImages/${scaleResult}").exists()
 
         result = burningImageService.loadImage('./resources/testImages/pngFile.png')
-                                    .resultDir('./resources/resultImages/')
-                                    .execute('first-scale-watermark', {
-                                        it.scaleAccurate(300, 300)
-                                        scaleResult = it.watermark('./resources/testImages/watermark.png')
-                                    })
+        .resultDir('./resources/resultImages/')
+        .execute('first-scale-watermark', {
+                it.scaleAccurate(300, 300)
+                scaleResult = it.watermark('./resources/testImages/watermark.png')
+            })
 
         assertTrue result instanceof BurningImageService
         assertEquals 'first-scale-watermark.png', scaleResult
         assertTrue new File("./resources/resultImages/${scaleResult}").exists()
 
         result.execute('second-watermark-scale', {
-                   it.scaleAccurate(200, 300)
-                   scaleResult = it.watermark('./resources/testImages/watermark.png')
-               })
+                it.scaleAccurate(200, 300)
+                scaleResult = it.watermark('./resources/testImages/watermark.png')
+            })
 
         assertEquals 'second-watermark-scale.png', scaleResult
         assertTrue new File("./resources/resultImages/${scaleResult}").exists()
