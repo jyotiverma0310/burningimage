@@ -545,4 +545,82 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         assertTrue new File("./resources/resultImages/${scaleResult}").exists()
 
     }
+
+    void testScaleAccurateLocalFileToSmall() {
+        def scaleResult
+        def result = burningImageService.loadImage('./resources/testImages/small.jpeg')
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleAccurate(800, 800)
+        }
+
+        assertTrue result instanceof BurningImageService
+        assertEquals 'small.jpeg', scaleResult
+        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+    }
+
+    void testScaleAccurateLocalFileToSmallWidth() {
+        def scaleResult
+        def result = burningImageService.loadImage('./resources/testImages/small.jpeg')
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleAccurate(800, 50)
+        }
+
+        assertTrue result instanceof BurningImageService
+        assertEquals 'small.jpeg', scaleResult
+        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+    }
+
+    void testScaleAccurateLocalFileToSmallHeight() {
+        def scaleResult
+        def result = burningImageService.loadImage('./resources/testImages/small.jpeg')
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleAccurate(50, 800)
+        }
+
+        assertTrue result instanceof BurningImageService
+        assertEquals 'small.jpeg', scaleResult
+        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+    }
+
+    void testScaleApproximateLocalFileToSmall() {
+        def scaleResult
+        def result = burningImageService.loadImage('./resources/testImages/small.jpeg')
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(800, 800)
+        }
+
+        assertTrue result instanceof BurningImageService
+        assertEquals 'small.jpeg', scaleResult
+        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+    }
+
+    void testScaleApproximateLocalFileToWidth() {
+        def scaleResult
+        def result = burningImageService.loadImage('./resources/testImages/small.jpeg')
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(800, 50)
+        }
+
+        assertTrue result instanceof BurningImageService
+        assertEquals 'small.jpeg', scaleResult
+        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+    }
+
+    void testScaleApproximateLocalFileToHeight() {
+        def scaleResult
+        def result = burningImageService.loadImage('./resources/testImages/small.jpeg')
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleApproximate(50, 800)
+        }
+
+        assertTrue result instanceof BurningImageService
+        assertEquals 'small.jpeg', scaleResult
+        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+    }
 }

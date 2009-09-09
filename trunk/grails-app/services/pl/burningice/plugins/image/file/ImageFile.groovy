@@ -51,6 +51,7 @@ abstract class ImageFile {
     @Lazy
     def extensionEncoderMapping = [
         'jpg': 'JPEG',
+        'jpeg': 'JPEG',
         'gif': 'JPEG',
         'bmp': 'BMP',
         'png': 'PNG'
