@@ -25,6 +25,7 @@ package pl.burningice.plugins.image.engines.scale
 import java.awt.image.renderable.ParameterBlock
 import javax.media.jai.*;
 import com.sun.media.jai.codec.*;
+import javax.imageio.ImageIO
 
 /**
  * Class allows to scale image with accourate width and height.
@@ -53,7 +54,7 @@ private class AccurateScaleEngine extends ApproximateScaleEngine {
         def scaleX = (width + SIZE_CORRECTION) / image.width
         def scaleY = (height + SIZE_CORRECTION) / image.height
         def scaledImage = resize(scaleX < scaleY ? scaleY : scaleX)(image)
-
+        
         if (scaledImage.width ==  width
             && scaledImage.height == height ){
             return scaledImage
@@ -61,10 +62,10 @@ private class AccurateScaleEngine extends ApproximateScaleEngine {
 
         ParameterBlock cropParams = new ParameterBlock();
         cropParams.addSource(scaledImage);
-        cropParams.add((float)Math.floor((scaledImage.width - width) / 2))
-        cropParams.add((float)Math.floor((scaledImage.height - height) / 2))
-        cropParams.add((float) width)
-        cropParams.add((float) height)
+        cropParams.add((float)Math.floor((scaledImage.width - width) / 2)) // delta x
+        cropParams.add((float)Math.floor((scaledImage.height - height) / 2)) // delta y
+        cropParams.add((float)width) // width
+        cropParams.add((float)height) // height
 
         JAI.create('crop', cropParams)
     }

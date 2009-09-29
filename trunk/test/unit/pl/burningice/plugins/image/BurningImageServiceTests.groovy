@@ -623,4 +623,16 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         assertEquals 'small.jpeg', scaleResult
         assertTrue new File("./resources/resultImages/${scaleResult}").exists()
     }
+
+    void testCorrectCropping() {
+        def scaleResult
+        def result = burningImageService.loadImage('./resources/testImages/01822_looseleaf_1600x1200.jpg')
+        .resultDir('./resources/resultImages/')
+        .execute {
+            scaleResult = it.scaleAccurate(150, 200)
+        }
+        assertTrue result instanceof BurningImageService
+        assertEquals '01822_looseleaf_1600x1200.jpg', scaleResult
+        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+    }
 }
