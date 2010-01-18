@@ -95,4 +95,4 @@ burningImageService.loadImage('path/to/my/file')
                     }
 }}}
 
-Only path to watermark is required. Watermark location is optional. If there is no location, map watermark will be put on the center of image. If you want to specify location, remember that mix of positions top-bottom and left-right is not allowed. There could be specified only one location option - in this case other will be centered. 
+Only path to watermark is required. Watermark location is optional. If there is no location map, watermark will be put on the center of image. If you want to specify location, remember that mix of positions top-bottom and left-right is not allowed. There could be specified only one location option - in other case it will be centered. 
