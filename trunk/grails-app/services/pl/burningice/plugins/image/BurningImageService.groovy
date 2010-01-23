@@ -49,102 +49,41 @@ class BurningImageService {
      */
     private def loadedImage
 
-    /**
-     * Allows to load image from spcified local source
-     *
-     * @throws IllegalArgumentException
-     * @throws FileNotFoundException
-     * @param String filePath Path to image
-     * @return BurningImageService
-     */
-    def loadImage(String filePath) {
-        if (!filePath) {
-            throw new IllegalArgumentException('There is no file path specified')
+    def doWith(String filePath, String resultDir){
+        if (!filePath || !resultDir) {
+            throw new IllegalArgumentException('Source file and output directory paths must be provided')
         }
 
         def file = new File(filePath)
 
         if (!file.exists()) {
-            throw new FileNotFoundException("There is no file ${filePath}")
+            throw new FileNotFoundException("There is no source file: ${filePath}")
         }
 
-        loadedImage = ImageFileFactory.produce(file)
-        this
+        getWorker(file, resultDir)
     }
 
-    /**
-     * Allows to load image from uploaded file
-     *
-     * @throws IllegalArgumentException
-     * @throws FileNotFoundException
-     * @param String filePath Path to image
-     * @return BurningImageService
-     */
-    def loadImage(MultipartFile file) {
-        if (!file) {
-            throw new IllegalArgumentException('There is no uploaded file')
+   def doWith(MultipartFile file, String resultDir) {
+        if (!file || !resultDir) {
+            throw new IllegalArgumentException('Source file and output directory path must be provided')
         }
 
         if (file.isEmpty()) {
             throw new FileNotFoundException("Uploaded file ${file.originalFilename} is empty")
         }
 
-        loadedImage = ImageFileFactory.produce(file)
-        this
+        getWorker(file, resultDir)
     }
 
-    /**
-     * Methods allows to set global setting for output direcotry
-     *
-     * @throws IllegalArgumentException
-     * @throws FileNotFoundException
-     * @param String resultDir Path to direcotry where images should be saved
-     * @return BurningImageService
-     */
-    def resultDir(String resultDir){
-        if (!resultDir) {
-            throw new IllegalArgumentException('There is no result directory')
-        }
-
+    private def getWorker(file, resultDir){
         if (!(new File(resultDir).exists())) {
-            throw new FileNotFoundException("There is no ${resultDir} directory")
+            throw new FileNotFoundException("There is no output ${resultDir} directory")
         }
-
+        
         if (resultDir[-1] == '/'){
             resultDir = resultDir[0..-2]
         }
 
-        this.resultDir = resultDir
-        this
-    }
-
-    /**
-     * Methods execute action on image
-     * It use as a output file name name of orginal image
-     *
-     * @param Closure chain Chain of action on image
-     * @return BurningImageService
-     */
-    def execute (chain) {
-        chain(new ActionBuilder(loadedImage:loadedImage,
-                                outputFilePath: "${resultDir}/${loadedImage.name}",
-                                fileName: loadedImage.name))
-        this
-    }
-
-    /**
-     * Methods execute action on image
-     * Allows to specify output name by the user
-     *
-     * @param String Name of output image (without extension)
-     * @param Closure chain Chain of action on image
-     * @return BurningImageService
-     */
-    def execute (outputFileName, chain) {
-        def fileName = "${outputFileName}.${loadedImage.extension}"
-        chain(new ActionBuilder(loadedImage:loadedImage,
-                                outputFilePath: "${resultDir}/${fileName}",
-                                fileName: fileName))
-        this
+        new Worker(loadedImage:ImageFileFactory.produce(file), resultDir:resultDir)
     }
 }

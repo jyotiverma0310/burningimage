@@ -5,19 +5,9 @@
   <description>Image manipulation plugin</description>
   <documentation>http://code.google.com/p/burningimage/wiki/Documentation</documentation>
   <resources>
+    <resource>pl.burningice.plugins.image.BurningImageService</resource>
     <resource>DataSource</resource>
     <resource>UrlMappings</resource>
-    <resource>pl.burningice.plugins.image.BurningImageService</resource>
-    <resource>pl.burningice.plugins.image.engines.ActionBuilder</resource>
-    <resource>pl.burningice.plugins.image.engines.scale.AccurateScaleEngine</resource>
-    <resource>pl.burningice.plugins.image.engines.scale.ApproximateScaleEngine</resource>
-    <resource>pl.burningice.plugins.image.engines.scale.ScaleEngine</resource>
-    <resource>pl.burningice.plugins.image.engines.scale.ScaleEngineFactory</resource>
-    <resource>pl.burningice.plugins.image.engines.watermark.DefaultWatermarkEngine</resource>
-    <resource>pl.burningice.plugins.image.file.ImageFile</resource>
-    <resource>pl.burningice.plugins.image.file.ImageFileFactory</resource>
-    <resource>pl.burningice.plugins.image.file.LocalImageFile</resource>
-    <resource>pl.burningice.plugins.image.file.MultipartImageFile</resource>
   </resources>
   <dependencies />
 </plugin>
