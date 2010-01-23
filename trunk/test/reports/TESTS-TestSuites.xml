@@ -1,127 +1,159 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" hostname="espeo-pawel" id="0" name="BurningImageServiceTests" package="pl.burningice.plugins.image" tests="38" time="11.844" timestamp="2009-09-09T14:51:56">
+  <testsuite errors="0" failures="0" hostname="pawel" id="0" name="BurningImageServiceTests" package="pl.burningice.plugins.image" tests="15" time="18.698" timestamp="2010-01-23T00:34:55">
       <properties />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testLoadImageLocal" time="0.187" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testBaseSetupLocalFile" time="0.312" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testLoadImageMultipart" time="0.032" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testBaseSetupMultipart" time="0.135" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testResultDir" time="0.015" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileJpg" time="2.458" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileJpg" time="1.0" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileJpgBig" time="0.615" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileBmp" time="0.063" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileJpg" time="2.241" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileGif" time="0.062" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileJpgWithName" time="1.561" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFilePng" time="0.453" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileBmp" time="0.52" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileJpgNameGived" time="0.172" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileBmp" time="1.248" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileBmpNameGived" time="0.219" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileBmpWithName" time="0.53" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileGifNameGived" time="0.047" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFilePng" time="2.573" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFilePngNameGived" time="0.265" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFilePng" time="1.973" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileJpg" time="0.344" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFilePngWithName" time="1.584" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileBmp" time="0.047" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileGif" time="1.018" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileGif" time="0.047" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileGif" time="1.268" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFilePng" time="0.281" />
+      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileGifWithName" time="0.656" />
 
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileJpg2" time="0.203" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileJpgNameGived" time="0.328" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileBmpNameGived" time="0.047" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileGifNameGived" time="0.047" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFilePngNameGived" time="0.313" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateRemoteFileJpg" time="0.172" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateRemoteFileGif" time="0.203" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateRemoteFilePng" time="0.265" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateRemoteFileBmp" time="0.047" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkError" time="0.063" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalJpg" time="0.406" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalGif" time="0.094" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalPng" time="0.437" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalBmp" time="0.031" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalJpgLocation" time="0.579" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkRemoteJpgLocation" time="3.64" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testChaining" time="1.531" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileToSmall" time="0.079" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileToSmallWidth" time="0.015" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileToSmallHeight" time="0.016" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileToSmall" time="0.062" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileToWidth" time="0.016" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileToHeight" time="0.016" />
-
-      <system-out><![CDATA[--Output from testLoadImageLocal--
---Output from testLoadImageMultipart--
---Output from testResultDir--
+      <system-out><![CDATA[--Output from testBaseSetupLocalFile--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/2000x2000.jpg
+--Output from testBaseSetupMultipart--
+----------------------------------------------------------------------------------------------------
 --Output from testScaleApproximateLocalFileJpg--
---Output from testScaleApproximateLocalFileBmp--
---Output from testScaleApproximateLocalFileGif--
---Output from testScaleApproximateLocalFilePng--
---Output from testScaleApproximateLocalFileJpgNameGived--
---Output from testScaleApproximateLocalFileBmpNameGived--
---Output from testScaleApproximateLocalFileGifNameGived--
---Output from testScaleApproximateLocalFilePngNameGived--
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+--Output from testScaleAccurateLocalFileJpgBig--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image2.jpg
 --Output from testScaleAccurateLocalFileJpg--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image2.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+--Output from testScaleApproximateLocalFileJpgWithName--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/jpg-50x50.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/jpg-50x2000.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/jpg-2000x50.jpg
+--Output from testScaleApproximateLocalFileBmp--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/jpg-2000x2000.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.bmp
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.bmp
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.bmp
 --Output from testScaleAccurateLocalFileBmp--
---Output from testScaleAccurateLocalFileGif--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.bmp
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.bmp
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.bmp
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.bmp
+--Output from testScaleApproximateLocalFileBmpWithName--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.bmp
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/bmp-50x50.bmp
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/bmp-50x2000.bmp
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/bmp-2000x50.bmp
+--Output from testScaleApproximateLocalFilePng--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/bmp-2000x2000.bmp
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.png
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.png
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.png
 --Output from testScaleAccurateLocalFilePng--
---Output from testScaleAccurateLocalFileJpg2--
---Output from testScaleAccurateLocalFileJpgNameGived--
---Output from testScaleAccurateLocalFileBmpNameGived--
---Output from testScaleAccurateLocalFileGifNameGived--
---Output from testScaleAccurateLocalFilePngNameGived--
---Output from testScaleApproximateRemoteFileJpg--
---Output from testScaleApproximateRemoteFileGif--
---Output from testScaleApproximateRemoteFilePng--
---Output from testScaleApproximateRemoteFileBmp--
---Output from testWatermarkError--
---Output from testWatermarkLocalJpg--
---Output from testWatermarkLocalGif--
---Output from testWatermarkLocalPng--
---Output from testWatermarkLocalBmp--
---Output from testWatermarkLocalJpgLocation--
---Output from testWatermarkRemoteJpgLocation--
---Output from testChaining--
---Output from testScaleAccurateLocalFileToSmall--
---Output from testScaleAccurateLocalFileToSmallWidth--
---Output from testScaleAccurateLocalFileToSmallHeight--
---Output from testScaleApproximateLocalFileToSmall--
---Output from testScaleApproximateLocalFileToWidth--
---Output from testScaleApproximateLocalFileToHeight--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.png
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.png
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.png
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.png
+--Output from testScaleApproximateLocalFilePngWithName--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.png
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/png-50x50.png
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/png-50x2000.png
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/png-2000x50.png
+--Output from testScaleApproximateLocalFileGif--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/png-2000x2000.png
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+--Output from testScaleAccurateLocalFileGif--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+--Output from testScaleApproximateLocalFileGifWithName--
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/image.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/50x50.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/50x2000.jpg
+----------------------------------------------------------------------------------------------------
+Remove ./resources/resultImages/2000x50.jpg
 ]]></system-out>
 
-      <system-err><![CDATA[--Output from testLoadImageLocal--
---Output from testLoadImageMultipart--
---Output from testResultDir--
+      <system-err><![CDATA[--Output from testBaseSetupLocalFile--
+--Output from testBaseSetupMultipart--
 --Output from testScaleApproximateLocalFileJpg--
 Error: Could not find mediaLib accelerator wrapper classes. Continuing in pure Java mode.
 Occurs in: com.sun.media.jai.mlib.MediaLibAccessor
@@ -143,27 +175,29 @@ java.lang.NoClassDefFoundError: com/sun/medialib/mlib/Image
 	at javax.media.jai.registry.RIFRegistry.create(RIFRegistry.java:332)
 	at javax.media.jai.RenderedOp.createInstance(RenderedOp.java:819)
 	at javax.media.jai.RenderedOp.createRendering(RenderedOp.java:867)
-	at javax.media.jai.RenderedOp.getRendering(RenderedOp.java:888)
-	at javax.media.jai.RenderedOp.createInstance(RenderedOp.java:799)
-	at javax.media.jai.RenderedOp.createRendering(RenderedOp.java:867)
-	at javax.media.jai.RenderedOp.getRendering(RenderedOp.java:888)
-	at javax.media.jai.JAI.createNS(JAI.java:1099)
-	at javax.media.jai.JAI.create(JAI.java:973)
-	at javax.media.jai.JAI.create(JAI.java:1668)
-	at javax.media.jai.JAI$create$1.call(Unknown Source)
+	at javax.media.jai.RenderedOp.getColorModel(RenderedOp.java:2242)
+	at javax.media.jai.PlanarImage.getAsBufferedImage(PlanarImage.java:2498)
+	at javax.media.jai.PlanarImage.getAsBufferedImage(PlanarImage.java:2546)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite$PojoCachedMethodSiteNoUnwrapNoCoerce.invoke(PojoMetaMethodSite.java:229)
+	at org.codehaus.groovy.runtime.callsite.PojoMetaMethodSite.call(PojoMetaMethodSite.java:52)
 	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:40)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:117)
-	at pl.burningice.plugins.image.engines.scale.ScaleEngine.execute(ScaleEngine.groovy:54)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:121)
+	at pl.burningice.plugins.image.engines.scale.ScaleEngine.execute(ScaleEngine.groovy:55)
 	at pl.burningice.plugins.image.engines.scale.ScaleEngine$execute.call(Unknown Source)
 	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:40)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:117)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:137)
-	at pl.burningice.plugins.image.engines.ActionBuilder.scaleApproximate(ActionBuilder.groovy:75)
-	at pl.burningice.plugins.image.engines.ActionBuilder$scaleApproximate.call(Unknown Source)
+	at pl.burningice.plugins.image.engines.Action.scaleApproximate(Action.groovy:75)
+	at pl.burningice.plugins.image.engines.Action$scaleApproximate.call(Unknown Source)
 	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:40)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:117)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:129)
-	at pl.burningice.plugins.image.BurningImageServiceTests$_testScaleApproximateLocalFileJpg_closure7.doCall(BurningImageServiceTests.groovy:68)
+	at pl.burningice.plugins.image.BurningImageServiceTests$_testScaleApproximateLocalFileJpg_closure12.doCall(BurningImageServiceTests.groovy:115)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
@@ -179,12 +213,12 @@ java.lang.NoClassDefFoundError: com/sun/medialib/mlib/Image
 	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:40)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:117)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:125)
-	at pl.burningice.plugins.image.BurningImageService.execute(BurningImageService.groovy:129)
-	at pl.burningice.plugins.image.BurningImageService$execute.call(Unknown Source)
+	at pl.burningice.plugins.image.engines.Worker.execute(Worker.groovy:37)
+	at pl.burningice.plugins.image.engines.Worker$execute.call(Unknown Source)
 	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:40)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:117)
 	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:125)
-	at pl.burningice.plugins.image.BurningImageServiceTests.testScaleApproximateLocalFileJpg(BurningImageServiceTests.groovy:65)
+	at pl.burningice.plugins.image.BurningImageServiceTests.testScaleApproximateLocalFileJpg(BurningImageServiceTests.groovy:114)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
@@ -587,41 +621,19 @@ Caused by: java.lang.ClassNotFoundException: com.sun.medialib.mlib.Image
 	at org.codehaus.groovy.grails.cli.support.GrailsRootLoader.loadClass(GrailsRootLoader.java:43)
 	at java.lang.ClassLoader.loadClass(ClassLoader.java:252)
 	at java.lang.ClassLoader.loadClassInternal(ClassLoader.java:320)
-	... 454 more
---Output from testScaleApproximateLocalFileBmp--
---Output from testScaleApproximateLocalFileGif--
---Output from testScaleApproximateLocalFilePng--
---Output from testScaleApproximateLocalFileJpgNameGived--
---Output from testScaleApproximateLocalFileBmpNameGived--
---Output from testScaleApproximateLocalFileGifNameGived--
---Output from testScaleApproximateLocalFilePngNameGived--
+	... 456 more
+--Output from testScaleAccurateLocalFileJpgBig--
 --Output from testScaleAccurateLocalFileJpg--
+--Output from testScaleApproximateLocalFileJpgWithName--
+--Output from testScaleApproximateLocalFileBmp--
 --Output from testScaleAccurateLocalFileBmp--
---Output from testScaleAccurateLocalFileGif--
+--Output from testScaleApproximateLocalFileBmpWithName--
+--Output from testScaleApproximateLocalFilePng--
 --Output from testScaleAccurateLocalFilePng--
---Output from testScaleAccurateLocalFileJpg2--
---Output from testScaleAccurateLocalFileJpgNameGived--
---Output from testScaleAccurateLocalFileBmpNameGived--
---Output from testScaleAccurateLocalFileGifNameGived--
---Output from testScaleAccurateLocalFilePngNameGived--
---Output from testScaleApproximateRemoteFileJpg--
---Output from testScaleApproximateRemoteFileGif--
---Output from testScaleApproximateRemoteFilePng--
---Output from testScaleApproximateRemoteFileBmp--
---Output from testWatermarkError--
---Output from testWatermarkLocalJpg--
---Output from testWatermarkLocalGif--
---Output from testWatermarkLocalPng--
---Output from testWatermarkLocalBmp--
---Output from testWatermarkLocalJpgLocation--
---Output from testWatermarkRemoteJpgLocation--
---Output from testChaining--
---Output from testScaleAccurateLocalFileToSmall--
---Output from testScaleAccurateLocalFileToSmallWidth--
---Output from testScaleAccurateLocalFileToSmallHeight--
---Output from testScaleApproximateLocalFileToSmall--
---Output from testScaleApproximateLocalFileToWidth--
---Output from testScaleApproximateLocalFileToHeight--
+--Output from testScaleApproximateLocalFilePngWithName--
+--Output from testScaleApproximateLocalFileGif--
+--Output from testScaleAccurateLocalFileGif--
+--Output from testScaleApproximateLocalFileGifWithName--
 ]]></system-err>
 
   </testsuite>
