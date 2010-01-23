@@ -1,71 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites>
-  <testsuite errors="0" failures="0" hostname="pawel" id="0" name="BurningImageServiceTests" package="pl.burningice.plugins.image" tests="31" time="26.585" timestamp="2010-01-23T12:19:22">
-      <properties />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testBaseSetupLocalFile" time="0.246" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testBaseSetupMultipart" time="0.076" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateMultipartFile" time="2.257" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileJpg" time="1.098" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileJpgBig" time="0.369" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileJpg" time="1.514" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateMultipartFileJpg" time="1.492" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileJpgWithName" time="1.111" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateMultipartFileJpgWithName" time="1.187" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileBmp" time="0.51" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileBmp" time="0.741" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileBmpWithName" time="0.46" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFilePng" time="1.998" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFilePng" time="1.989" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFilePngWithName" time="1.579" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileGif" time="1.308" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileGif" time="1.006" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileGifWithName" time="0.643" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkError" time="0.066" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalJpg" time="0.653" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalGif" time="0.221" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalPng" time="0.759" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalBmp" time="0.046" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalJpgLocation" time="0.598" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkRemoteJpgLocation" time="0.74" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testChaining" time="1.71" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropError" time="1.241" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropJpgLocalFile" time="0.321" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropBmpLocalFile" time="0.032" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropPngLocalFile" time="0.548" />
-
-      <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropGifLocalFile" time="0.058" />
-
-      <system-out><![CDATA[--Output from testBaseSetupLocalFile--
+<testsuite errors="0" failures="0" hostname="pawel" name="pl.burningice.plugins.image.BurningImageServiceTests" tests="31" time="26.585" timestamp="2010-01-23T12:19:22">
+  <properties />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testBaseSetupLocalFile" time="0.246" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testBaseSetupMultipart" time="0.076" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateMultipartFile" time="2.257" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileJpg" time="1.098" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileJpgBig" time="0.369" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileJpg" time="1.514" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateMultipartFileJpg" time="1.492" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileJpgWithName" time="1.111" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateMultipartFileJpgWithName" time="1.187" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileBmp" time="0.51" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileBmp" time="0.741" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileBmpWithName" time="0.46" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFilePng" time="1.998" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFilePng" time="1.989" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFilePngWithName" time="1.579" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileGif" time="1.308" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleAccurateLocalFileGif" time="1.006" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testScaleApproximateLocalFileGifWithName" time="0.643" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkError" time="0.066" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalJpg" time="0.653" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalGif" time="0.221" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalPng" time="0.759" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalBmp" time="0.046" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkLocalJpgLocation" time="0.598" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testWatermarkRemoteJpgLocation" time="0.74" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testChaining" time="1.71" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropError" time="1.241" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropJpgLocalFile" time="0.321" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropBmpLocalFile" time="0.032" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropPngLocalFile" time="0.548" />
+  <testcase classname="pl.burningice.plugins.image.BurningImageServiceTests" name="testCropGifLocalFile" time="0.058" />
+  <system-out><![CDATA[--Output from testBaseSetupLocalFile--
 Remove ./resources/resultImages/image.jpg
 --Output from testBaseSetupMultipart--
 --Output from testScaleApproximateMultipartFile--
@@ -173,8 +140,7 @@ Remove ./resources/resultImages/image.bmp
 --Output from testCropGifLocalFile--
 Remove ./resources/resultImages/image.png
 ]]></system-out>
-
-      <system-err><![CDATA[--Output from testBaseSetupLocalFile--
+  <system-err><![CDATA[--Output from testBaseSetupLocalFile--
 --Output from testBaseSetupMultipart--
 --Output from testScaleApproximateMultipartFile--
 Error: Could not find mediaLib accelerator wrapper classes. Continuing in pure Java mode.
@@ -673,6 +639,4 @@ Caused by: java.lang.ClassNotFoundException: com.sun.medialib.mlib.Image
 --Output from testCropPngLocalFile--
 --Output from testCropGifLocalFile--
 ]]></system-err>
-
-  </testsuite>
-</testsuites>
+</testsuite>
