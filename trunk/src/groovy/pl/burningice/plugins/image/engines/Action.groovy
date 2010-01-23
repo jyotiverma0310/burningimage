@@ -24,6 +24,7 @@ package pl.burningice.plugins.image.engines
 
 import pl.burningice.plugins.image.engines.scale.*
 import pl.burningice.plugins.image.engines.watermark.DefaultWatermarkEngine
+import pl.burningice.plugins.image.engines.crop.DefaultCropEngine
 
 /**
  * Object allows to build chains of action
@@ -123,6 +124,28 @@ class Action {
         }
 
         loadedImage = new DefaultWatermarkEngine().execute(watermarkFile, loadedImage, outputFilePath, position, alpha)
+
+        fileName
+    }
+
+    def crop(deltaX, deltaY, width, height){
+        if (deltaX == null || deltaY == null || width == null || height == null){
+            throw new IllegalArgumentException("Parameters cant be null: deltaX = ${deltaX}, deltaY = ${deltaY}, width = ${width}, height = ${height}")
+        }
+
+        if (deltaX < 0 || deltaY < 0 || width <= 0 || height <= 0){
+            throw new IllegalArgumentException("Delta parameters smaller than 0, dimension smaller or equal 0: deltaX = ${deltaX}, deltaY = ${deltaY}, width = ${width}, height = ${height}")
+        }
+
+        def image = loadedImage.getAsJaiStream()
+
+        if (deltaX > image.width || deltaY > image.height
+            || width > image.width || height > image.height
+            || (deltaX + width) > image.width || (deltaY + height) > image.height){
+            throw new IllegalArgumentException('Crop region not match to image size')
+        }
+
+        loadedImage = new DefaultCropEngine().execute(loadedImage, outputFilePath, deltaX, deltaY, width, height)
 
         fileName
     }

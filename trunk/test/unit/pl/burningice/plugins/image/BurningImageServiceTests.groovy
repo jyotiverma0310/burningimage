@@ -29,7 +29,6 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     }
 
     protected void cleanUpTestDir(){
-        println "-" * 100
         new File(RESULT_DIR).list().toList().each {
             if(it != '.svn'){
                 def filePath = "${RESULT_DIR}${it}"
@@ -46,9 +45,9 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     protected def getFilePath(fileName){
         "${SOURCE_DIR}${fileName}"
     }
-
-    protected def getFile(fileName){
-        ImageIO.read(new File("${RESULT_DIR}${fileName}"))
+    
+    protected def getFile(fileName, dir = null){
+        ImageIO.read(new File("${dir ?: RESULT_DIR}${fileName}"))
     }
 
     protected def getEmptyMultipartFile(){
@@ -56,7 +55,12 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
     }
 
     protected def getMultipartFile(fileName){
-        new MockMultipartFile('uploaded', new FileInputStream(getFilePath(fileName)))
+        def fileNameParts = fileName.split(/\./)
+        def contentTypes = ['jpg':'image/jpeg', 'png':'image/png', 'gif':'image/gif']
+        new MockMultipartFile(fileNameParts[0],
+                              fileName,
+                              contentTypes[fileNameParts[1]],
+                              new FileInputStream(getFilePath(fileName)))
     }
 
     void testBaseSetupLocalFile(){
@@ -105,6 +109,60 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         }
 
         assertTrue burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR) instanceof Worker
+    }
+
+    void testScaleApproximateMultipartFile() {
+        assertFalse fileExists('image.jpg')
+        def scaleResult, result, file
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.scaleApproximate(50, 50)
+        }
+        assertEquals 'image.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('image.jpg')
+        file = getFile('image.jpg')
+        assertTrue file.width <= 50
+        assertTrue file.height <= 50
+
+        cleanUpTestDir()
+        assertFalse fileExists('image.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.scaleApproximate(50, 2000)
+        }
+        assertEquals 'image.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('image.jpg')
+        file = getFile('image.jpg')
+        assertTrue file.width <= 50
+        assertTrue file.height <= 2000
+
+        cleanUpTestDir()
+        assertFalse fileExists('image.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.scaleApproximate(2000, 50)
+        }
+        assertEquals 'image.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('image.jpg')
+        file = getFile('image.jpg')
+        assertTrue file.width <= 2000
+        assertTrue file.height <= 50
+
+        cleanUpTestDir()
+        assertFalse fileExists('image.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.scaleApproximate(2000, 2000)
+        }
+        assertEquals 'image.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('image.jpg')
+        file = getFile('image.jpg')
+        assertTrue file.width <= 2000
+        assertTrue file.height <= 2000
     }
 
     void testScaleApproximateLocalFileJpg() {
@@ -241,6 +299,60 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         assertTrue file.height == 2000
     }
 
+    void testScaleAccurateMultipartFileJpg() {
+        assertFalse fileExists('image.jpg')
+        def scaleResult, result, file
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.scaleAccurate(50, 50)
+        }
+        assertEquals 'image.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('image.jpg')
+        file = getFile('image.jpg')
+        assertTrue file.width == 50
+        assertTrue file.height == 50
+
+        cleanUpTestDir()
+        assertFalse fileExists('image.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.scaleAccurate(50, 2000)
+        }
+        assertEquals 'image.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('image.jpg')
+        file = getFile('image.jpg')
+        assertTrue file.width == 50
+        assertTrue file.height == 2000
+
+        cleanUpTestDir()
+        assertFalse fileExists('image.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.scaleAccurate(2000, 50)
+        }
+        assertEquals 'image.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('image.jpg')
+        file = getFile('image.jpg')
+        assertTrue file.width == 2000
+        assertTrue file.height == 50
+
+        cleanUpTestDir()
+        assertFalse fileExists('image.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.scaleAccurate(2000, 2000)
+        }
+        assertEquals 'image.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('image.jpg')
+        file = getFile('image.jpg')
+        assertTrue file.width == 2000
+        assertTrue file.height == 2000
+    }
+
     void testScaleApproximateLocalFileJpgWithName() {
         def scaleResult, result, file
 
@@ -287,6 +399,62 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         assertFalse fileExists('jpg-2000x2000.jpg')
 
         result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute('jpg-2000x2000',{
+            scaleResult = it.scaleApproximate(2000, 2000)
+        })
+        assertEquals 'jpg-2000x2000.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('jpg-2000x2000.jpg')
+        file = getFile('jpg-2000x2000.jpg')
+        assertTrue file.width <= 2000
+        assertTrue file.height <= 2000
+    }
+
+    void testScaleApproximateMultipartFileJpgWithName() {
+        def scaleResult, result, file
+
+        assertFalse fileExists('jpg-50x50.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('jpg-50x50',{
+            scaleResult = it.scaleApproximate(50, 50)
+        })
+
+        assertEquals 'jpg-50x50.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('jpg-50x50.jpg')
+        file = getFile('jpg-50x50.jpg')
+        assertTrue file.width <= 50
+        assertTrue file.height <= 50
+
+        cleanUpTestDir()
+        assertFalse fileExists('jpg-50x2000.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('jpg-50x2000',{
+            scaleResult = it.scaleApproximate(50, 2000)
+        })
+        assertEquals 'jpg-50x2000.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('jpg-50x2000.jpg')
+        file = getFile('jpg-50x2000.jpg')
+        assertTrue file.width <= 50
+        assertTrue file.height <= 2000
+
+        cleanUpTestDir()
+        assertFalse fileExists('jpg-2000x50.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('jpg-2000x50',{
+            scaleResult = it.scaleApproximate(2000, 50)
+        })
+        assertEquals 'jpg-2000x50.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('jpg-2000x50.jpg')
+        file = getFile('jpg-2000x50.jpg')
+        assertTrue file.width <= 2000
+        assertTrue file.height <= 50
+
+        cleanUpTestDir()
+        assertFalse fileExists('jpg-2000x2000.jpg')
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('jpg-2000x2000',{
             scaleResult = it.scaleApproximate(2000, 2000)
         })
         assertEquals 'jpg-2000x2000.jpg', scaleResult
@@ -801,316 +969,293 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         assertTrue file.height <= 2000
     }
 
-    void xtestScaleAccurateLocalFileJpgNameGived() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-        .resultDir('./resources/resultImages/')
-        .execute ('jpgx200x200', {
-                scaleResult = it.scaleAccurate(200, 200)
-            })
-
-        assertTrue result instanceof BurningImageService
-        assertEquals 'jpgx200x200.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-
-    }
-
-    void xtestScaleAccurateLocalFileBmpNameGived() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/bmpFile.bmp')
-        .resultDir('./resources/resultImages/')
-        .execute('bmpx200x200', {
-                scaleResult = it.scaleAccurate(200, 200)
-            })
-
-        assertTrue result instanceof BurningImageService
-        assertEquals 'bmpx200x200.bmp', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-    }
-
-    void xtestScaleAccurateLocalFileGifNameGived() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/gifFile.gif')
-        .resultDir('./resources/resultImages/')
-        .execute('gifx200x200', {
-                scaleResult = it.scaleAccurate(200, 200)
-            })
-
-        assertTrue result instanceof BurningImageService
-        assertEquals 'gifx200x200.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-    }
-
-    void xtestScaleAccurateLocalFilePngNameGived() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/pngFile.png')
-        .resultDir('./resources/resultImages/')
-        .execute('pngx200x200', {
-                scaleResult = it.scaleAccurate(200, 200)
-            })
-
-        assertTrue result instanceof BurningImageService
-        assertEquals 'pngx200x200.png', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-    }
-
-    void xtestScaleApproximateRemoteFileJpg() {
-        def scaleResult
-
-        def name = 'foto'
-        def originalFilename = 'jpgFile.jpg'
-        def contentType = 'image/jpeg'
-        def file =  new FileInputStream('./resources/testImages/jpgFile.jpg')
-        def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
-
-        def result = burningImageService.loadImage(uploadedFile)
-        .resultDir('./resources/resultImages/')
-        .execute {
-            scaleResult = it.scaleApproximate(200, 200)
-        }
-
-        assertTrue result instanceof BurningImageService
-        assertEquals 'jpgFile.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-
-    }
-
-    void xtestScaleApproximateRemoteFileGif() {
-        def scaleResult
-
-        def name = 'foto'
-        def originalFilename = 'gifFile.gif'
-        def contentType = 'image/gif'
-        def file =  new FileInputStream('./resources/testImages/gifFile.gif')
-        def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
-
-        def result = burningImageService.loadImage(uploadedFile)
-        .resultDir('./resources/resultImages/')
-        .execute {
-            scaleResult = it.scaleApproximate(200, 200)
-        }
-
-        assertTrue result instanceof BurningImageService
-        assertEquals 'gifFile.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-
-    }
-
-    void xtestScaleApproximateRemoteFilePng() {
-        def scaleResult
-
-        def name = 'foto'
-        def originalFilename = 'pngFile.png'
-        def contentType = 'image/png'
-        def file =  new FileInputStream('./resources/testImages/pngFile.png')
-        def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
-
-        def result = burningImageService.loadImage(uploadedFile)
-        .resultDir('./resources/resultImages/')
-        .execute {
-            scaleResult = it.scaleApproximate(200, 200)
-        }
-
-        assertTrue result instanceof BurningImageService
-        assertEquals 'pngFile.png', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-
-    }
-
-    void xtestScaleApproximateRemoteFileBmp() {
-        def scaleResult
-
-        def name = 'foto'
-        def originalFilename = 'bmpFile.bmp'
-        def contentType = 'image/png'
-        def file =  new FileInputStream('./resources/testImages/bmpFile.bmp')
-        def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
-
-        def result = burningImageService.loadImage(uploadedFile)
-        .resultDir('./resources/resultImages/')
-        .execute {
-            scaleResult = it.scaleApproximate(200, 200)
-        }
-
-        assertTrue result instanceof BurningImageService
-        assertEquals 'bmpFile.bmp', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-
-    }
-
-    void xtestWatermarkError() {
+     void testWatermarkError() {
         shouldFail(IllegalArgumentException){
-            def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-            .resultDir('./resources/resultImages/')
-            .execute {
+            burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute {
                 it.watermark(null, null)
             }
         }
 
         shouldFail(IllegalArgumentException){
-            def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-            .resultDir('./resources/resultImages/')
-            .execute {
+            burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute {
                 it.watermark('/not/exists', ['left':10, 'right': 10])
             }
         }
 
         shouldFail(IllegalArgumentException){
-            def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-            .resultDir('./resources/resultImages/')
-            .execute {
+            burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute {
                 it.watermark('/not/exists', ['top':10, 'bottom': 10])
             }
         }
 
         shouldFail(FileNotFoundException){
-            def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-            .resultDir('./resources/resultImages/')
-            .execute {
+            burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute {
                 it.watermark('/not/exists')
             }
         }
     }
 
-    void xtestWatermarkLocalJpg() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-        .resultDir('./resources/resultImages/')
-        .execute {
+    void testWatermarkLocalJpg() {
+        def scaleResult, result
+
+        result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute {
             scaleResult = it.watermark('./resources/testImages/watermark.png')
         }
 
-        assertTrue result instanceof BurningImageService
-        assertEquals 'jpgFile.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
     }
 
-    void xtestWatermarkLocalGif() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/gifFile.gif')
-        .resultDir('./resources/resultImages/')
-        .execute {
+    void testWatermarkLocalGif() {
+        def scaleResult, result
+
+        result = burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute {
             scaleResult = it.watermark('./resources/testImages/watermark.png')
         }
 
-        assertTrue result instanceof BurningImageService
-        assertEquals 'gifFile.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
     }
 
-    void xtestWatermarkLocalPng() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/pngFile.png')
-        .resultDir('./resources/resultImages/')
-        .execute {
+    void testWatermarkLocalPng() {
+        def scaleResult, result
+
+        result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR).execute {
             scaleResult = it.watermark('./resources/testImages/watermark.png')
         }
 
-        assertTrue result instanceof BurningImageService
-        assertEquals 'pngFile.png', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-
+        assertTrue result instanceof Worker
+        assertEquals 'image.png', scaleResult
+        assertTrue fileExists('image.png')
     }
 
-    void xtestWatermarkLocalBmp() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/bmpFile.bmp')
-        .resultDir('./resources/resultImages/')
-        .execute {
+    void testWatermarkLocalBmp() {
+        def scaleResult, result
+
+        result = burningImageService.doWith(getFilePath('image.bmp'), RESULT_DIR).execute {
             scaleResult = it.watermark('./resources/testImages/watermark.png')
         }
 
-        assertTrue result instanceof BurningImageService
-        assertEquals 'bmpFile.bmp', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+        assertTrue result instanceof Worker
+        assertEquals 'image.bmp', scaleResult
+        assertTrue fileExists('image.bmp')
     }
 
-    void xtestWatermarkLocalJpgLocation() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-        .resultDir('./resources/resultImages/')
-        .execute('left-top-watermark', {
-                scaleResult = it.watermark('./resources/testImages/watermark.png', ['left': 20, 'top': 20])
-            })
+    void testWatermarkLocalJpgLocation() {
+        def scaleResult, result
 
-        assertTrue result instanceof BurningImageService
+        result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute('left-top-watermark', {
+            scaleResult = it.watermark('./resources/testImages/watermark.png', ['left': 20, 'top': 20])
+        })
+
+        assertTrue result instanceof Worker
         assertEquals 'left-top-watermark.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+        assertTrue fileExists('left-top-watermark.jpg')
 
-        
-        result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-        .resultDir('./resources/resultImages/')
-        .execute('right-bottom-watermark', {
-                scaleResult = it.watermark('./resources/testImages/watermark.png', ['right': 20, 'bottom': 20])
-            })
+        result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute('right-bottom-watermark', {
+            scaleResult = it.watermark('./resources/testImages/watermark.png', ['right': 20, 'bottom': 20])
+        })
 
-        assertTrue result instanceof BurningImageService
+        assertTrue result instanceof Worker
         assertEquals 'right-bottom-watermark.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+        assertTrue fileExists('right-bottom-watermark.jpg')
     }
 
-    void xtestWatermarkRemoteJpgLocation() {
-        def scaleResult
+    void testWatermarkRemoteJpgLocation() {
+        def scaleResult, result
 
-        def name = 'foto'
-        def originalFilename = 'pngFile.png'
-        def contentType = 'image/png'
-        def file =  new FileInputStream('./resources/testImages/pngFile.png')
-        def uploadedFile = new MockMultipartFile(name, originalFilename, contentType, file)
-        
-        def result = burningImageService.loadImage(uploadedFile)
-        .resultDir('./resources/resultImages/')
-        .execute('remote-watermark', {
-                scaleResult = it.watermark('./resources/testImages/watermark.png')
-            })
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute({
+            scaleResult = it.watermark('./resources/testImages/watermark.png', ['left': 20, 'top': 20])
+        })
 
-        assertTrue result instanceof BurningImageService
-        assertEquals 'remote-watermark.png', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
     }
 
-    void xtestChaining() {
-        def scaleResult
-        def result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-        .resultDir('./resources/resultImages/')
-        .execute('watermark-scale', {
-                it.watermark('./resources/testImages/watermark.png')
-                scaleResult = it.scaleApproximate(200, 200)
-            })
+    void testChaining() {
+        def scaleResult, result
 
-        assertTrue result instanceof BurningImageService
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('watermark-scale', {
+            it.watermark('./resources/testImages/watermark.png')
+            scaleResult = it.scaleApproximate(200, 200)
+        })
+
+        assertTrue result instanceof Worker
         assertEquals 'watermark-scale.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+        assertTrue fileExists('watermark-scale.jpg')
 
-        result = burningImageService.loadImage('./resources/testImages/jpgFile.jpg')
-        .resultDir('./resources/resultImages/')
-        .execute('scale-watermark', {
-                it.scaleApproximate(200, 200)
-                scaleResult = it.watermark('./resources/testImages/watermark.png')
-            })
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('scale-watermark', {
+            scaleResult = it.scaleApproximate(200, 200)
+            it.watermark('./resources/testImages/watermark.png')
+        })
 
-        assertTrue result instanceof BurningImageService
+        assertTrue result instanceof Worker
         assertEquals 'scale-watermark.jpg', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
+        assertTrue fileExists('scale-watermark.jpg')
 
-        result = burningImageService.loadImage('./resources/testImages/pngFile.png')
-        .resultDir('./resources/resultImages/')
-        .execute('first-scale-watermark', {
-                it.scaleAccurate(300, 300)
-                scaleResult = it.watermark('./resources/testImages/watermark.png')
-            })
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('complex', {
+            it.watermark('./resources/testImages/watermark.png', ['left': 20, 'top': 20])
+            scaleResult = it.scaleApproximate(100, 50)
+            scaleResult = it.scaleAccurate(50, 100)
+            it.watermark('./resources/testImages/watermark.png', ['right': 20, 'bottom': 20])
+            scaleResult = it.scaleApproximate(50, 100)
+            scaleResult = it.scaleAccurate(100, 50)
+        })
 
-        assertTrue result instanceof BurningImageService
-        assertEquals 'first-scale-watermark.png', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-
-        result.execute('second-watermark-scale', {
-                it.scaleAccurate(200, 300)
-                scaleResult = it.watermark('./resources/testImages/watermark.png')
-            })
-
-        assertEquals 'second-watermark-scale.png', scaleResult
-        assertTrue new File("./resources/resultImages/${scaleResult}").exists()
-
+        assertTrue result instanceof Worker
+        assertEquals 'complex.jpg', scaleResult
+        assertTrue fileExists('complex.jpg')
     }
+
+    void testCropError() {
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(null, null, null, null)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(10, null, null, null)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(0, 0, null, null)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(0, 0, 10, null)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(-10, 0, 10, 10)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(0, -10, 10, 10)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(0, 0, -10, 10)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(0, 0, 0, -10)
+            }
+        }
+
+        def image = getFile('image.jpg', SOURCE_DIR)
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop((image.width + 10), 0, 10, 10)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(0, (image.height + 10), 10, 10)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(0, 0, (image.width + 10), 10)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(0, 0, 10, (image.height + 10))
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(image.width, 0, 10, 10)
+            }
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+                it.crop(0, image.height, 10, 10)
+            }
+        }
+    }
+
+    void testCropJpgLocalFile() {
+        def result, scaleResult, image
+
+        result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{
+            scaleResult = it.crop(0, 0, 50, 100)
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+        image = getFile('image.jpg')
+        assertTrue image.width == 50
+        assertTrue image.height == 100
+    }
+
+    void testCropBmpLocalFile() {
+        def result, scaleResult, image
+
+        result = burningImageService.doWith(getFilePath('image.bmp'), RESULT_DIR).execute{
+            scaleResult = it.crop(20, 30, 50, 40)
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.bmp', scaleResult
+        assertTrue fileExists('image.bmp')
+        image = getFile('image.bmp')
+        assertTrue image.width == 50
+        assertTrue image.height == 40
+     }
+
+    void testCropPngLocalFile() {
+        def result, scaleResult, image
+
+        result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR).execute{
+            scaleResult = it.crop(20, 30, 50, 40)
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.png', scaleResult
+        assertTrue fileExists('image.png')
+        image = getFile('image.png')
+        assertTrue image.width == 50
+        assertTrue image.height == 40
+    }
+
+    void testCropGifLocalFile() {
+        def result, scaleResult, image
+
+        result = burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute{
+            scaleResult = it.crop(100, 100, 200, 230)
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+        image = getFile('image.jpg')
+        assertTrue image.width == 200
+        assertTrue image.height == 230
+     }
 }
