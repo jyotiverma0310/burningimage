@@ -1,4 +1,4 @@
-#summary BurningImage plug-in usage documentation
+#summary BurningImage plug-in usage documentation (version 0.2)
 
 == Initialization == 
 
