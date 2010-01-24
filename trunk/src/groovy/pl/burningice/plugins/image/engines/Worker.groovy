@@ -26,6 +26,11 @@ class Worker {
      */
     private def loadedImage
 
+    Worker(loadedImage, resultDir){
+        this.resultDir = resultDir
+        this.loadedImage = (loadedImage.isLocal() ? loadedImage : loadedImage.asLocal(resultDir))
+    }
+
     /**
      * Methods execute action on image
      * It use as a output file name name of orginal image

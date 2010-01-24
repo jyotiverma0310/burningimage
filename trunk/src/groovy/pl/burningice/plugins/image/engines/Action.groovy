@@ -25,6 +25,10 @@ package pl.burningice.plugins.image.engines
 import pl.burningice.plugins.image.engines.scale.*
 import pl.burningice.plugins.image.engines.watermark.DefaultWatermarkEngine
 import pl.burningice.plugins.image.engines.crop.DefaultCropEngine
+import pl.burningice.plugins.image.engines.text.DefaultTextEngine
+import pl.burningice.plugins.image.engines.text.DefaultTextEngine
+import java.awt.Font
+import java.awt.Color
 
 /**
  * Object allows to build chains of action
@@ -146,8 +150,26 @@ class Action {
         }
 
         loadedImage = new DefaultCropEngine().execute(loadedImage, outputFilePath, deltaX, deltaY, width, height)
-
         fileName
+    }
+
+    def text(Color color, Font font, Closure typist){
+        def engine = new DefaultTextEngine(color, font, loadedImage, outputFilePath)
+        typist(engine)
+        loadedImage = engine.gerResult()
+        fileName
+    }
+
+    def text(Color color, Closure typist){
+        text(color, null, typist)
+    }
+
+    def text(Font font, Closure typist){
+        text(null, font, typist)
+    }
+
+    def text(Closure typist){
+        text(null, null, typist)
     }
 }
 

@@ -4,6 +4,8 @@ import grails.test.*
 import org.springframework.mock.web.MockMultipartFile
 import pl.burningice.plugins.image.engines.*
 import javax.imageio.ImageIO
+import java.awt.Color
+import java.awt.Font
 
 /**
  *
@@ -1258,4 +1260,236 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         assertTrue image.width == 200
         assertTrue image.height == 230
      }
+
+    void testTextJpgLocalFile() {
+        def result, scaleResult, image
+
+        result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{img ->
+            scaleResult = img.text({
+                it.write("text one", 10, 10)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(Color.WHITE,{
+                it.write("text one", 10, 10)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(new Font('Arial', Font.PLAIN, 30),{
+                it.write("text one", 50, 50)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(Color.WHITE, new Font('Arial', Font.PLAIN, 30),{
+                it.write("text one", 50, 50)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+    }
+
+    void testTextBmpLocalFile() {
+        def result, scaleResult, image
+
+        result = burningImageService.doWith(getFilePath('image.bmp'), RESULT_DIR).execute{img ->
+            scaleResult = img.text({
+                it.write("text one", 10, 10)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.bmp', scaleResult
+        assertTrue fileExists('image.bmp')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.bmp'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(Color.WHITE,{
+                it.write("text one", 10, 10)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.bmp', scaleResult
+        assertTrue fileExists('image.bmp')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.bmp'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(new Font('Arial', Font.PLAIN, 30),{
+                it.write("text one", 50, 50)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.bmp', scaleResult
+        assertTrue fileExists('image.bmp')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.bmp'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(Color.WHITE, new Font('Arial', Font.PLAIN, 30),{
+                it.write("text one", 50, 50)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.bmp', scaleResult
+        assertTrue fileExists('image.bmp')
+    }
+
+    void testTextGifLocalFile() {
+        def result, scaleResult, image
+
+        result = burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute{img ->
+            scaleResult = img.text({
+                it.write("text one", 10, 10)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(Color.WHITE,{
+                it.write("text one", 10, 10)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(new Font('Arial', Font.PLAIN, 30),{
+                it.write("text one", 50, 50)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.gif'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(Color.WHITE, new Font('Arial', Font.PLAIN, 30),{
+                it.write("text one", 50, 50)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+    }
+
+    void testTextPngLocalFile() {
+        def result, scaleResult, image
+
+        result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR).execute{img ->
+            scaleResult = img.text({
+                it.write("text one", 10, 10)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.png', scaleResult
+        assertTrue fileExists('image.png')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(Color.WHITE,{
+                it.write("text one", 10, 10)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.png', scaleResult
+        assertTrue fileExists('image.png')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(new Font('Arial', Font.PLAIN, 30),{
+                it.write("text one", 50, 50)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.png', scaleResult
+        assertTrue fileExists('image.png')
+
+        cleanUpTestDir()
+
+        result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR).execute{img ->
+            scaleResult = img.text(Color.WHITE, new Font('Arial', Font.PLAIN, 30),{
+                it.write("text one", 50, 50)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.png', scaleResult
+        assertTrue fileExists('image.png')
+    }
 }

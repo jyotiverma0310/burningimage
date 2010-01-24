@@ -84,6 +84,6 @@ class BurningImageService {
             resultDir = resultDir[0..-2]
         }
 
-        new Worker(loadedImage:ImageFileFactory.produce(file), resultDir:resultDir)
+        new Worker(ImageFileFactory.produce(file), resultDir)
     }
 }
