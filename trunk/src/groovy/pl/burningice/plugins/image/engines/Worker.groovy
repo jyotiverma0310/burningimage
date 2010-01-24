@@ -5,6 +5,8 @@
 
 package pl.burningice.plugins.image.engines
 
+import javax.imageio.ImageIO
+
 /**
  *
  *
@@ -26,11 +28,6 @@ class Worker {
      */
     private def loadedImage
 
-    Worker(loadedImage, resultDir){
-        this.resultDir = resultDir
-        this.loadedImage = (loadedImage.isLocal() ? loadedImage : loadedImage.asLocal(resultDir))
-    }
-
     /**
      * Methods execute action on image
      * It use as a output file name name of orginal image
@@ -39,9 +36,7 @@ class Worker {
      * @return BurningImageService
      */
     def execute (chain) {
-        chain(new Action(loadedImage:loadedImage,
-                         outputFilePath: "${resultDir}/${loadedImage.name}",
-                         fileName: loadedImage.name))
+        work("${resultDir}/${loadedImage.name}", loadedImage.name, chain)
         this
     }
 
@@ -55,10 +50,21 @@ class Worker {
      */
     Worker execute (outputFileName, chain) {
         def fileName = "${outputFileName}.${loadedImage.extension}"
-        chain(new Action(loadedImage:loadedImage,
-                         outputFilePath: "${resultDir}/${fileName}",
-                         fileName: fileName))
+        work("${resultDir}/${fileName}", fileName, chain)
+    }
+
+
+    private Worker work(outputFilePath, fileName, chain){
+        chain(new Action(loadedImage:loadedImage, fileName: fileName))
+        save(outputFilePath)
+        loadedImage.restoreOginalFile()
         this
+    }
+
+    private void save(outputFilePath){
+        ImageIO.write(ImageIO.read(loadedImage.inputStream),
+                      loadedImage.extension,
+                      new File(outputFilePath));
     }
 }
 

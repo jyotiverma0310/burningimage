@@ -1492,4 +1492,46 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         assertEquals 'image.png', scaleResult
         assertTrue fileExists('image.png')
     }
+
+    void testChain2() {
+        def result, result1, result2, image
+
+        result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR)
+        .execute('first', {img ->
+            result1 =  img.scaleAccurate(100, 200)
+            img.watermark('./resources/testImages/watermark.png', ['top':10, 'left': 10])
+        })
+        .execute('second', {img ->
+            result2 = img.crop(300, 300, 300, 300)
+            img.text({
+                it.write("text one", 10, 10)
+                it.write("text two", 100, 100)
+                it.write("text three", 200, 200)
+            })
+        })
+        .execute('three', {img ->
+            img.crop(300, 300, 300, 300)
+            img.text({
+                it.write("this is file number three", 10, 10)
+            })
+        })
+
+        assertTrue result instanceof Worker
+        assertEquals 'first.png', result1
+        assertTrue fileExists('first.png')
+        image = getFile('first.png')
+        assertTrue image.width == 100
+        assertTrue image.height == 200
+
+        assertEquals 'second.png', result2
+        assertTrue fileExists('second.png')
+        image = getFile('second.png')
+        assertTrue image.width == 300
+        assertTrue image.height == 300
+
+        assertTrue fileExists('three.png')
+        image = getFile('three.png')
+        assertTrue image.width == 300
+        assertTrue image.height == 300
+    }
 }

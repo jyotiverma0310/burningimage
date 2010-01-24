@@ -55,13 +55,6 @@ class Action {
     def fileName
 
     /**
-     * Full path to new file location
-     *
-     * @var String
-     */
-    def outputFilePath
-
-    /**
      * Method allows to scale image with approximate width and height
      * Width and height of image will never be greater than parameters width and height
      * but it could be lover (image could not be deformed)
@@ -77,8 +70,8 @@ class Action {
             throw new IllegalArgumentException("Scale width = ${width}, height = ${height} is incorrent")
         }
 
-        loadedImage = ScaleEngineFactory.produce(ScaleEngineFactory.APPROXIMATE_ENGINE)
-                                        .execute(loadedImage, width, height, outputFilePath)
+        loadedImage.update(ScaleEngineFactory.produce(ScaleEngineFactory.APPROXIMATE_ENGINE)
+                                             .execute(loadedImage, width, height))
         fileName
     }
 
@@ -99,8 +92,8 @@ class Action {
             throw new IllegalArgumentException("Scale width = ${width}, height = ${height} is incorrent")
         }
 
-        loadedImage = ScaleEngineFactory.produce(ScaleEngineFactory.ACCURATE_ENGINE)
-                                        .execute(loadedImage, width, height, outputFilePath)
+        loadedImage.update(ScaleEngineFactory.produce(ScaleEngineFactory.ACCURATE_ENGINE)
+                                             .execute(loadedImage, width, height))
         fileName
     }
 
@@ -127,8 +120,7 @@ class Action {
             throw new FileNotFoundException("There is no ${watermarkPath} watermark file")
         }
 
-        loadedImage = new DefaultWatermarkEngine().execute(watermarkFile, loadedImage, outputFilePath, position, alpha)
-
+        loadedImage.update(new DefaultWatermarkEngine().execute(watermarkFile, loadedImage, position, alpha))
         fileName
     }
 
@@ -149,14 +141,14 @@ class Action {
             throw new IllegalArgumentException('Crop region not match to image size')
         }
 
-        loadedImage = new DefaultCropEngine().execute(loadedImage, outputFilePath, deltaX, deltaY, width, height)
+        loadedImage.update(new DefaultCropEngine().execute(loadedImage, deltaX, deltaY, width, height))
         fileName
     }
 
     def text(Color color, Font font, Closure typist){
-        def engine = new DefaultTextEngine(color, font, loadedImage, outputFilePath)
+        def engine = new DefaultTextEngine(color, font, loadedImage)
         typist(engine)
-        loadedImage = engine.gerResult()
+        loadedImage.update(engine.getResult())
         fileName
     }
 

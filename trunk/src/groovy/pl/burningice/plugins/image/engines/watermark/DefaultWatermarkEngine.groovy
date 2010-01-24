@@ -39,13 +39,11 @@ class DefaultWatermarkEngine {
      *
      * @param File watermarkFile Objec representing local watermark file
      * @param ImageFile loadedImage Loaded image
-     * @param String outputFilePath Place where output fule should be stored
      * @param [:] position Map representing watermark location on image
      * @return ImageFile
      */
-    def execute(watermarkFile, loadedImage, outputFilePath, position, alpha) {
-
-        def fileToMark = ImageIO.read(loadedImage.source);
+    def execute(watermarkFile, loadedImage, position, alpha) {
+        def fileToMark = ImageIO.read(loadedImage.inputStream);
         def watermark = ImageIO.read(watermarkFile)
         def (left, top) = transfromPostionon(watermark, fileToMark, position)
 
@@ -54,10 +52,7 @@ class DefaultWatermarkEngine {
         g.drawImage(watermark, (int)left, (int)top, null);
         g.dispose();
 
-        File outputfile = new File(outputFilePath);
-        ImageIO.write(fileToMark, loadedImage.extension, outputfile);
-
-        ImageFileFactory.produce(outputfile)
+        fileToMark
     }
 
     /**

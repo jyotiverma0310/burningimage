@@ -40,20 +40,6 @@ private class LocalImageFile extends ImageFile {
      * @return LocalImageFile
      */
     def LocalImageFile(File source) {
-        this.source = source
-    }
-
-    /**
-     * @see ImageFile#getAsJaiStream()
-     */
-    def getAsJaiStream() {
-        JAI.create("stream", new FileSeekableStream(source))
-    }
-
-    /**
-     * @see ImageFile#getSourceFileName()
-     */
-    def getSourceFileName() {
-        source.name
+        init(source.name, new FileSeekableStream(source))
     }
 }

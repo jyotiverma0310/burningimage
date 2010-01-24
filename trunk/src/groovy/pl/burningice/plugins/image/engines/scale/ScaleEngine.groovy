@@ -46,15 +46,11 @@ abstract class ScaleEngine {
      * @param ImageFile loadedImage Loaded image
      * @param int width Requestet width
      * @param int height Requestet height
-     * @param String outputFilePath Place where output fule should be stored
-     * @return ImageFile
+     * @return BufferedImage
      */
-    def execute(loadedImage, width, height, outputFilePath) {
+    def execute(loadedImage, width, height) {
         def scaledImage = scaleImage(loadedImage.getAsJaiStream(), width, height)
-        BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(outputFilePath));
-        ImageIO.write(scaledImage.getAsBufferedImage(), loadedImage.encoder, output);
-        output.close();
-        ImageFileFactory.produce(new File(outputFilePath))
+        scaledImage.getAsBufferedImage()
     }
 
     /**

@@ -17,7 +17,7 @@ import pl.burningice.plugins.image.file.ImageFileFactory
  */
 class DefaultCropEngine {
 
-    def execute(loadedImage, outputFilePath, deltaX, deltaY, width, height){
+    def execute(loadedImage, deltaX, deltaY, width, height){
         ParameterBlock cropParams = new ParameterBlock();
         cropParams.addSource(loadedImage.getAsJaiStream());
         cropParams.add((float)Math.floor(deltaX)) // delta x
@@ -26,11 +26,7 @@ class DefaultCropEngine {
         cropParams.add((float)height) // height
 
         def croppedImage = JAI.create('crop', cropParams)
-
-        BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(outputFilePath));
-        ImageIO.write(croppedImage.getAsBufferedImage(), loadedImage.encoder, output);
-        output.close();
-        ImageFileFactory.produce(new File(outputFilePath))
+        croppedImage.getAsBufferedImage()
     }
 }
 
