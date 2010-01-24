@@ -40,36 +40,6 @@ private class MultipartImageFile extends ImageFile {
      * @return MultipartImageFile
      */
     def MultipartImageFile(MultipartFile source) {
-        this.source = source
-    }
-
-    /**
-     * @see ImageFile#getAsJaiStream()
-     */
-    def getAsJaiStream() {
-        JAI.create("stream", new ByteArraySeekableStream(source.bytes))
-    }
-
-    /**
-     * @see ImageFile#getSourceFileName()
-     */
-    def getSourceFileName() {
-        source.originalFilename
-    }
-
-    /**
-     * Transform self to LocalImageFile object
-     * Save buffered source on this and create LocalImageFile as a result
-     * with source as saved file
-     *
-     * @param String outputFilePath Path where buffered data should be stored
-     * @return LocalImageFile
-     */
-    def asLocal(resultDir) {
-        def outputFilePath = "${resultDir}/${name}"
-        def outputFile = new FileOutputStream(outputFilePath);
-        JAI.create('encode', getAsJaiStream(), outputFile, encoder, null);
-        outputFile.close()
-        ImageFileFactory.produce(new File(outputFilePath))
+        init(source.originalFilename, new ByteArraySeekableStream(source.bytes))
     }
 }

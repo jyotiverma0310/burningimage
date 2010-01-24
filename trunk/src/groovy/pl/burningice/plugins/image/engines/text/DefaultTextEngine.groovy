@@ -23,19 +23,16 @@ class DefaultTextEngine {
 
     def loadedImage
 
-    def outputFilePath
-
     def fileToMark
 
     def graphics
 
-    DefaultTextEngine(color, font, loadedImage, outputFilePath){
+    DefaultTextEngine(color, font, loadedImage){
         this.color = color
         this.font = font
         this.loadedImage = loadedImage
-        this.outputFilePath = outputFilePath
 
-        fileToMark = ImageIO.read(loadedImage.source);
+        fileToMark = ImageIO.read(loadedImage.inputStream);
         graphics = fileToMark.createGraphics();
 
         if (color) {
@@ -51,11 +48,9 @@ class DefaultTextEngine {
         graphics.drawString(text, deltaX, deltaY);
     }
 
-    def gerResult(){
+    def getResult(){
         graphics.dispose();
-        File outputfile = new File(outputFilePath);
-        ImageIO.write(fileToMark, loadedImage.extension, outputfile);
-        ImageFileFactory.produce(outputfile)
+        fileToMark
     }
 }
 

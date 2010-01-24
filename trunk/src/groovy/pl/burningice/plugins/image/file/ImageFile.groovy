@@ -22,6 +22,14 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.file
 
+import java.awt.image.BufferedImage
+import javax.imageio.ImageIO
+import java.io.ByteArrayOutputStream
+import com.sun.media.jai.codec.SeekableStream
+import com.sun.media.jai.codec.ByteArraySeekableStream
+import javax.media.jai.*
+import com.sun.media.jai.codec.*
+
 /**
  * Base class for all image sources (File, MultipartFile)
  *
@@ -37,11 +45,29 @@ abstract class ImageFile {
     private static final def GIF_OUTPUT_FORMAT = 'jpg'
 
     /**
-     * Source image 
+     * Stream of image
      *
-     * @var File / MultipartFile
      */
-    def source
+    SeekableStream stream
+
+    /**
+     * Oginal image saved as a stream
+     *
+     */
+    SeekableStream orginalStream
+
+    /**
+     * Name of the source file
+     *
+     * @var String
+     */
+    String sourceFileName
+
+    def init(String name, SeekableStream fileStream){
+        sourceFileName = name
+        orginalStream = fileStream
+        stream = fileStream
+    }
 
     /**
      * Mapping file extension >> JAI endocer
@@ -57,28 +83,26 @@ abstract class ImageFile {
         'png': 'PNG'
     ]
 
+    def restoreOginalFile(){
+        stream = orginalStream
+    }
+
     /**
      * Returns file as JAI RenderedOp object
      *
      * @return RenderedOp
      */
-    abstract def getAsJaiStream()
+    def getAsJaiStream() {
+        JAI.create("stream", inputStream)
+    }
 
     /**
-     * Method returns source object name
+     * Returns InputStream object representing current file
      *
-     * @return String
+     * @return InputStream
      */
-    abstract def getSourceFileName()
-
-    /**
-     * Allows to check if specified file is local
-     * or is upladed by user 
-     *
-     * @return boolean
-     */
-    def isLocal() {
-        this instanceof LocalImageFile
+    def getInputStream() {
+        stream
     }
 
     /**
@@ -124,5 +148,16 @@ abstract class ImageFile {
      */
     def getEncoder() {
         extensionEncoderMapping[extension]
+    }
+
+    /**
+     * Allows to update image after some manipuations
+     *
+     * @param image Updated imaege
+     */
+    def update(BufferedImage image){
+        def output = new ByteArrayOutputStream()
+        ImageIO.write(image, extension, output);
+        stream = new ByteArraySeekableStream(output.toByteArray())
     }
 }
