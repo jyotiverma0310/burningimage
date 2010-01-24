@@ -65,7 +65,8 @@ private class MultipartImageFile extends ImageFile {
      * @param String outputFilePath Path where buffered data should be stored
      * @return LocalImageFile
      */
-    def asLocal(outputFilePath) {
+    def asLocal(resultDir) {
+        def outputFilePath = "${resultDir}/${name}"
         def outputFile = new FileOutputStream(outputFilePath);
         JAI.create('encode', getAsJaiStream(), outputFile, encoder, null);
         outputFile.close()

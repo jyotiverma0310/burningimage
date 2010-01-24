@@ -44,10 +44,6 @@ class DefaultWatermarkEngine {
      * @return ImageFile
      */
     def execute(watermarkFile, loadedImage, outputFilePath, position, alpha) {
-        // this engine work onlny on local saved file
-        if (!loadedImage.isLocal()) {
-            loadedImage = loadedImage.asLocal(outputFilePath)
-        }
 
         def fileToMark = ImageIO.read(loadedImage.source);
         def watermark = ImageIO.read(watermarkFile)
