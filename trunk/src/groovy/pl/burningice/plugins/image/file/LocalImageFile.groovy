@@ -40,6 +40,6 @@ private class LocalImageFile extends ImageFile {
      * @return LocalImageFile
      */
     def LocalImageFile(File source) {
-        init(source.name, new FileSeekableStream(source))
+        super(source.name, new FileSeekableStream(source))
     }
 }
