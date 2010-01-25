@@ -40,6 +40,6 @@ private class MultipartImageFile extends ImageFile {
      * @return MultipartImageFile
      */
     def MultipartImageFile(MultipartFile source) {
-        init(source.originalFilename, new ByteArraySeekableStream(source.bytes))
+        super(source.originalFilename, new ByteArraySeekableStream(source.bytes))
     }
 }

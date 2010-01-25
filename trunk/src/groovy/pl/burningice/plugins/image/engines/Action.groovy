@@ -124,6 +124,19 @@ class Action {
         fileName
     }
 
+    /**
+     * Method allows to crop specfied region from image
+     *
+     * @param deltaX Offset from left border of image
+     * @param deltaY Offset from top border of image
+     * @param width Size (horizontal) of crop region
+     * @param width Size (vertical) of crop region
+     * @throws IllegalArgumentException If any parameter is null,
+     *                                  or delta is smaller than 0
+     *                                  or crop region dimension is smaller or equal zero
+     *                                  or crop region is beyond the image
+     * @return String Name of output file
+     */
     def crop(deltaX, deltaY, width, height){
         if (deltaX == null || deltaY == null || width == null || height == null){
             throw new IllegalArgumentException("Parameters cant be null: deltaX = ${deltaX}, deltaY = ${deltaY}, width = ${width}, height = ${height}")
@@ -145,6 +158,14 @@ class Action {
         fileName
     }
 
+    /**
+     * Method allows to type text on image
+     *
+     * @param color Specfify color of typed text
+     * @param font Specfify font of typed text
+     * @param typist Type action
+     * @return String Name of output file
+     */
     def text(Color color, Font font, Closure typist){
         def engine = new DefaultTextEngine(color, font, loadedImage)
         typist(engine)
@@ -152,14 +173,34 @@ class Action {
         fileName
     }
 
+    /**
+     * Method allows to type text on image
+     *
+     * @param color Specfify color of typed text
+     * @param typist Type action
+     * @return String Name of output file
+     */
     def text(Color color, Closure typist){
         text(color, null, typist)
     }
 
+    /**
+     * Method allows to type text on image
+     *
+     * @param font Specfify font of typed text
+     * @param typist Type action
+     * @return String Name of output file
+     */
     def text(Font font, Closure typist){
         text(null, font, typist)
     }
 
+    /**
+     * Method allows to type text on image
+     *
+     * @param typist Type action
+     * @return String Name of output file
+     */
     def text(Closure typist){
         text(null, null, typist)
     }

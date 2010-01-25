@@ -36,19 +36,14 @@ class BurningImageService {
     boolean transactional = false
 
     /**
-     * Global setting for output direcotry
+     * Executes work for file determined by string path
      *
-     * @var String
+     * @param filePath Path where file is stored
+     * @param resultDir Path to directory where output file should be save
+     * @return Object that execute specified manipulations on image
+     * @throws IllegalArgumentException If any input is null
+     * @throws FileNotFoundException If there is no file in specified location or there is no output directory
      */
-    private def resultDir
-
-    /**
-     * Object representin image to manipulate
-     *
-     * @var ImageFile
-     */
-    private def loadedImage
-
     def doWith(String filePath, String resultDir){
         if (!filePath || !resultDir) {
             throw new IllegalArgumentException('Source file and output directory paths must be provided')
@@ -63,7 +58,16 @@ class BurningImageService {
         getWorker(file, resultDir)
     }
 
-   def doWith(MultipartFile file, String resultDir) {
+    /**
+     * Executes work for file determined by MultipartFile interface
+     *
+     * @param file File uploaded by the user (or in other case when file is represented by MultipartFile interface)
+     * @param resultDir Path to directory where output file should be save
+     * @return Object that execute specified manipulations on image
+     * @throws IllegalArgumentException If any input is null
+     * @throws FileNotFoundException If there is no file in specified location or there is no output directory
+     */
+    def doWith(MultipartFile file, String resultDir) {
         if (!file || !resultDir) {
             throw new IllegalArgumentException('Source file and output directory path must be provided')
         }
@@ -75,6 +79,14 @@ class BurningImageService {
         getWorker(file, resultDir)
     }
 
+    /**
+     * Create and cofigure object that execute specified manipulations on image
+     *
+     * @param file Image represented by different type of objects (File/MultipartFile)
+     * @param resultDir Path to directory where output file should be save
+     * @return Object that execute specified manipulations on image
+     * @throws FileNotFoundException If there is no output directory
+     */
     private def getWorker(file, resultDir){
         if (!(new File(resultDir).exists())) {
             throw new FileNotFoundException("There is no output ${resultDir} directory")

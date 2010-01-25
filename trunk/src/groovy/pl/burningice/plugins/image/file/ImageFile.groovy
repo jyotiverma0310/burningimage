@@ -63,12 +63,6 @@ abstract class ImageFile {
      */
     String sourceFileName
 
-    def init(String name, SeekableStream fileStream){
-        sourceFileName = name
-        orginalStream = fileStream
-        stream = fileStream
-    }
-
     /**
      * Mapping file extension >> JAI endocer
      *
@@ -83,6 +77,23 @@ abstract class ImageFile {
         'png': 'PNG'
     ]
 
+    /**
+     * Default constructor
+     *
+     * @param name Orginal file name
+     * @param fileStream Representing an image
+     */
+    ImageFile(String name, SeekableStream fileStream){
+        sourceFileName = name
+        orginalStream = fileStream
+        stream = fileStream
+    }
+
+    /**
+     * Allows to restore orginal file
+     *
+     * @return void
+     */
     def restoreOginalFile(){
         stream = orginalStream
     }
