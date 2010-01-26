@@ -1493,7 +1493,7 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         assertTrue fileExists('image.png')
     }
 
-    void testChain2() {
+    void testChainExecutions() {
         def result, result1, result2, image
 
         result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR)
@@ -1502,17 +1502,24 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
             img.watermark('./resources/testImages/watermark.png', ['top':10, 'left': 10])
         })
         .execute('second', {img ->
-            result2 = img.crop(300, 300, 300, 300)
+            result2 = img.crop(100, 100, 500, 500)
+            
             img.text({
                 it.write("text one", 10, 10)
                 it.write("text two", 100, 100)
                 it.write("text three", 200, 200)
             })
+            
         })
         .execute('three', {img ->
-            img.crop(300, 300, 300, 300)
+            img.crop(0, 0, 600, 600)
             img.text({
                 it.write("this is file number three", 10, 10)
+            })
+        })
+        .execute('four', {img ->
+            img.text({
+                it.write("this is file number four", 10, 10)
             })
         })
 
@@ -1526,12 +1533,18 @@ class BurningImageServiceTests extends GrailsUnitTestCase {
         assertEquals 'second.png', result2
         assertTrue fileExists('second.png')
         image = getFile('second.png')
-        assertTrue image.width == 300
-        assertTrue image.height == 300
+        assertTrue image.width == 500
+        assertTrue image.height == 500
 
         assertTrue fileExists('three.png')
         image = getFile('three.png')
-        assertTrue image.width == 300
-        assertTrue image.height == 300
+        assertTrue image.width == 600
+        assertTrue image.height == 600
+
+        assertTrue fileExists('four.png')
+        image = getFile('four.png')
+        def sourceImage = getFile('image.png', SOURCE_DIR)
+        assertTrue image.width == sourceImage.width
+        assertTrue image.height == sourceImage.height
     }
 }

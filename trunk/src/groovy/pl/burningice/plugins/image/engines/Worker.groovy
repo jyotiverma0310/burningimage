@@ -22,9 +22,10 @@ THE SOFTWARE.
 package pl.burningice.plugins.image.engines
 
 import javax.imageio.ImageIO
+import  pl.burningice.plugins.image.file.*
 
 /**
- *
+ * Execute 
  *
  * @author gdulus
  */
@@ -40,7 +41,7 @@ class Worker {
     /**
      * Object representin image to manipulate
      *
-     * @var ImageFile
+     * @var File/MultipartFile
      */
     private def loadedImage
 
@@ -52,7 +53,8 @@ class Worker {
      * @return BurningImageService
      */
     def execute (chain) {
-        work("${resultDir}/${loadedImage.name}", loadedImage.name, chain)
+        def image = ImageFileFactory.produce(loadedImage)
+        work("${resultDir}/${image.name}", image.name, chain, image)
         this
     }
 
@@ -65,8 +67,9 @@ class Worker {
      * @return Worker
      */
     Worker execute (outputFileName, chain) {
-        def fileName = "${outputFileName}.${loadedImage.extension}"
-        work("${resultDir}/${fileName}", fileName, chain)
+        def image = ImageFileFactory.produce(loadedImage)
+        def fileName = "${outputFileName}.${image.extension}"
+        work("${resultDir}/${fileName}", fileName, chain, image)
     }
 
     /**
@@ -75,12 +78,12 @@ class Worker {
      * @param outputFilePath Specify path to output image
      * @param fileName Specify file name
      * @param chain Specify work field
+     * @param image ImageFile object representing image to manipulate
      * @return Self
      */
-    private Worker work(outputFilePath, fileName, chain){
-        chain(new Action(loadedImage:loadedImage, fileName: fileName))
-        save(outputFilePath)
-        loadedImage.restoreOginalFile()
+    private Worker work(outputFilePath, fileName, chain, image){
+        chain(new Action(loadedImage:image, fileName: fileName))
+        save(outputFilePath, image)
         this
     }
 
@@ -88,10 +91,11 @@ class Worker {
      * Save changed image
      *
      * @param outputFilePath Specify path to output image
+     * @param image ImageFile object representing image to manipulate
      */
-    private void save(outputFilePath){
-        ImageIO.write(ImageIO.read(loadedImage.inputStream),
-                      loadedImage.extension,
+    private void save(outputFilePath, image){
+        ImageIO.write(ImageIO.read(image.inputStream),
+                      image.extension,
                       new File(outputFilePath));
     }
 }
