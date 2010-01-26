@@ -45,8 +45,8 @@ private class ApproximateScaleEngine extends ScaleEngine {
     }
 
     /**
-     * We provide two types of image resize to eleminate situatuin
-     * wheb scale is > 1, for sutch action SubsampleAverage throw exception
+     * We provide two types of image resize to eleminate situation
+     * when scale is > 1, for such action SubsampleAverage throw exception
      * For this situation we resize image by "scale"
      *
      * @param Float scale

@@ -27,6 +27,7 @@ import javax.imageio.ImageIO
 import java.io.ByteArrayOutputStream
 import com.sun.media.jai.codec.SeekableStream
 import com.sun.media.jai.codec.ByteArraySeekableStream
+import com.sun.media.jai.codec.MemoryCacheSeekableStream
 import javax.media.jai.*
 import com.sun.media.jai.codec.*
 
@@ -49,12 +50,6 @@ abstract class ImageFile {
      *
      */
     SeekableStream stream
-
-    /**
-     * Oginal image saved as a stream
-     *
-     */
-    SeekableStream orginalStream
 
     /**
      * Name of the source file
@@ -84,18 +79,8 @@ abstract class ImageFile {
      * @param fileStream Representing an image
      */
     ImageFile(String name, SeekableStream fileStream){
-        sourceFileName = name
-        orginalStream = fileStream
         stream = fileStream
-    }
-
-    /**
-     * Allows to restore orginal file
-     *
-     * @return void
-     */
-    def restoreOginalFile(){
-        stream = orginalStream
+        sourceFileName = name
     }
 
     /**
