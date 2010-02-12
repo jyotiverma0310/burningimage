@@ -19,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-
 package pl.burningice.plugins.image.engines
 
 import pl.burningice.plugins.image.engines.scale.*
@@ -70,8 +69,7 @@ class Action {
             throw new IllegalArgumentException("Scale width = ${width}, height = ${height} is incorrent")
         }
 
-        loadedImage.update(ScaleEngineFactory.produce(ScaleEngineFactory.APPROXIMATE_ENGINE)
-                                             .execute(loadedImage, width, height))
+        loadedImage.update(new ApproximateScaleEngine().execute(loadedImage, width, height))
         fileName
     }
 
@@ -92,8 +90,7 @@ class Action {
             throw new IllegalArgumentException("Scale width = ${width}, height = ${height} is incorrent")
         }
 
-        loadedImage.update(ScaleEngineFactory.produce(ScaleEngineFactory.ACCURATE_ENGINE)
-                                             .execute(loadedImage, width, height))
+        loadedImage.update(new AccurateScaleEngine().execute(loadedImage, width, height))
         fileName
     }
 

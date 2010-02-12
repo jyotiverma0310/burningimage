@@ -25,7 +25,7 @@ import javax.imageio.ImageIO
 import  pl.burningice.plugins.image.file.*
 
 /**
- * Execute 
+ * Execute actions on image
  *
  * @author gdulus
  */
