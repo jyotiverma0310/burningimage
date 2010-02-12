@@ -1,9 +1,8 @@
 package pl.burningice.plugins.image
 
-import grails.test.*
+import pl.burningice.plugins.image.test.BurningImageUnitTestCase
 import org.springframework.mock.web.MockMultipartFile
 import pl.burningice.plugins.image.engines.*
-import javax.imageio.ImageIO
 import java.awt.Color
 import java.awt.Font
 
@@ -11,58 +10,20 @@ import java.awt.Font
  *
  * @author pawel.gdula@burningice.pl
  */
-class BurningImageServiceTests extends GrailsUnitTestCase {
+class BurningImageServiceTests extends BurningImageUnitTestCase {
 
-    private static final def SOURCE_DIR = './resources/testImages/'
-
-    private static final def RESULT_DIR = './resources/resultImages/'
+    protected static final def RESULT_DIR = './resources/resultImages/'
 
     private def burningImageService
 
     protected void setUp() {
         super.setUp()
-        cleanUpTestDir()
         burningImageService = new BurningImageService()
     }
 
     protected void tearDown() {
         super.tearDown()
         burningImageService = null
-    }
-
-    protected void cleanUpTestDir(){
-        new File(RESULT_DIR).list().toList().each {
-            if(it != '.svn'){
-                def filePath = "${RESULT_DIR}${it}"
-                println "Remove ${filePath}"
-                new File(filePath).delete()
-            }
-        }
-    }
-
-    protected def fileExists(fileName){
-        new File("${RESULT_DIR}${fileName}").exists()
-    }
-
-    protected def getFilePath(fileName){
-        "${SOURCE_DIR}${fileName}"
-    }
-    
-    protected def getFile(fileName, dir = null){
-        ImageIO.read(new File("${dir ?: RESULT_DIR}${fileName}"))
-    }
-
-    protected def getEmptyMultipartFile(){
-        new MockMultipartFile('empty', new byte[0])
-    }
-
-    protected def getMultipartFile(fileName){
-        def fileNameParts = fileName.split(/\./)
-        def contentTypes = ['jpg':'image/jpeg', 'png':'image/png', 'gif':'image/gif']
-        new MockMultipartFile(fileNameParts[0],
-                              fileName,
-                              contentTypes[fileNameParts[1]],
-                              new FileInputStream(getFilePath(fileName)))
     }
 
     void testBaseSetupLocalFile(){

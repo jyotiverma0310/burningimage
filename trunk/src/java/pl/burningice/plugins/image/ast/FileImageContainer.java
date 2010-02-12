@@ -19,30 +19,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+package pl.burningice.plugins.image.ast;
 
-package pl.burningice.plugins.image.engines.scale
+import org.codehaus.groovy.transform.GroovyASTTransformationClass;
+import java.lang.annotation.*;
 
 /**
- * Factory for scale engines 
+ * Annotation that allows to mark domain object that will act as image container
+ * for files saved in specified dir (non db storage)
  *
- * @author Pawel Gdula <pawel.gdula@burningice.pl>
+ * @author pawel.gdula@burningice.pl
  */
-private class ScaleEngineFactory {
-
-    def static final APPROXIMATE_ENGINE = 1;
-
-    def static final ACCURATE_ENGINE = 2;
-
-    /**
-     * Produce image scale engine
-     *
-     * @param int engineType Type of the engine
-     * @return ScaleEngine
-     */
-    def static produce(engineType) {
-        if (engineType == APPROXIMATE_ENGINE) {
-            return new ApproximateScaleEngine()
-        }
-        return new AccurateScaleEngine()
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+@GroovyASTTransformationClass("pl.burningice.plugins.image.ast.FileImageContainerTransformation")
+public @interface FileImageContainer {
 }
