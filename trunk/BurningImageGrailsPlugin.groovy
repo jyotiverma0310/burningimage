@@ -8,7 +8,9 @@ class BurningImageGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
         "grails-app/views/error.gsp",
-        "grails-app/domain/**"
+        "grails-app/domain/pl/burningice/plugins/image/ast/**",
+        "resources/**",
+        "web-app/**"
     ]
 
     def author = "Pawel Gdula"
