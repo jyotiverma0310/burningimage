@@ -7,8 +7,8 @@
 = Version 0.3 (in progress) =
  * crop image
  * write text on image
- * !ImageUploadService for handling image manipulating and saving 
- * @!FileImageContainer annotation - simple way to work with images sored in specified directory
+ * !ImageUploadService for handling saving and manipulating images uploaded by user
+ * @!FileImageContainer annotation - simple way to work with images stored in specified directory
 
 = Version 0.2 =
 
