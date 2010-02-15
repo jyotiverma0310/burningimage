@@ -1,5 +1,3 @@
 #summary Plugin functionality requests
 
-= Introduction =
-
 If you have some ideas, request, comments about how this plugin should evolve, and what type functionality should provide, leave comment (but before that, please check if your request isn't on plugin [http://code.google.com/p/burningimage/wiki/Roadmap roadmap])
