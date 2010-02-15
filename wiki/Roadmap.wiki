@@ -1,4 +1,4 @@
-#summary Burning image roadmap
+#summary Plugin roadmap
 
 = Version 0.4 =
  * @!DbImageContainer annotation - simple way to work with image stored in database
