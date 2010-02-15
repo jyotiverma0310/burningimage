@@ -1,11 +1,14 @@
 #summary Burning image roadmap
 
+= Version 0.4 =
+ * @!DbImageContainer annotation - simple way to work with image stored in database
+
+
 = Version 0.3 (in progress) =
  * crop image
  * write text on image
- * ImageUploadService for handling image manipulating and saving 
- * @FileImageContainer annotation to provide simple way to work with image uploaded images
-
+ * !ImageUploadService for handling image manipulating and saving 
+ * @!FileImageContainer annotation - simple way to work with images sored in specified directory
 
 = Version 0.2 =
 
