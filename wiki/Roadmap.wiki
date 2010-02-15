@@ -1,0 +1,14 @@
+#summary Burning image roadmap
+
+= Version 0.3 (in progress) =
+ * crop image
+ * write text on image
+ * ImageUploadService for handling image manipulating and saving 
+ * @FileImageContainer annotation to provide simple way to work with image uploaded images
+
+
+= Version 0.2 =
+
+ * scale image with approximate width and height
+ * scale image with accurate width and height
+ * add image watermark
