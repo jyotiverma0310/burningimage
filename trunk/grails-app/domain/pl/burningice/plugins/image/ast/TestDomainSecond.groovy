@@ -9,10 +9,14 @@ package pl.burningice.plugins.image.ast
  *
  * @author gdulus
  */
-@FileImageContainer
+@FileImageContainer(field = 'avatar')
 class TestDomainSecond {
 
     String email
+
+    String lastname
+
+    static transients = ['lastname']
 
     static constraints = {
         email(email:true, blank:false)

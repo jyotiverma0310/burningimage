@@ -29,10 +29,10 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
     }
 
     void testScale() {
-        def testDomain = new TestDomain()
+        def testDomain = new TestDomain(image:getMultipartFile('image.jpg'))
 
         shouldFail(IllegalArgumentException){
-            imageUploadService.save(testDomain, getMultipartFile('image.jpg'))
+            imageUploadService.save(testDomain)
         }
         assertNull testDomain.imageExtension
 
@@ -50,7 +50,7 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
         assertFalse fileExists('prefixName-1-small.jpg')
 
         shouldFail(IllegalArgumentException){
-            imageUploadService.save(testDomain, getMultipartFile('image.jpg'))
+            imageUploadService.save(testDomain)
         }
         assertNull testDomain.imageExtension
 
@@ -62,7 +62,7 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
         def version = testDomain.version
 
         assertNotNull testDomain.ident()
-        imageUploadService.save(testDomain, getMultipartFile('image.jpg'))
+        imageUploadService.save(testDomain)
 
         assertTrue testDomain.imageExtension == 'jpg'
         assertTrue testDomain.version == version
@@ -73,8 +73,9 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
 
         version = testDomain.version
 
+        testDomain.image = getMultipartFile('image.png')
         assertNotNull testDomain.ident()
-        imageUploadService.save(testDomain, getMultipartFile('image.png'), true)
+        imageUploadService.save(testDomain, true)
 
         assertFalse fileExists('prefixName-1-large.jpg')
         assertFalse fileExists('prefixName-1-medium.jpg')
@@ -95,9 +96,9 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
             images: ['large':[watermark:[sign:'images/watermark.png', offset:[top:10, left:10]]]]
         ]
 
-        def testDomain = new TestDomain().save(flush:true)
+        def testDomain = new TestDomain(image:getMultipartFile('image.jpg')).save(flush:true)
         assertFalse fileExists("${testDomain.ident()}-large.jpg")
-        imageUploadService.save(testDomain, getMultipartFile('image.jpg'))
+        imageUploadService.save(testDomain)
         assertTrue fileExists("${testDomain.ident()}-large.jpg")
     }
 
@@ -111,13 +112,13 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
             ]
         ]
 
-        def testDomain = new TestDomain().save(flush:true)
+        def testDomain = new TestDomain(image:getMultipartFile('image.jpg')).save(flush:true)
 
         assertFalse fileExists("prefixName-${testDomain.ident()}-large.jpg")
         assertFalse fileExists("prefixName-${testDomain.ident()}-medium.jpg")
         assertFalse fileExists("prefixName-${testDomain.ident()}-small.jpg")
         
-        imageUploadService.save(testDomain, getMultipartFile('image.jpg'))
+        imageUploadService.save(testDomain)
 
         assertTrue fileExists("prefixName-${testDomain.ident()}-large.jpg")
         assertTrue fileExists("prefixName-${testDomain.ident()}-medium.jpg")
@@ -131,7 +132,7 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
         assertFalse fileExists("prefixName-${testDomain.ident()}-medium.jpg")
         assertFalse fileExists("prefixName-${testDomain.ident()}-small.jpg")
 
-        imageUploadService.save(testDomain, getMultipartFile('image.jpg'))
+        imageUploadService.save(testDomain)
 
         assertTrue fileExists("prefixName-${testDomain.ident()}-large.jpg")
         assertTrue fileExists("prefixName-${testDomain.ident()}-medium.jpg")
@@ -154,9 +155,9 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
                               watermark:[sign:'images/watermark.png', offset:[top:10, left:10]]]]
         ]
 
-        def testDomain = new TestDomain().save(flush:true)
+        def testDomain = new TestDomain(image:getMultipartFile('image.jpg')).save(flush:true)
         assertFalse fileExists("scale-and-waremark-${testDomain.ident()}-large.jpg")
-        imageUploadService.save(testDomain, getMultipartFile('image.jpg'))
+        imageUploadService.save(testDomain)
         assertTrue fileExists("scale-and-waremark-${testDomain.ident()}-large.jpg")
     }
 
@@ -169,14 +170,14 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
                       'small':[scale:[width:300, height:300, type:ScaleType.ACCURATE]]]
         ]
 
-        def testDomain = new TestDomain().save(flush:true)
+        def testDomain = new TestDomain(image:getMultipartFile('image.jpg')).save(flush:true)
         def version = testDomain.version
 
         assertNull testDomain.imageExtension
         assertFalse fileExists("action-wraped-${testDomain.ident()}-large.jpg")
         assertFalse fileExists("action-wraped-${testDomain.ident()}-small.jpg")
 
-        imageUploadService.save(testDomain, getMultipartFile('image.jpg'), {image, name, action ->
+        imageUploadService.save(testDomain, {image, name, action ->
             action()
 
             if (name == 'large'){
@@ -192,8 +193,10 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
         assertTrue testDomain.imageExtension == 'jpg'
         assertTrue fileExists("action-wraped-${testDomain.ident()}-large.jpg")
         assertTrue fileExists("action-wraped-${testDomain.ident()}-small.jpg")
+
+        testDomain.image = getMultipartFile('image.png')
         
-        imageUploadService.save(testDomain, getMultipartFile('image.png'), true, {image, name, action ->
+        imageUploadService.save(testDomain, true, {image, name, action ->
             action()
 
             if (name == 'large'){

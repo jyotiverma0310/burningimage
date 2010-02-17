@@ -32,6 +32,8 @@ import org.objectweb.asm.Opcodes;
 import org.apache.commons.lang.StringUtils;
 import pl.burningice.plugins.image.ast.intarface.FileImageContainer;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
+import pl.burningice.plugins.image.validator.ImageValidator;
 
 /**
  * Object executer tranformation of object marked by FileImageContainer annotation
@@ -41,25 +43,128 @@ import java.util.List;
 @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
 public class FileImageContainerTransformation implements ASTTransformation, Opcodes {
 
+    private static final String DEFAULT_FIELD_NAME = "image";
+
     public void visit(ASTNode[] nodes, SourceUnit sourceUnit) {
+        AnnotationNode annotation = (AnnotationNode) nodes[0];
+        String fieldName = DEFAULT_FIELD_NAME;
+        ConstantExpression fieldExpression = (ConstantExpression)annotation.getMember("field");
+
+        if (fieldExpression != null){
+            fieldName = fieldExpression.getValue().toString();
+        }
+
         for (ASTNode aSTNode : nodes) {
             if (!(aSTNode instanceof ClassNode)) {
                 continue;
             }
-            transform((ClassNode) aSTNode);
+
+            try {
+             transform((ClassNode) aSTNode, fieldName);
+            }
+            catch(Exception exception){
+                log(exception.toString());
+            }
+
+            break;
         }
     }
 
-    private void transform(ClassNode node) {
-        log("start transforming: " + node);
+    private void transform(ClassNode node, String fieldName) {
+        log("start transforming: " + node + " with field " + fieldName);
+
         // implements interface
         node.addInterface(new ClassNode(FileImageContainer.class));
-        // imageExists field
-        FieldNode imageExists = new FieldNode("imageExtension", Modifier.PRIVATE, new ClassNode(String.class), new ClassNode(node.getClass()), null);
-        node.addField(imageExists);
-        addGetter(imageExists, node);
-        addSetter(imageExists, node);
+
+        // imageExtension field
+        FieldNode imageExtension = new FieldNode("imageExtension", Modifier.PRIVATE, new ClassNode(String.class), new ClassNode(node.getClass()), null);
+        node.addField(imageExtension);
+        addGetter(imageExtension, node);
+        addSetter(imageExtension, node);
         addNullableConstraint(node, "imageExtension");
+
+        // field where image will be binded
+        FieldNode imageBindField = new FieldNode(fieldName, Modifier.PRIVATE, new ClassNode(MultipartFile.class), new ClassNode(node.getClass()), null);
+        node.addField(imageBindField);
+        addGetter(imageBindField, node);
+        addSetter(imageBindField, node);
+        addTransientValue(node, fieldName);
+        addImageValidator(node, fieldName);
+
+        if (fieldName.equals(DEFAULT_FIELD_NAME)){
+            return;
+        }
+
+        // additional fields/methods in case when field name is different than default
+        // we want to have possibilty to get binded image
+        addTransientValue(node, DEFAULT_FIELD_NAME);
+        addGetter(DEFAULT_FIELD_NAME, imageBindField, node);
+    }
+
+    public void addTransientValue(ClassNode node, String transientValue){
+        FieldNode transientField = getTransientsField(node);
+        ListExpression listValues = (ListExpression)transientField.getInitialExpression();
+        listValues.addExpression(new ConstantExpression(transientValue));
+    }
+
+    public FieldNode getTransientsField(ClassNode node){
+        FieldNode transientFields = node.getDeclaredField("transients");
+
+        if (transientFields != null) {
+            return transientFields;
+        }
+
+        transientFields = new FieldNode("transients",
+                                       Modifier.PRIVATE | Modifier.STATIC,
+                                       new ClassNode(List.class),
+                                       new ClassNode(node.getClass()),
+                                       new ListExpression());
+        node.addField(transientFields);
+        addGetter(transientFields, node, Modifier.PUBLIC | Modifier.STATIC);
+        addSetter(transientFields, node, Modifier.PUBLIC | Modifier.STATIC);
+        return transientFields;
+    }
+
+    public void addImageValidator(ClassNode classNode, String fieldName) {
+        FieldNode closure = classNode.getDeclaredField("constraints");
+
+        if (closure != null) {
+
+            ClosureExpression exp = (ClosureExpression) closure.getInitialExpression();
+            BlockStatement block = (BlockStatement) exp.getCode();
+
+            if (!hasFieldInClosure(closure, fieldName)) {
+                Variable image = new VariableExpression("image");
+                Variable imageContainer = new VariableExpression("imageContainer");
+
+                StaticMethodCallExpression closureMethodCall = new StaticMethodCallExpression(new ClassNode(ImageValidator.class),
+                                                                                              "validate",
+                                                                                              new ArgumentListExpression((VariableExpression)image,
+                                                                                                                         (VariableExpression)imageContainer));
+
+                BlockStatement closureBody = new BlockStatement(new Statement[]{new ReturnStatement(closureMethodCall)},
+                                                                new VariableScope());
+
+                Parameter[] closureParameters = {new Parameter(new ClassNode(MultipartFile.class), "image"),
+                                                 new Parameter(new ClassNode(FileImageContainer.class), "imageContainer")};
+
+                VariableScope scope = new VariableScope();
+                scope.putDeclaredVariable(image);
+                scope.putDeclaredVariable(imageContainer);
+                
+                ClosureExpression validator = new ClosureExpression(closureParameters, closureBody);
+                validator.setVariableScope(scope);
+
+                NamedArgumentListExpression namedarg = new NamedArgumentListExpression();
+                namedarg.addMapEntryExpression(new ConstantExpression("validator"), validator);
+
+                MethodCallExpression constExpr = new MethodCallExpression(VariableExpression.THIS_EXPRESSION,
+                                                                          new ConstantExpression(fieldName),
+                                                                          namedarg);
+                block.addStatement(new ExpressionStatement(constExpr));
+            }
+        }
+
     }
 
     public void addNullableConstraint(ClassNode classNode, String fieldName) {
@@ -101,24 +206,38 @@ public class FileImageContainerTransformation implements ASTTransformation, Opco
     }
 
     private void addGetter(FieldNode fieldNode, ClassNode owner) {
+        addGetter(fieldNode.getName(), fieldNode, owner, ACC_PUBLIC);
+    }
+
+    private void addGetter(String name, FieldNode fieldNode, ClassNode owner) {
+        addGetter(name, fieldNode, owner, ACC_PUBLIC);
+    }
+
+    private void addGetter(FieldNode fieldNode, ClassNode owner, int modifier) {
+        addGetter(fieldNode.getName(), fieldNode, owner, modifier);
+    }
+
+    private void addGetter(String name, FieldNode fieldNode, ClassNode owner, int modifier) {
         ClassNode type = fieldNode.getType();
-        String name = fieldNode.getName();
         String getterName = "get" + StringUtils.capitalize(name);
         owner.addMethod(getterName,
-                ACC_PUBLIC,
+                modifier,
                 nonGeneric(type),
                 Parameter.EMPTY_ARRAY,
                 null,
                 new ReturnStatement(new FieldExpression(fieldNode)));
-
     }
 
     private void addSetter(FieldNode fieldNode, ClassNode owner) {
+        addSetter(fieldNode, owner, ACC_PUBLIC);
+    }
+
+    private void addSetter(FieldNode fieldNode, ClassNode owner, int modifier) {
         ClassNode type = fieldNode.getType();
         String name = fieldNode.getName();
         String setterName = "set" + StringUtils.capitalize(name);
         owner.addMethod(setterName,
-                ACC_PUBLIC,
+                modifier,
                 ClassHelper.VOID_TYPE,
                 new Parameter[]{new Parameter(nonGeneric(type), "value")},
                 null,
@@ -142,7 +261,7 @@ public class FileImageContainerTransformation implements ASTTransformation, Opco
     }
 
     private void log(String message) {
-        System.out.println("[Burining Image]: " + message);
+        System.out.println("[Burining Image] " + message);
     }
 }
 

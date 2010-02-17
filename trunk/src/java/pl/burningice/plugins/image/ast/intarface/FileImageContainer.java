@@ -21,6 +21,8 @@ THE SOFTWARE.
 */
 package pl.burningice.plugins.image.ast.intarface;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * Interface to mark image container that hold information about images
  * saved in phisical directory.
@@ -32,4 +34,6 @@ public interface FileImageContainer extends ImageContainer {
     public String getImageExtension();
 
     public void setImageExtension(String value);
+
+    public MultipartFile getImage();
 }

@@ -11,7 +11,6 @@ package pl.burningice.plugins.image.ast
  */
 @FileImageContainer
 class TestDomain {
-
     static constraints = {
     }
 }
