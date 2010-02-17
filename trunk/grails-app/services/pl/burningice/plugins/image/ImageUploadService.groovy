@@ -58,25 +58,24 @@ class ImageUploadService implements ApplicationContextAware {
      *  ]
      *
      * @param imageContainer Domain object marked by FileImageContainer annotation
-     * @param uploadedImage Image that should be stored
      * @param shouldBeSaved Delineate if specifed domain object should be saved (optional)
      * @param actionWraper Closure that allow user to wrap prediefined action by some additional steps (optional)
      * @return FileImageContainer updated image container
      */
-    def save(FileImageContainer imageContainer, MultipartFile uploadedImage) {
-        execute(imageContainer, uploadedImage, null)
+    def save(FileImageContainer imageContainer) {
+        execute(imageContainer, imageContainer.getImage(), null)
     }
 
-    def save(FileImageContainer imageContainer, MultipartFile uploadedImage, boolean shouldBeSaved) {
-        save(imageContainer, uploadedImage, shouldBeSaved, null)
+    def save(FileImageContainer imageContainer, boolean shouldBeSaved) {
+        save(imageContainer, shouldBeSaved, null)
     }
 
-    def save(FileImageContainer imageContainer, MultipartFile uploadedImage, Closure actionWraper) {
-        execute(imageContainer, uploadedImage, actionWraper)
+    def save(FileImageContainer imageContainer, Closure actionWraper) {
+        execute(imageContainer, imageContainer.getImage(), actionWraper)
     }
 
-    def save(FileImageContainer imageContainer, MultipartFile uploadedImage, boolean shouldBeSaved, Closure actionWraper) {
-        execute(imageContainer, uploadedImage, actionWraper)
+    def save(FileImageContainer imageContainer, boolean shouldBeSaved, Closure actionWraper) {
+        execute(imageContainer, imageContainer.getImage(), actionWraper)
 
         if (shouldBeSaved){
             imageContainer.save(flush:true)

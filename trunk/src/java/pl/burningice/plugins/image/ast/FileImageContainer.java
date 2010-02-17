@@ -34,4 +34,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @GroovyASTTransformationClass("pl.burningice.plugins.image.ast.FileImageContainerTransformation")
 public @interface FileImageContainer {
+    String field ();
 }

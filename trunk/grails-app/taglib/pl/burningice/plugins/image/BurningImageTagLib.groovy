@@ -21,7 +21,6 @@ THE SOFTWARE.
 */
 package pl.burningice.plugins.image
 
-import pl.burningice.plugins.image.ast.TestDomain
 import pl.burningice.plugins.image.container.ContainerUtils
 import pl.burningice.plugins.image.ast.intarface.FileImageContainer
 

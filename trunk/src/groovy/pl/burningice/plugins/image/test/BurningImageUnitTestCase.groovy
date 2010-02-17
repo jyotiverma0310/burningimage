@@ -46,7 +46,7 @@ abstract class BurningImageUnitTestCase extends GrailsUnitTestCase {
 
     protected def getMultipartFile(fileName){
         def fileNameParts = fileName.split(/\./)
-        def contentTypes = ['jpg':'image/jpeg', 'png':'image/png', 'gif':'image/gif']
+        def contentTypes = ['jpg':'image/jpeg', 'png':'image/png', 'gif':'image/gif', 'bmp':'image/bmp']
         new MockMultipartFile(fileNameParts[0],
                               fileName,
                               contentTypes[fileNameParts[1]],

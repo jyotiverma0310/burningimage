@@ -52,7 +52,7 @@ class ContainerUtils {
      * @return Configuration data for specified container
      */
     static def getConfig(ImageContainer imageContainer){
-        CH.config[CONFIG_NAMESPACE][imageContainer.class.name.split(/\./)[-1]]
+        CH.config?."${CONFIG_NAMESPACE}"?."${imageContainer.class.name.split(/\./)[-1]}"
     }
 
     /**
