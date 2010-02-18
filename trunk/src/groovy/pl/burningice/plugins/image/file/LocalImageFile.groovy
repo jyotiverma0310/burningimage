@@ -22,8 +22,6 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.file
 
-import org.springframework.web.multipart.MultipartFile
-import javax.media.jai.*
 import com.sun.media.jai.codec.*
 
 /**

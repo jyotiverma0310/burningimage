@@ -24,12 +24,9 @@ package pl.burningice.plugins.image.file
 
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
-import java.io.ByteArrayOutputStream
 import com.sun.media.jai.codec.SeekableStream
 import com.sun.media.jai.codec.ByteArraySeekableStream
-import com.sun.media.jai.codec.MemoryCacheSeekableStream
 import javax.media.jai.*
-import com.sun.media.jai.codec.*
 
 /**
  * Base class for all image sources (File, MultipartFile)
@@ -59,7 +56,7 @@ abstract class ImageFile {
     String sourceFileName
 
     /**
-     * Mapping file extension >> JAI endocer
+     * Mapping file extension >> JAI encoder
      *
      * @var [:]
      */
@@ -75,7 +72,7 @@ abstract class ImageFile {
     /**
      * Default constructor
      *
-     * @param name Orginal file name
+     * @param name Original file name
      * @param fileStream Representing an image
      */
     ImageFile(String name, SeekableStream fileStream){
@@ -147,9 +144,9 @@ abstract class ImageFile {
     }
 
     /**
-     * Allows to update image after some manipuations
+     * Allows to update image after some manipulation
      *
-     * @param image Updated imaege
+     * @param image Updated image
      */
     def update(BufferedImage image){
         def output = new ByteArrayOutputStream()

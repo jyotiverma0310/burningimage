@@ -25,21 +25,20 @@ import pl.burningice.plugins.image.engines.scale.*
 import pl.burningice.plugins.image.engines.watermark.DefaultWatermarkEngine
 import pl.burningice.plugins.image.engines.crop.DefaultCropEngine
 import pl.burningice.plugins.image.engines.text.DefaultTextEngine
-import pl.burningice.plugins.image.engines.text.DefaultTextEngine
 import java.awt.Font
 import java.awt.Color
 
 /**
  * Object allows to build chains of action
  * It instance is pass as a parameter to closure that user define and
- * pass to execute method as aparameter
+ * pass to execute method as parameter
  *
  * @author pawel.gdula@burningice.pl
  */
 class Action {
 
     /**
-     * Image that is set to manipualte
+     * Image that is set to manipulate
      *
      * @var ImageFile
      */
@@ -75,8 +74,8 @@ class Action {
 
     /**
      * Method allows to scale image with accurate width and height
-     * Widht and heigt will be always (almous ;)) equals to set parameters
-     * Image will no be deformet but first scaled and next cropped on the center
+     * Width and height will be always (almost ;)) equals to set parameters
+     * Image will no be deformed but first scaled and next cropped on the center
      * (if it will necessary)
      *
      * @param int width
@@ -122,7 +121,7 @@ class Action {
     }
 
     /**
-     * Method allows to crop specfied region from image
+     * Method allows to crop specified region from image
      *
      * @param deltaX Offset from left border of image
      * @param deltaY Offset from top border of image
@@ -158,8 +157,8 @@ class Action {
     /**
      * Method allows to type text on image
      *
-     * @param color Specfify color of typed text
-     * @param font Specfify font of typed text
+     * @param color Specified color of typed text
+     * @param font Specified font of typed text
      * @param typist Type action
      * @return String Name of output file
      */
@@ -173,7 +172,7 @@ class Action {
     /**
      * Method allows to type text on image
      *
-     * @param color Specfify color of typed text
+     * @param color Specified color of typed text
      * @param typist Type action
      * @return String Name of output file
      */
@@ -184,7 +183,7 @@ class Action {
     /**
      * Method allows to type text on image
      *
-     * @param font Specfify font of typed text
+     * @param font Specified font of typed text
      * @param typist Type action
      * @return String Name of output file
      */

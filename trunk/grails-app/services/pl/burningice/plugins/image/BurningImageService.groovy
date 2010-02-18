@@ -22,7 +22,6 @@ THE SOFTWARE.
 package pl.burningice.plugins.image
 
 import org.springframework.web.multipart.MultipartFile
-import  pl.burningice.plugins.image.file.*
 import  pl.burningice.plugins.image.engines.*
 
 /**
@@ -79,7 +78,7 @@ class BurningImageService {
     }
 
     /**
-     * Create and cofigure object that execute specified manipulations on image
+     * Create and configure object that execute specified manipulations on image
      *
      * @param file Image represented by different type of objects (File/MultipartFile)
      * @param resultDir Path to directory where output file should be save

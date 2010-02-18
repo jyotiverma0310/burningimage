@@ -36,10 +36,10 @@ class ContainerUtils {
     private static final def CONFIG_NAMESPACE = 'bi'
 
     /**
-     * Retrive file extension from name of file
+     * Retrieve file extension from name of file
      *
      * @param imageName File name
-     * @return Fiele extension
+     * @return File extension
      */
     static def getImageExtension(String imageName){
         imageName.split(/\./)[-1].toLowerCase()
@@ -48,7 +48,7 @@ class ContainerUtils {
     /**
      * Returns configuration for specified container
      *
-     * @param imageContainer Image container for witch confguration is serched
+     * @param imageContainer Image container for witch configuration is searched
      * @return Configuration data for specified container
      */
     static def getConfig(ImageContainer imageContainer){

@@ -22,17 +22,6 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.engines.scale
 
-import pl.burningice.plugin.magick.exceptions.*
-import pl.burningice.plugin.magick.scale.exceptions.*
-import pl.burningice.plugin.magick.utils.*
-import javax.media.jai.*
-import com.sun.media.jai.codec.*
-import java.awt.image.renderable.ParameterBlock
-import javax.imageio.ImageIO
-import java.awt.AlphaComposite
-import pl.burningice.plugins.image.file.ImageFileFactory
-import java.awt.image.BufferedImage;
-
 /**
  * Abstract class for all scale engines
  *
@@ -44,8 +33,8 @@ abstract class ScaleEngine {
      * Execute image scaling
      *
      * @param ImageFile loadedImage Loaded image
-     * @param int width Requestet width
-     * @param int height Requestet height
+     * @param int width Requested width
+     * @param int height Requested height
      * @return BufferedImage
      */
     def execute(loadedImage, width, height) {
@@ -54,11 +43,11 @@ abstract class ScaleEngine {
     }
 
     /**
-     * Start scaling transfromation
+     * Start scaling transformation
      *
      * @param RenderedOp image Image to scale
-     * @param int width Requestet width
-     * @param int height Requestet height
+     * @param int width Requested width
+     * @param int height Requested height
      * @return RenderedOp
      */
     abstract protected def scaleImage(image, width, height)

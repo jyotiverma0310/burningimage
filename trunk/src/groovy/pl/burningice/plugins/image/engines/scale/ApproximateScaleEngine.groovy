@@ -24,11 +24,10 @@ package pl.burningice.plugins.image.engines.scale
 
 import java.awt.image.renderable.ParameterBlock
 import javax.media.jai.*;
-import com.sun.media.jai.codec.*;
 
 /**
  * Class allows to scale image with approximate width and height
- * Result image will not contain exact width and height gived by user
+ * Result image will not contain exact width and height given by user
  * if there will be image deformation
  *
  * @author Pawel Gdula <pawel.gdula@burningice.pl>
@@ -36,7 +35,7 @@ import com.sun.media.jai.codec.*;
 private class ApproximateScaleEngine extends ScaleEngine {
 
     /**
-     * @see ScaleEngine#scaleImage(image, width, height)
+     * @see ScaleEngine#scaleImage
      */
     protected def scaleImage(image, width, height) {
         def scaleX = width / image.width
@@ -45,7 +44,7 @@ private class ApproximateScaleEngine extends ScaleEngine {
     }
 
     /**
-     * We provide two types of image resize to eleminate situation
+     * We provide two types of image resize to eliminate situation
      * when scale is > 1, for such action SubsampleAverage throw exception
      * For this situation we resize image by "scale"
      *
@@ -59,7 +58,7 @@ private class ApproximateScaleEngine extends ScaleEngine {
     /**
      * Resize option for scale > 1
      *
-     * @param flaot scale Scale parameter
+     * @param scale Scale parameter
      * @param image Image to scale
      * @return RenderedOp
      */
@@ -77,7 +76,7 @@ private class ApproximateScaleEngine extends ScaleEngine {
     /**
      * Resize option for scale <= 1
      *
-     * @param flaot scale Scale parameter
+     * @param scale Scale parameter
      * @param image Image to scale
      * @return RenderedOp
      */

@@ -24,15 +24,12 @@ package pl.burningice.plugins.image.engines.scale
 
 import java.awt.image.renderable.ParameterBlock
 import javax.media.jai.*;
-import com.sun.media.jai.codec.*;
-import javax.imageio.ImageIO
-import pl.burningice.plugins.image.engines.crop.DefaultCropEngine
 
 /**
- * Class allows to scale image with accourate width and height.
- * Result image will  contain exact width and height gived by user,
- * if orginal size of image not fit to user width and height, image will be scaled
- * to shortest side and cropet on center
+ * Class allows to scale image with accurate width and height.
+ * Result image will  contain exact width and height gave by user,
+ * if original size of image not fit to user width and height, image will be scaled
+ * to shortest side and cropped on center
  *
  * @author Pawel Gdula <pawel.gdula@burningice.pl>
  */
@@ -40,15 +37,15 @@ private class AccurateScaleEngine extends ApproximateScaleEngine {
 
     /**
      * Sometimes scale of image is lowered by 1px and when
-     * there is crop action, exception is rised becouse
-     * crop region not match. If wee add 1px to requested size, it will corect error
+     * there is crop action, exception is risen because
+     * crop region not match. If wee add 1px to requested size, it will correct error
      *
      * @var int
      */
     private static final SIZE_CORRECTION = 1
 
     /**
-     * @see ScaleEngine#scaleImage(image, width, height)
+     * @see ScaleEngine#scaleImage
      * @overwrite
      */
     protected def scaleImage(image, width, height) {
