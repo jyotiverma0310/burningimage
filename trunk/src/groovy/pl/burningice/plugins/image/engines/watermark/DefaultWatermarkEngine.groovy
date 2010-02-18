@@ -22,10 +22,8 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.engines.watermark
 
-import pl.burningice.plugins.image.file.LocalImageFile
 import javax.imageio.ImageIO
 import java.awt.AlphaComposite
-import pl.burningice.plugins.image.file.ImageFileFactory
 
 /**
  * Base, default and only watermark engine
@@ -37,7 +35,7 @@ class DefaultWatermarkEngine {
     /**
      * Execute watermark impose
      *
-     * @param File watermarkFile Objec representing local watermark file
+     * @param File watermarkFile Object representing local watermark file
      * @param ImageFile loadedImage Loaded image
      * @param [:] position Map representing watermark location on image
      * @return ImageFile
@@ -45,7 +43,7 @@ class DefaultWatermarkEngine {
     def execute(watermarkFile, loadedImage, position, alpha) {
         def fileToMark = ImageIO.read(loadedImage.inputStream);
         def watermark = ImageIO.read(watermarkFile)
-        def (left, top) = transfromPostionon(watermark, fileToMark, position)
+        def (left, top) = transformPosition(watermark, fileToMark, position)
 
         def g = fileToMark.createGraphics();
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)alpha));
@@ -59,12 +57,12 @@ class DefaultWatermarkEngine {
      * Method transforms watermark localization parameters
      * to image coordinates
      *
-     * @param Image watermark Objec representing local watermark file
+     * @param Image watermark Object representing local watermark file
      * @param Image fileToMark Loaded image
      * @param [:] position Map representing watermark location on image
      * @return [] Array where 0 index delta from left and 1 index is delta from top of image
      */
-    private def transfromPostionon(watermark, fileToMark, position){
+    private def transformPosition(watermark, fileToMark, position){
         def left, top
 
         if (position['left'] != null) {

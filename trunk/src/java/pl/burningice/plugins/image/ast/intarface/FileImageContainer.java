@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Interface to mark image container that hold information about images
- * saved in phisical directory.
+ * saved in file system.
  *
  * @author pawel.gdula@burningice.pl
  */

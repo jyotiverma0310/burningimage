@@ -21,13 +21,7 @@ THE SOFTWARE.
 */
 package pl.burningice.plugins.image.engines.text
 
-import pl.burningice.plugins.image.file.LocalImageFile
-import pl.burningice.plugins.image.file.ImageFileFactory
 import javax.imageio.ImageIO
-import java.awt.image.BufferedImage
-import java.awt.Graphics
-import java.awt.Font
-import java.awt.Color
 
 /**
  * Engine for typing text on image
@@ -49,7 +43,7 @@ class DefaultTextEngine {
     def graphics
 
     /**
-     * Default class construcotr
+     * Default class constructor
      *
      * @param color Representing current color of text. Can be null
      * @param font Representing current font of text. Can be null

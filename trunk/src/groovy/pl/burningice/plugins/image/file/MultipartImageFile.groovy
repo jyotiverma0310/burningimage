@@ -23,11 +23,10 @@ THE SOFTWARE.
 package pl.burningice.plugins.image.file
 
 import org.springframework.web.multipart.MultipartFile
-import javax.media.jai.*
 import com.sun.media.jai.codec.*
 
 /**
- * Representing image file upladed na server as a MultipartFile
+ * Representing image file uploaded na server as a MultipartFile
  *
  * @author pawel.gdula@burningice.pl
  */

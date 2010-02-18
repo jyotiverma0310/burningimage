@@ -26,7 +26,7 @@ import pl.burningice.plugins.image.container.ContainerUtils
 import pl.burningice.plugins.image.ast.intarface.FileImageContainer
 
 /**
- * Allow to validate image
+ * Class allows to validate uploaded image associated with specified grails domain class.
  *
  * @author pawel.gdula@burningice.pl
  */

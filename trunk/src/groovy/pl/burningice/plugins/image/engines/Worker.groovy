@@ -27,7 +27,7 @@ import  pl.burningice.plugins.image.file.*
 /**
  * Execute actions on image
  *
- * @author gdulus
+ * @author pawel.gdula@burningice.pl
  */
 class Worker {
 
@@ -39,7 +39,7 @@ class Worker {
     private def resultDir
 
     /**
-     * Object representin image to manipulate
+     * Object represents image to manipulate
      *
      * @var File/MultipartFile
      */
@@ -47,7 +47,7 @@ class Worker {
 
     /**
      * Methods execute action on image
-     * It use as a output file name name of orginal image
+     * It use as a output file name name of original image
      *
      * @param Closure chain Chain of action on image
      * @return BurningImageService

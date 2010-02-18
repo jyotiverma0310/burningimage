@@ -36,7 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.burningice.plugins.image.validator.ImageValidator;
 
 /**
- * Object executer tranformation of object marked by FileImageContainer annotation
+ * Object execute transformation of object marked by FileImageContainer annotation
  *
  * @author pawel.gdula@burningice.pl
  */
@@ -96,7 +96,7 @@ public class FileImageContainerTransformation implements ASTTransformation, Opco
         }
 
         // additional fields/methods in case when field name is different than default
-        // we want to have possibilty to get binded image
+        // we want to have possibility to get binded image
         addTransientValue(node, DEFAULT_FIELD_NAME);
         addGetter(DEFAULT_FIELD_NAME, imageBindField, node);
     }
@@ -261,7 +261,7 @@ public class FileImageContainerTransformation implements ASTTransformation, Opco
     }
 
     private void log(String message) {
-        System.out.println("[Burining Image] " + message);
+        System.out.println("[Burning Image] " + message);
     }
 }
 

@@ -28,7 +28,7 @@ import pl.burningice.plugins.image.ast.intarface.*;
 import org.springframework.context.*
 
 /**
- * Servicem for image upload handling
+ * Service for image upload handling
  *
  * @author pawel.gdula@burningice.pl
  */
@@ -102,11 +102,11 @@ class ImageUploadService implements ApplicationContextAware {
     }
 
     /**
-     * Execute actins on image
+     * Execute actions on image
      *
      * @param imageContainer Domain object marked by FileImageContainer annotation
      * @param uploadedImage Image that should be stored
-     * @param actionWraper Closure that allow user to wrap prediefined action by some additional steps (optional)
+     * @param actionWraper Closure that allow user to wrap predefined action by some additional steps (optional)
      * @return FileImageContainer updated image container
      */
     private def execute(FileImageContainer imageContainer, MultipartFile uploadedImage, Closure actionWraper) {
@@ -124,7 +124,7 @@ class ImageUploadService implements ApplicationContextAware {
 
         config.images.each {subImageName, subImageOperations ->
             worker.execute(ContainerUtils.getName(subImageName, imageContainer, config), {image ->
-                // execute in user specified wraper
+                // execute in user specified wrapper
                 if (actionWraper) {
                     actionWraper(image, subImageName, {
                         executeOnImage(image, subImageOperations)
@@ -144,10 +144,10 @@ class ImageUploadService implements ApplicationContextAware {
     }
 
     /**
-     * Perform specified chain of modyfication configuret by the user
+     * Perform specified chain of modification configured by the user
      *
-     * @param image Image that is moddified
-     * @param subImageOperations Configuration of specified modyfications
+     * @param image Image that is modified
+     * @param subImageOperations Configuration of specified modifications
      */
     private def executeOnImage(image, subImageOperations) {
         subImageOperations.each {operationName, params ->

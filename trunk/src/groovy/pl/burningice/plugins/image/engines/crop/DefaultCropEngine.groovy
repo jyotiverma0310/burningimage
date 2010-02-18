@@ -23,10 +23,9 @@ package pl.burningice.plugins.image.engines.crop
 
 import java.awt.image.renderable.ParameterBlock
 import javax.media.jai.*;
-import com.sun.media.jai.codec.*;
 
 /**
- * Engine to croping image
+ * Engine to cropping image
  *
  * @author pawel.gdula@burningice.pl
  */
@@ -35,7 +34,7 @@ class DefaultCropEngine {
     /**
      * Performs crop action on image
      *
-     * @param loadedImage Object reperesenting current image
+     * @param loadedImage Object representing current image
      * @param deltaX Offset from left border of image
      * @param deltaY Offset from top border of image
      * @param width Size (horizontal) of crop region

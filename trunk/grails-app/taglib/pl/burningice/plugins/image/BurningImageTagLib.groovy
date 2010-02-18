@@ -78,7 +78,7 @@ class BurningImageTagLib {
     }
 
     /**
-     * Retrive information about file name and storage directory on base
+     * Retrieve information about file name and storage directory on base
      * of image size name and image container object
      *
      * @param size Size of the image that should be displayed
