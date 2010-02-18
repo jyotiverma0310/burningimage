@@ -21,7 +21,7 @@ def file = request.getFile('foto')
 burningImageService.doWith(file, 'path/to/output/dir')
 }}}
 
-If there is no file in specified path or submitted file is empty FileNotFoundException will be throw. 
+If there is no file in specified path or submitted file is empty !FileNotFoundException will be throw. 
 
 There are four type of files supported: GIF, JPG, PNG, BMP. All files will be saved in specified location in the same format, expect of GIF (because JAI read only support), that will be saved as JPG.
 
@@ -104,7 +104,7 @@ burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
 
 == Text writing ==
 
-This functionality allows to write text on image. Write method take three parameters: text to write, and offset offset from top left corner. Color and font can be set.
+This functionality allows to write text on image. Write method take three parameters: text to write, and offset from top left corner. Color and font can be set.
 
 {{{
 
