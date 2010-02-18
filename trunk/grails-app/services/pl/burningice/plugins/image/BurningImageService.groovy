@@ -31,6 +31,13 @@ import  pl.burningice.plugins.image.engines.*
  */
 class BurningImageService {
 
+    /**
+     * This gets rid of exception for not using native acceleration
+     */
+    static {
+        System.setProperty('com.sun.media.jai.disableMediaLib', 'true');
+    } 
+
     boolean transactional = false
 
     /**

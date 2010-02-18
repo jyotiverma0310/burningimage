@@ -19,7 +19,7 @@ class BurningImageGrailsPlugin {
     def description = "Image manipulation plugin"
 
     // URL to the plugin's documentation
-    def documentation = "http://code.google.com/p/burningimage/wiki/Documentation"
+    def documentation = "http://code.google.com/p/burningimage/"
 
     def doWithSpring = {
     }
