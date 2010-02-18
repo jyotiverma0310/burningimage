@@ -131,7 +131,53 @@ imageUploadService.save(userInstance)
 
 Passed userInstance must be saved already. This is required to get unique part in image file name. If it will not be save, !IlleagalArgumentException will be throw.
 
+This action will save image, but will not save information about him in domain object - it must be saved outside service:
 
+{{{
+....
+
+imageUploadService.save(userInstance)
+userInstance.save()
+
+....
+
+}}}
+
+or you can call save method with shouldBeSaved parameter set on true:
+
+{{{
+....
+
+imageUploadService.save(userInstance, true)
+
+....
+
+}}}
+
+As it was mentioned before, there is no possibility to configure image cropping/text writing in general !FileImageContainer configuration. But it can be done by using action wrapper in !ImageUploadService:
+
+{{{
+
+imageUploadService.save(userInstance, {image, name, action ->
+    if (name == 'large'){
+       image.text({it.write("Text on large image", 300, 300)})
+    }
+
+    action()
+    
+
+    if (name == 'small'){
+        image.text({it.write("Text on small image", 10, 50)})
+    }
+})
+
+}}}
+
+It allows you to wrap configured actions (represented in example by closure action) by actions provided by [DocVersion03_BurningImageService BurningImageService] (scale, crop, watermark, write text). 
+
+Parameter name represents name of image that is currently creating (key form bi.DomainClassName.images map) and allows to specify with image should be affected by additional action.
+
+In this example, image with name "large" will have write text and next configured actions will be performed. Image with name "small" will have actions performed and next text will be written on action result. 
 
 
 
