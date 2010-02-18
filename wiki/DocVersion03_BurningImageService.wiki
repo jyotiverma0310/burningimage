@@ -51,8 +51,6 @@ Inside closure we specify types of action. You could specify this actions in any
 
 == Scaling ==
 
-This is main functionality of plugin. It use JAI library as engine for producing thumbnails in high quality. There are two types of scaling.
-
 ==== Approximate image scaling ====
 
 This type of scaling not guarantee that result thumbnail will have requested size but it guarantee that size will not be greater than specified by user. Output image will not be deformed and proportions of image will be the same:
@@ -81,7 +79,8 @@ burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
 
 == Watermarking ==
 
-BI allows to add watermark at image:
+Only path to watermark is required. Watermark location is optional. If there is no location map, watermark will be put on the center of image. If you want to specify location, remember that mix of positions top-bottom and left-right is not allowed. There could be specified only one location option - in other case it will be centered. 
+
 
 {{{
 
@@ -91,8 +90,58 @@ burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
                     }
 }}}
 
-Only path to watermark is required. Watermark location is optional. If there is no location map, watermark will be put on the center of image. If you want to specify location, remember that mix of positions top-bottom and left-right is not allowed. There could be specified only one location option - in other case it will be centered. 
-
 == Cropping ==
 
+The two first parameters defines offset from left top corner of image, two last parameters defines crop size. If cropped region not fit on image (offset is over image or crop size is to big) !IllegalArgumentException will be thrown.
+
+{{{
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {
+                       it.crop(0,0,50,50)
+                   }
+}}}
+
 == Text writing ==
+
+This functionality allows to write text on image. Write method take three parameters: text to write, and offset offset from top left corner. Color and font can be set.
+
+{{{
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {img ->
+                        img.text(Color.WHITE, new Font('Arial', Font.PLAIN, 30), {
+                            it.write("text one", 10, 10)
+                            it.write("text two", 100, 100)
+                            it.write("text three", 200, 200)
+                        })
+                   }
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {img ->
+                        img.text(Color.WHITE, {
+                            it.write("text one", 10, 10)
+                            it.write("text two", 100, 100)
+                            it.write("text three", 200, 200)
+                        })
+                   }
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {img ->
+                        img.text(new Font('Arial', Font.PLAIN, 30),{
+                            it.write("text one", 10, 10)
+                            it.write("text two", 100, 100)
+                            it.write("text three", 200, 200)
+                        })
+                   }
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {img ->
+                        img.text({
+                            it.write("text one", 10, 10)
+                            it.write("text two", 100, 100)
+                            it.write("text three", 200, 200)
+                        })
+                   }
+}}}
+
