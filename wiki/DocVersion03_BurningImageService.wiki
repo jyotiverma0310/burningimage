@@ -14,7 +14,7 @@ in your controller / service. Grails will initialize and inject it to this varia
 burningImageService.doWith('path/to/image', 'path/to/output/dir')
 }}}
 
-or submitted by user as MultiparFile:
+or submitted by user as !MultiparFile:
  
 {{{
 def file = request.getFile('foto')
@@ -144,4 +144,3 @@ burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
                         })
                    }
 }}}
-
