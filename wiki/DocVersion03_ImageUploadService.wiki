@@ -2,7 +2,7 @@
 
 = Introduction = 
 
-!BurningImage provide simple way to associate image with domain object and write it on the disk. With version 0.3, there was provided @!FileImageContainer annotation that allows to mark domain object, that should be treat as image container. That prepared class can be handle by !ImageUploadService, that provide methods to save and delete image. To display images for specified domain object instance, just use BurningImageTagLib, that provide necessary tags to display image, or retrieve path to it. 
+!BurningImage provide simple way to associate image with domain object and write it on the disk. With version 0.3, there was provided @!FileImageContainer annotation that allows to mark domain object, that should be treat as image container. That prepared class can be handle by !ImageUploadService, that provide methods to save and delete image. To display images for specified domain object instance, just use !BurningImageTagLib, that provide necessary tags to display image, or retrieve path to it. 
 
 == @!FileImageContainer ==
 
@@ -178,7 +178,7 @@ Parameter name represents name of image that is currently creating (key form bi.
 
 In this example, image with name "large" will have write text and next configured actions will be performed. Image with name "small" will have actions performed and next text will be written on action result. 
 
-== !BurningImageTagLibTests ==
+== !BurningImageTagLib ==
 
 Resource tag will return path to image. Size attribute represents name of image (key form bi.!DomainClassName.images map) and bean attribute specify domain object image is associated with.
 
@@ -191,6 +191,4 @@ Img tag will render img html tag, that will display specified image. As above, s
 {{{
 <bi:img size="" bean="" />
 }}}
-
-
 
