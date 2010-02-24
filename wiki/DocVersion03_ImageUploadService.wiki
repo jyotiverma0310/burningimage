@@ -180,13 +180,13 @@ In this example, image with name "large" will have write text and next configure
 
 == !BurningImageTagLib ==
 
-Resource tag will return path to image. Size attribute represents name of image (key form bi.!DomainClassName.images map) and bean attribute specify domain object image is associated with.
+Resource tag will return path to image. Size attribute represents name of image (key form bi.!DomainClassName.images map) and bean attribute specify domain object that image is associated with.
 
 {{{
 <bi:resource size="" bean="" />
 }}}
 
-Img tag will render img html tag, that will display specified image. As above, size attribute represents name of image (key form bi.!DomainClassName.images map) and bean attribute specify domain object image is associated with. Tag allows to provide standard html attributes (id, name, title, onclick)
+Img tag will render img html tag, that will display specified image. As above, size attribute represents name of image (key form bi.!DomainClassName.images map) and bean attribute specify domain object that image is associated with. Tag allows to provide standard html attributes (id, name, title, onclick)
 
 {{{
 <bi:img size="" bean="" />
