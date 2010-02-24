@@ -178,6 +178,32 @@ Parameter name represents name of image that is currently creating (key form bi.
 
 In this example, image with name "large" will have write text and next configured actions will be performed. Image with name "small" will have actions performed and next text will be written on action result. 
 
+To delete image files, execute: 
+
+{{{
+
+....
+
+imageUploadService.delete(userInstance)
+userInstance.save()
+
+....
+
+}}}
+
+or, with flag shouldBeSaved set on true
+
+{{{
+
+....
+
+imageUploadService.delete(userInstance, true)
+
+....
+
+}}} 
+
+
 == !BurningImageTagLib ==
 
 Resource tag will return path to image. Size attribute represents name of image (key form bi.!DomainClassName.images map) and bean attribute specify domain object that image is associated with.
