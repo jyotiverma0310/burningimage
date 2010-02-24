@@ -95,11 +95,11 @@ bi.NameOfDomainClass = [
 
 *constraints*: optional parameter that hold information about validation rules. If skipped, no validation is performed.
 
-*constraints.nullable*: specify if image can be can by null/empty (className.fileImageContainer.nullable)
+*constraints.nullable*: specify if image can be can by null/empty (className.fieldName.nullable)
 
-*constraints.maxSize*: specify max allowed size of uploaded image in  bytes (className.fileImageContainer.maxSize.exceeded)
+*constraints.maxSize*: specify max allowed size of uploaded image in  bytes (className.fieldName.maxSize.exceeded)
 
-*constraints.contentType*: specify allowed content type of image (className.fileImageContainer.contentType)
+*constraints.contentType*: specify allowed content type of image (className.fieldName.contentType)
 
 == !ImageUploadService ==
 
