@@ -99,7 +99,7 @@ bi.NameOfDomainClass = [
 
 *constraints.maxSize*: specify max allowed size of uploaded image in  bytes (className.fileImageContainer.maxSize.exceeded)
 
-*constraints.contentType*: specify allowed content type of image (lassName.fileImageContainer.contentType)
+*constraints.contentType*: specify allowed content type of image (className.fileImageContainer.contentType)
 
 == !ImageUploadService ==
 
