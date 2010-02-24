@@ -38,27 +38,27 @@ class ImageValidator {
         if (!config?.constraints){
             return true
         }
+
         // nullable constraints
         if (!config.constraints.nullable
             && (!image || image.isEmpty())){
-            return ['fileImageContainer.nullable']
+            return ['nullable']
         }
-        // other validators require no null object
-        if (!image){
+        // other validators require no null and not empty object
+        if (!image || image.isEmpty()){
             return true
         }
         // maxSize constraint
         if (config.constraints.maxSize
             && config.constraints.maxSize < image.getSize()){
-            return ['fileImageContainer.maxSize.exceeded', config.constraints.maxSize, image.getSize()]
+            return ['maxSize.exceeded', config.constraints.maxSize, image.getSize()]
         }
-        // content type 
+        // content type
         if (config.constraints.contentType
             && !config.constraints.contentType.contains(image.getContentType())){
-            return ['fileImageContainer.contentType', config.constraints.contentType, image.getContentType()]
+            return ['contentType.invalid', config.constraints.contentType, image.getContentType()]
         }
         // all ok
         return true
     }
 }
-
