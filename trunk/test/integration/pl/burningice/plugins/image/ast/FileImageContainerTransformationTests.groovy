@@ -145,12 +145,12 @@ class FileImageContainerTransformationTests extends BurningImageUnitTestCase {
         testDomain = new TestDomain()
         testDomain.validate()
 
-        assertEquals testDomain.errors.getFieldError('image').getCode(), 'fileImageContainer.nullable'
+        assertEquals testDomain.errors.getFieldError('image').getCode(), 'nullable'
 
         testDomain = new TestDomain(image:getEmptyMultipartFile())
         testDomain.validate()
 
-        assertEquals testDomain.errors.getFieldError('image').getCode(), 'fileImageContainer.nullable'
+        assertEquals testDomain.errors.getFieldError('image').getCode(), 'nullable'
 
         ConfigurationHolder.config.bi.TestDomain = [
             constraints:[
@@ -166,13 +166,13 @@ class FileImageContainerTransformationTests extends BurningImageUnitTestCase {
         testDomain.validate()
 
         println testDomain.errors.getFieldErrors('image')
-        assertEquals testDomain.errors.getFieldError('image').getCode(), 'fileImageContainer.maxSize.exceeded'
+        assertEquals testDomain.errors.getFieldError('image').getCode(), 'maxSize.exceeded'
 
         ConfigurationHolder.config.bi.TestDomain.constraints.maxSize = image.getSize()
         testDomain.validate()
         
         println testDomain.errors.getFieldErrors('image')
-        assertEquals testDomain.errors.getFieldError('image').getCode(), 'fileImageContainer.contentType'
+        assertEquals testDomain.errors.getFieldError('image').getCode(), 'contentType.invalid'
 
         ConfigurationHolder.config.bi.TestDomain.constraints.contentType <<  image.getContentType()
         testDomain.validate()

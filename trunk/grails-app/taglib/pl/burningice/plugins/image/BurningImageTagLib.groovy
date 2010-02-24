@@ -38,25 +38,19 @@ class BurningImageTagLib {
      *
      * @param size Size of the image that should be displayed
      * @param bean Image container that hold information about image
-     * @param id Value of id attribute
-     * @param onclick Value of onclick attribute
-     * @param name Value of name attribute
-     * @param title Value of title attribute
-     * @param alt Value of alt attribute
      */
     def img =  { attrs, body ->
         def path = resource(attrs, body)
 
-        if (!attrs.bean.ident()){
+        if (!path){
             return null
         }
 
-        def id = attrs.id ? " id=\"${attrs.id}\"" : ''
-        def onclick = attrs.onclick ? " onclick=\"${attrs.onclick}\"" : ''
-        def name = attrs.name ? " name=\"${attrs.name}\"" : ''
-        def title = attrs.title ? " title=\"${attrs.title}\"" : ''
-        def alt = attrs.alt ?: ''
-        out << "<img src=\"${path}\" alt=\"${alt}\"${id}${onclick}${name}${title} />"
+        attrs.remove('size')
+        attrs.remove('bean')
+
+        def htmlAttributes = attrs.collect {it.key + '="' + it.value + '"'}
+        out << "<img src=\"${path}\" ${htmlAttributes.join(' ')}/>"
     }
 
     /**
