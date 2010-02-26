@@ -92,4 +92,17 @@ class BurningImageTagLibTests extends GroovyPagesTestCase {
         result = applyTemplate(template, [size:size, bean:bean, alt:'img-alt', id:'img-id', onclick:'alert()', title:'img-title', name:'img-name'])
         assertEquals "<img src=\"/${bean.ident()}-small.jpg\" alt=\"img-alt\" id=\"img-id\" name=\"img-name\" onclick=\"alert()\" title=\"img-title\"/>", result
     }
+
+    void testHasImage() {
+        def template = '<bi:hasImage bean="${bean}">test</bi:hasImage>'
+
+        def result = applyTemplate(template, [bean:null])
+        assertEquals '', result
+
+        result = applyTemplate(template, [bean:new TestDomain()])
+        assertEquals '', result
+
+        result = applyTemplate(template, [bean:new TestDomain(imageExtension:'jpg')])
+        assertEquals 'test', result
+    }
 }
