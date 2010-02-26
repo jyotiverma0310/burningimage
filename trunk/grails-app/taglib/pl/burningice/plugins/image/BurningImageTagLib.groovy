@@ -34,6 +34,19 @@ class BurningImageTagLib {
     static namespace = 'bi'
 
     /**
+     * Allows to check if specified image container has saved image
+     *
+     * @param bean Image container that hold information about image
+     */
+    def hasImage =  { attrs, body ->
+        if (!attrs.bean
+            || !attrs.bean.imageExtension){
+            return
+        }
+        out << body()
+    }
+
+    /**
      * Display html img tag with path to stored image
      *
      * @param size Size of the image that should be displayed
