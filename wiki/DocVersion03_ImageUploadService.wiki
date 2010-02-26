@@ -217,3 +217,11 @@ Img tag will render img html tag, that will display specified image. As above, s
 {{{
 <bi:img size="" bean="" />
 }}}
+
+If you want to check if specified image container has associated images, just use hasImage tag:
+
+{{{
+<bi:hasImage bean="${imageContainer}">
+    And this is your image: <bi:img size="large" bean="${imageContainer}" />
+</bi:hasImage>
+}}}
