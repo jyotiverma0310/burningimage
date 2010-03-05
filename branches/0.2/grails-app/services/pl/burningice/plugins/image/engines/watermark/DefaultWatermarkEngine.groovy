@@ -22,7 +22,6 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.engines.watermark
 
-import pl.burningice.plugins.image.file.LocalImageFile
 import javax.imageio.ImageIO
 import java.awt.AlphaComposite
 import pl.burningice.plugins.image.file.ImageFileFactory

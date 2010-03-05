@@ -22,16 +22,8 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.engines.scale
 
-import pl.burningice.plugin.magick.exceptions.*
-import pl.burningice.plugin.magick.scale.exceptions.*
-import pl.burningice.plugin.magick.utils.*
-import javax.media.jai.*
-import com.sun.media.jai.codec.*
-import java.awt.image.renderable.ParameterBlock
 import javax.imageio.ImageIO
-import java.awt.AlphaComposite
 import pl.burningice.plugins.image.file.ImageFileFactory
-import java.awt.image.BufferedImage;
 
 /**
  * Abstract class for all scale engines
