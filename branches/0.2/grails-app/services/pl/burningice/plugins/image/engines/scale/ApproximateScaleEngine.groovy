@@ -24,7 +24,6 @@ package pl.burningice.plugins.image.engines.scale
 
 import java.awt.image.renderable.ParameterBlock
 import javax.media.jai.*;
-import com.sun.media.jai.codec.*;
 
 /**
  * Class allows to scale image with approximate width and height
@@ -36,7 +35,7 @@ import com.sun.media.jai.codec.*;
 private class ApproximateScaleEngine extends ScaleEngine {
 
     /**
-     * @see ScaleEngine#scaleImage(image, width, height)
+     * @see ScaleEngine#scaleImage
      */
     protected def scaleImage(image, width, height) {
         def scaleX = width / image.width

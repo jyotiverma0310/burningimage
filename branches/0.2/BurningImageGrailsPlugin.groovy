@@ -1,6 +1,6 @@
 class BurningImageGrailsPlugin {
     // the plugin version
-    def version = "0.3"
+    def version = "0.2.1"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.1 > *"
     // the other plugins this plugin depends on
@@ -14,7 +14,7 @@ class BurningImageGrailsPlugin {
     def authorEmail = "pawel.gdula@burningice.pl"
     def title = "Burning Image"
     def description = "Image manipulation plugin"
-    def documentation = "http://code.google.com/p/burningimage/wiki/Documentation"
+    def documentation = "http://code.google.com/p/burningimage/"
 
     def doWithSpring = {
     }

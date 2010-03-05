@@ -24,8 +24,6 @@ package pl.burningice.plugins.image.engines.scale
 
 import java.awt.image.renderable.ParameterBlock
 import javax.media.jai.*;
-import com.sun.media.jai.codec.*;
-import javax.imageio.ImageIO
 
 /**
  * Class allows to scale image with accourate width and height.
@@ -47,7 +45,7 @@ private class AccurateScaleEngine extends ApproximateScaleEngine {
     private static final SIZE_CORRECTION = 1
 
     /**
-     * @see ScaleEngine#scaleImage(image, width, height)
+     * @see ScaleEngine#scaleImage
      * @overwrite
      */
     protected def scaleImage(image, width, height) {
