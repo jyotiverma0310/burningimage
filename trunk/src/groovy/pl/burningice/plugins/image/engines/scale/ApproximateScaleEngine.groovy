@@ -38,6 +38,11 @@ private class ApproximateScaleEngine extends ScaleEngine {
      * @see ScaleEngine#scaleImage
      */
     protected def scaleImage(image, width, height) {
+        if (width > image.width
+            && height > image.height){
+            return image 
+        }
+
         def scaleX = width / image.width
         def scaleY = height / image.height
         resize(scaleX > scaleY ? scaleY : scaleX)(image)
