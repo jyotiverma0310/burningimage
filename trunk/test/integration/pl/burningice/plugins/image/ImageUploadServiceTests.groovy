@@ -4,6 +4,7 @@ import pl.burningice.plugins.image.test.BurningImageUnitTestCase
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import pl.burningice.plugins.image.engines.scale.ScaleType
 import pl.burningice.plugins.image.ast.TestDomain
+import grails.test.GroovyPagesTestCase
 
 /**
  *

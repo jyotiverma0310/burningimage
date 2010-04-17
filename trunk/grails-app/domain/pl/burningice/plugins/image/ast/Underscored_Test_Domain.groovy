@@ -26,23 +26,9 @@ package pl.burningice.plugins.image.ast
  *
  * @author pawel.gdula@burningice.pl
  */
-@FileImageContainer(field = 'avatar')
-class TestDomainSecond {
-
-    String email
-
-    String lastname
-
-    List<TestDomainSecond> images
-
-    List<Underscored_Test_Domain> undersored
-
-    static hasMany = [images:TestDomainSecond, imagesSet:TestDomainSecond, undersored:Underscored_Test_Domain]
-
-    static transients = ['lastname']
-
+@FileImageContainer
+class Underscored_Test_Domain {
     static constraints = {
-        email(email:true, blank:false)
+    
     }
 }
-
