@@ -52,7 +52,18 @@ class ContainerUtils {
      * @return Configuration data for specified container
      */
     static def getConfig(ImageContainer imageContainer){
-        CH.config?."${CONFIG_NAMESPACE}"?."${imageContainer.class.name.split(/\./)[-1]}"
+        CH.config?."${CONFIG_NAMESPACE}"?."${getImageContainerName(imageContainer)}"
+    }
+
+    /**
+     * Returns class name for specified container
+     *
+     * @param imageContainer Image container for witch configuration is searched
+     * @return Name of the class
+     */
+    static def getImageContainerName(imageContainer){
+        // first split get name from classes like $$_javassist and second remove package
+        return imageContainer.class.name.split('_')[0].split(/\./)[-1]      
     }
 
     /**
