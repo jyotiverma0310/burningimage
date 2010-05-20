@@ -62,8 +62,8 @@ class ContainerUtils {
      * @return Name of the class
      */
     static def getImageContainerName(imageContainer){
-        // first split get name from classes like $$_javassist and second remove package
-        return imageContainer.class.name.split('_')[0].split(/\./)[-1]      
+        // search for name, can be sufixed by $$_javassist (hibernate proxy)
+        return imageContainer.class.simpleName.split('_')[0]
     }
 
     /**

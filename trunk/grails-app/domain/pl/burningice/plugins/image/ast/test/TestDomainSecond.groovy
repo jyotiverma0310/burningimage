@@ -19,17 +19,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package pl.burningice.plugins.image.ast.intarface;
+package pl.burningice.plugins.image.ast.test
 
-import org.springframework.web.multipart.MultipartFile;
+import pl.burningice.plugins.image.ast.FileImageContainer
+import pl.burningice.plugins.image.ast.test.Underscored_Test_Domain
 
 /**
- * Base interface for all interfaces used to mark image container
+ * Domain class used in tests of FileImageContainer AST transformation
  *
  * @author pawel.gdula@burningice.pl
  */
-public interface ImageContainer {
+@FileImageContainer(field = 'avatar')
+class TestDomainSecond {
 
-    public MultipartFile getImage();
+    String email
 
+    String lastname
+
+    List<TestDomainSecond> images
+
+    List<Underscored_Test_Domain> undersored
+
+    static hasMany = [images:TestDomainSecond, imagesSet:TestDomainSecond, undersored:Underscored_Test_Domain]
+
+    static transients = ['lastname']
+
+    static constraints = {
+        email(email:true, blank:false)
+    }
 }
+

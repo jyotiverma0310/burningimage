@@ -19,16 +19,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package pl.burningice.plugins.image.ast
+package pl.burningice.plugins.image.ast.intarface;
+
+import java.util.Map;
 
 /**
- * Domain class used in tests of FileImageContainer AST transformation 
+ * Interface to mark image container that hold information about images
+ * saved in database
  *
  * @author pawel.gdula@burningice.pl
  */
-@FileImageContainer
-class TestDomain {
-    static constraints = {
-    }
-}
+public interface DBImageContainer extends ImageContainer {
 
+    public Map getBiImage();
+
+    public void setBiImage(Map value);
+}

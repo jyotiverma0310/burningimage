@@ -23,7 +23,7 @@ package pl.burningice.plugins.image.validator
 
 import org.springframework.web.multipart.MultipartFile
 import pl.burningice.plugins.image.container.ContainerUtils
-import pl.burningice.plugins.image.ast.intarface.FileImageContainer
+import pl.burningice.plugins.image.ast.intarface.ImageContainer
 
 /**
  * Class allows to validate uploaded image associated with specified grails domain class.
@@ -32,7 +32,7 @@ import pl.burningice.plugins.image.ast.intarface.FileImageContainer
  */
 class ImageValidator {
 
-    static def validate(MultipartFile image, FileImageContainer container){
+    static def validate(MultipartFile image, ImageContainer container){
         def config = ContainerUtils.getConfig(container)
         //  there is no validation for this class
         if (!config?.constraints){

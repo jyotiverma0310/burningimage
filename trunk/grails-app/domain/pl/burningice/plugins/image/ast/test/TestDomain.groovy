@@ -19,16 +19,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package pl.burningice.plugins.image.ast
+package pl.burningice.plugins.image.ast.test
+
+import pl.burningice.plugins.image.ast.FileImageContainer
 
 /**
- * Domain class used in tests of FileImageContainer AST transformation
+ * Domain class used in tests of FileImageContainer AST transformation 
  *
  * @author pawel.gdula@burningice.pl
  */
 @FileImageContainer
-class Underscored_Test_Domain {
+class TestDomain {
     static constraints = {
-    
     }
 }
+

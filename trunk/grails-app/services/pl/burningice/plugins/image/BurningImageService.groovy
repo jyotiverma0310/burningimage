@@ -84,6 +84,27 @@ class BurningImageService {
         getWorker(file, resultDir)
     }
 
+     /**
+     * Executes work for file determined by MultipartFile interface
+     *
+     * @param file File uploaded by the user (or in other case when file is represented by MultipartFile interface)
+     * @param resultDir Path to directory where output file should be save
+     * @return Object that execute specified manipulations on image
+     * @throws IllegalArgumentException If any input is null
+     * @throws FileNotFoundException If there is no file in specified location or there is no output directory
+     */
+    def doWith(MultipartFile file) {
+        if (!file) {
+            throw new IllegalArgumentException('Uploaded image is null')
+        }
+
+        if (file.isEmpty()) {
+            throw new FileNotFoundException("Uploaded file ${file.originalFilename} is empty")
+        }
+
+        new Worker(loadedImage:file)
+    }
+
     /**
      * Create and configure object that execute specified manipulations on image
      *

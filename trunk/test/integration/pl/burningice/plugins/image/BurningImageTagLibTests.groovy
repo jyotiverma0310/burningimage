@@ -1,9 +1,11 @@
 package pl.burningice.plugins.image
 
-import pl.burningice.plugins.image.ast.*
 import grails.test.GroovyPagesTestCase
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
+import pl.burningice.plugins.image.ast.test.Underscored_Test_Domain
+import pl.burningice.plugins.image.ast.test.TestDomain
+import pl.burningice.plugins.image.ast.test.TestDomainSecond
 
 /**
  *

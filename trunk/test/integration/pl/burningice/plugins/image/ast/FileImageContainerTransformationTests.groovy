@@ -1,9 +1,11 @@
 package pl.burningice.plugins.image.ast
 
-import grails.test.*
 import pl.burningice.plugins.image.ast.intarface.FileImageContainer
 import pl.burningice.plugins.image.test.BurningImageUnitTestCase
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
+import pl.burningice.plugins.image.ast.test.TestDomainSecond
+import pl.burningice.plugins.image.ast.test.TestDomain
+import pl.burningice.plugins.image.ast.intarface.ImageContainer
 
 /**
  *
@@ -34,6 +36,7 @@ class FileImageContainerTransformationTests extends BurningImageUnitTestCase {
 
         def testDomain = new TestDomain()
         assertTrue testDomain instanceof FileImageContainer
+        assertTrue testDomain instanceof  ImageContainer
         assertNull testDomain.imageExtension
 
         testDomain = new TestDomain(imageExtension:'jpg')

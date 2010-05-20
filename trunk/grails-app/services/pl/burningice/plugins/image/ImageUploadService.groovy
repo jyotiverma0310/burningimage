@@ -25,108 +25,122 @@ import org.springframework.web.multipart.MultipartFile
 import pl.burningice.plugins.image.container.*
 import pl.burningice.plugins.image.engines.scale.ScaleType
 import pl.burningice.plugins.image.ast.intarface.*;
-import org.springframework.context.*
+import pl.burningice.plugins.image.engines.Worker
 
 /**
  * Service for image upload handling
  *
  * @author pawel.gdula@burningice.pl
  */
-class ImageUploadService implements ApplicationContextAware {
+class ImageUploadService {
 
     boolean transactional = true
 
-    ApplicationContext applicationContext
+    ResourcePathProvider resourcePathProvider
 
-    def burningImageService
+    UploadWorkerFactory uploadWorkerFactory
+
+    BurningImageService burningImageService
 
     /**
-     * Perfrom save/update of image. Use configuration data to specify how many images
-     * should be created and what type of actions should be performed.
-     *
-     * Exanple configuration
-     *
-     * CH.config.bi.MyDomain = [
-     *     outputDir: '/path/to/outputDir', {nullable = false, blank = false, exists = true}
-     *     prefix: '/path/to/outputDir', {nullable = true, blank = false}
-     *     images: ['small':[scale:[width:xx, height:yy, type[e:SCALE_ENGINE]]
-     *              'medium:[scale:[width:xx, height:yy, type:SCALE_ENGINE],
-     *                       watermark:[sign:'/path/to/watermark', offset:[valid offset]]],
-     *              'large':[scale:[width:xx, height:yy, type:SCALE_ENGINE],
-     *                       watermark:[sign:'/path/to/watermark', offset:[valid offset]]]
-     *     ]
-     *  ]
-     *
-     * @param imageContainer Domain object marked by FileImageContainer annotation
-     * @param shouldBeSaved Delineate if specifed domain object should be saved (optional)
-     * @param actionWraper Closure that allow user to wrap prediefined action by some additional steps (optional)
-     * @return FileImageContainer updated image container
-     */
-    def save(FileImageContainer imageContainer) {
+         * Perfrom save/update of image. Use configuration data to specify how many images
+         * should be created and what type of actions should be performed.
+         *
+         * Exanple configuration
+         *
+         * CH.config.bi.MyDomain = [
+         *     outputDir: '/path/to/outputDir', {nullable = false, blank = false, exists = true}
+         *     prefix: '/path/to/outputDir', {nullable = true, blank = false}
+         *     images: ['small':[scale:[width:xx, height:yy, type[e:SCALE_ENGINE]]
+         *              'medium:[scale:[width:xx, height:yy, type:SCALE_ENGINE],
+         *                       watermark:[sign:'/path/to/watermark', offset:[valid offset]]],
+         *              'large':[scale:[width:xx, height:yy, type:SCALE_ENGINE],
+         *                       watermark:[sign:'/path/to/watermark', offset:[valid offset]]]
+         *     ]
+         *  ]
+         *
+         * @param imageContainer Domain object marked by FileImageContainer annotation
+         * @param shouldBeSaved Delineate if specifed domain object should be saved (optional)
+         * @param actionWraper Closure that allow user to wrap prediefined action by some additional steps (optional)
+         * @return FileImageContainer updated image container
+         */
+    def save(ImageContainer imageContainer) {
         execute(imageContainer, imageContainer.getImage(), null)
     }
 
-    def save(FileImageContainer imageContainer, boolean shouldBeSaved) {
+    def save(ImageContainer imageContainer, boolean shouldBeSaved) {
         save(imageContainer, shouldBeSaved, null)
     }
 
-    def save(FileImageContainer imageContainer, Closure actionWraper) {
+    def save(ImageContainer imageContainer, Closure actionWraper) {
         execute(imageContainer, imageContainer.getImage(), actionWraper)
     }
 
-    def save(FileImageContainer imageContainer, boolean shouldBeSaved, Closure actionWraper) {
+    def save(ImageContainer imageContainer, boolean shouldBeSaved, Closure actionWraper) {
         execute(imageContainer, imageContainer.getImage(), actionWraper)
 
-        if (shouldBeSaved){
-            imageContainer.save(flush:true)
+        if (!shouldBeSaved){
+            return imageContainer
         }
 
-        imageContainer
+        return imageContainer.save(flush:true)
     }
 
     /**
-     * Allows to delete images associated with specified domain object
-     *
-     * @param imageContainer Domain object marked by FileImageContainer annotation
-     * @param shouldBeSaved Delineate if specifed domain object should be saved (optional)
-     * @return FileImageContainer updated image container
-     */
-    def delete(FileImageContainer imageContainer, save = false) {
-        removeFiles(imageContainer, getConfig(imageContainer))
-
-        if (save){
-            imageContainer.save(flush:true)
+        * Allows to delete images associated with specified domain object
+        *
+        * @param imageContainer Domain object marked by FileImageContainer annotation
+        * @param shouldBeSaved Delineate if specified domain object should be saved (optional)
+        * @return FileImageContainer updated image container
+        */
+    ImageContainer delete(final ImageContainer imageContainer, shouldBeSaved = false) {
+        // get worker that will provide actions for specified container
+        UploadWorker uploadWorker =  uploadWorkerFactory.produce(imageContainer)
+        // check if there are images - if not leave
+        if (!uploadWorker.hasImage()){
+            return uploadWorker.container 
         }
-
-        imageContainer
+        // perform image delete
+        uploadWorker.delete()
+        // check container should be save - if not leave
+        if (!shouldBeSaved){
+            return uploadWorker.container
+        }
+        // perform update
+        return uploadWorker.container.save(flush:true)
     }
 
     /**
-     * Execute actions on image
-     *
-     * @param imageContainer Domain object marked by FileImageContainer annotation
-     * @param uploadedImage Image that should be stored
-     * @param actionWraper Closure that allow user to wrap predefined action by some additional steps (optional)
-     * @return FileImageContainer updated image container
-     */
-    private def execute(FileImageContainer imageContainer, MultipartFile uploadedImage, Closure actionWraper) {
-        if (!imageContainer.ident()){
-            throw new IllegalArgumentException("Image container ${imageContainer} should be persisten")
+         * Execute actions on image
+         *
+         * @param imageContainer Domain object marked by FileImageContainer annotation
+         * @param uploadedImage Image that should be stored
+         * @param actionWrapper Closure that allow user to wrap predefined action by some additional steps (optional)
+         * @return FileImageContainer updated image container
+         */
+    private ImageContainer execute(final ImageContainer imageContainer, MultipartFile uploadedImage, Closure actionWrapper) {
+        // get worker that will provide actions for specified container
+        UploadWorker uploadWorker =  uploadWorkerFactory.produce(imageContainer)
+        // check if container is saved        
+        if (!uploadWorker.isPersisted()){
+            throw new IllegalArgumentException("Container ${uploadWorker} should be persisted")
         }
-
-        def config = getConfig(imageContainer)
-
-        if (imageContainer.imageExtension != null){
-            removeFiles(imageContainer, config)
+        //  check if container have provided configuration 
+        if (!uploadWorker.config){
+            throw new IllegalArgumentException("There is no configuration for ${uploadWorker}")
         }
-
-        def imageName, worker = burningImageService.doWith(uploadedImage, getPath(config.outputDir))
-
-        config.images.each {subImageName, subImageOperations ->
-            worker.execute(ContainerUtils.getName(subImageName, imageContainer, config), {image ->
+        // if there are images remove them - we will update 
+        if (uploadWorker.hasImage()){
+            uploadWorker.delete()                        
+        }
+        // retrieve worker that will perform actions on image
+        Worker manipulationWorker = burningImageService.doWith(uploadedImage)
+        // do each configured image manipulation
+        uploadWorker.config.images.each {subImageName, subImageOperations ->
+            manipulationWorker.execute(uploadWorker.getSaveCommand(subImageName), {image ->
                 // execute in user specified wrapper
-                if (actionWraper) {
-                    actionWraper(image, subImageName, {
+                if (actionWrapper) {
+                    actionWrapper(image, subImageName, {
                         executeOnImage(image, subImageOperations)
                     })
                 }
@@ -134,21 +148,18 @@ class ImageUploadService implements ApplicationContextAware {
                 else {
                     executeOnImage(image, subImageOperations)
                 }
-                // set file name - we will use it to get file extension
-                imageName = image.fileName
-            })
+             })
         }
-
-        imageContainer.imageExtension = ContainerUtils.getImageExtension(imageName)
-        imageContainer
+        // return image container for other actions
+        return uploadWorker.container
     }
 
     /**
-     * Perform specified chain of modification configured by the user
-     *
-     * @param image Image that is modified
-     * @param subImageOperations Configuration of specified modifications
-     */
+         * Perform specified chain of modification configured by the user
+         *
+         * @param image Image that is modified
+         * @param subImageOperations Configuration of specified modifications
+         */
     private def executeOnImage(image, subImageOperations) {
         subImageOperations.each {operationName, params ->
             actionMapping[operationName](image, params)
@@ -156,53 +167,11 @@ class ImageUploadService implements ApplicationContextAware {
     }
 
     /**
-     * Perform image deleting
-     *
-     * @param imageContainer Domain object marked by FileImageContainer annotation
-     * @param config Configuration for specified domain object
-     */
-    private def removeFiles(FileImageContainer imageContainer, Map config) {
-        def path = getPath(config.outputDir)
-        config.images.each {subImageName, subImageOperations ->
-            def file = new File("${path}/${ContainerUtils.getFullName(subImageName, imageContainer, config)}")
-            if (file.exists()){
-                file.delete()
-            }
-        }
-    }
-
-    /**
-     * Returns configuration for specified domain object
-     *
-     * @param imageContainer Domain object marked by FileImageContainer annotation
-     * @return Configuration for Domain object
-     */
-    private def getConfig(ImageContainer imageContainer){
-        def config = ContainerUtils.getConfig(imageContainer)
-
-        if (!config){
-            throw new IllegalArgumentException("There is no configuration for ${imageContainer} class")
-        }
-
-        config
-    }
-
-    /**
-     * Returns absolute path to resources
-     *
-     * @param relativePath Relative path to resources
-     * @return Absolute path to resources
-     */
-    private def getPath(relativePath){
-        applicationContext.getResource(relativePath).getFile().toString()
-    }
-
-    /**
-     * Performs scaling on image
-     *
-     * @param image Image on witch scaling should be performed
-     * @param params Scaling parameters
-     */
+         * Performs scaling on image
+         *
+         * @param image Image on witch scaling should be performed
+         * @param params Scaling parameters
+         */
     private def scaleImage = {image, params ->
         if (params.type == ScaleType.ACCURATE){
             image.scaleAccurate(params.width, params.height)
@@ -215,19 +184,19 @@ class ImageUploadService implements ApplicationContextAware {
     }
 
     /**
-     * Performs watermarking on image
-     *
-     * @param image Image on witch watermarking should be performed
-     * @param params Scaling parameters
-     */
+         * Performs watermarking on image
+         *
+         * @param image Image on witch watermarking should be performed
+         * @param params Scaling parameters
+         */
     private def watermarkImage = {image, params ->
-        image.watermark(getPath(params.sign), params.offset)
+        image.watermark(resourcePathProvider.getPath(params.sign), params.offset)
     }
 
     /**
-     * Map configuration key to action in this service
-     *
-     */
+         * Map configuration key to action in this service
+         *
+         */
     private def actionMapping = [
         scale:scaleImage,
         watermark:watermarkImage

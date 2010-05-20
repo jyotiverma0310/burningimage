@@ -19,17 +19,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package pl.burningice.plugins.image.ast.intarface;
+package pl.burningice.plugins.image.ast;
 
-import org.springframework.web.multipart.MultipartFile;
+import org.codehaus.groovy.transform.GroovyASTTransformationClass;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Base interface for all interfaces used to mark image container
+ * Annotation that allows to mark domain object that will act as image container
+ * for files saved in database
  *
  * @author pawel.gdula@burningice.pl
  */
-public interface ImageContainer {
-
-    public MultipartFile getImage();
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+@GroovyASTTransformationClass("pl.burningice.plugins.image.ast.DBImageContainerTransformation")
+public @interface DBImageContainer {
+    String field ();
 }

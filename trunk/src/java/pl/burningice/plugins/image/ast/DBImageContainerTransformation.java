@@ -21,38 +21,39 @@ THE SOFTWARE.
 */
 package pl.burningice.plugins.image.ast;
 
-import org.codehaus.groovy.ast.*;
-import org.codehaus.groovy.transform.*;
-import org.codehaus.groovy.control.*;
-import org.codehaus.groovy.ast.expr.*;
-import org.codehaus.groovy.ast.stmt.*;
+import org.codehaus.groovy.ast.ClassNode;
+import org.codehaus.groovy.ast.FieldNode;
+import org.codehaus.groovy.ast.expr.ClassExpression;
+import org.codehaus.groovy.ast.expr.ConstantExpression;
+import org.codehaus.groovy.ast.expr.MapExpression;
+import org.codehaus.groovy.control.CompilePhase;
+import org.codehaus.groovy.transform.GroovyASTTransformation;
+import pl.burningice.plugins.image.ast.intarface.DBImageContainer;
+
 import java.lang.reflect.Modifier;
-import org.codehaus.groovy.syntax.*;
-import org.objectweb.asm.Opcodes;
-import org.apache.commons.lang.StringUtils;
-import pl.burningice.plugins.image.ast.intarface.FileImageContainer;
-import java.util.List;
-import org.springframework.web.multipart.MultipartFile;
-import pl.burningice.plugins.image.validator.ImageValidator;
+import java.util.Map;
 
 /**
- * Object execute transformation of object marked by FileImageContainer annotation
+ * Object execute transformation of object marked by DBImageContainer annotation
  *
  * @author pawel.gdula@burningice.pl
  */
 @GroovyASTTransformation(phase = CompilePhase.CANONICALIZATION)
-public class FileImageContainerTransformation extends AbstractImageContainerTransformation {
+public class DBImageContainerTransformation extends AbstractImageContainerTransformation {
 
     @Override
     protected void transformSpecified(ClassNode node, String fieldName) {
         // implements interface
-        node.addInterface(new ClassNode(FileImageContainer.class));
-        // imageExtension field
-        FieldNode imageExtension = new FieldNode("imageExtension", Modifier.PRIVATE, new ClassNode(String.class), new ClassNode(node.getClass()), null);
-        node.addField(imageExtension);
-        addGetter(imageExtension, node);
-        addSetter(imageExtension, node);
-        addNullableConstraint(node, "imageExtension");
+        node.addInterface(new ClassNode(DBImageContainer.class));
+        // add relation with images table
+        FieldNode imageBindField = new FieldNode("biImage", Modifier.PRIVATE, new ClassNode(Map.class), new ClassNode(node.getClass()), null);
+        node.addField(imageBindField);
+        addGetter(imageBindField, node);
+        addSetter(imageBindField, node);
+        addNullableConstraint(node, "biImage");
+        // add hasMany relation
+        FieldNode hasManyField = getHasManyField(node);
+        MapExpression mapValues = (MapExpression)hasManyField.getInitialExpression();
+        mapValues.addMapEntryExpression(new ConstantExpression("biImage"), new ClassExpression(new ClassNode(Image.class)));
     }
 }
-
