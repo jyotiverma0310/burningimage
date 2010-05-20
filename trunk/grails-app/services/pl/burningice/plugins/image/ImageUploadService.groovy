@@ -125,7 +125,7 @@ class ImageUploadService {
         if (!uploadWorker.isPersisted()){
             throw new IllegalArgumentException("Container ${uploadWorker} should be persisted")
         }
-        //  check if container have provided configuration 
+        //  check if container have provided configuration
         if (!uploadWorker.config){
             throw new IllegalArgumentException("There is no configuration for ${uploadWorker}")
         }

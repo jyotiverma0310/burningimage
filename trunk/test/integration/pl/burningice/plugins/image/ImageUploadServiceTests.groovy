@@ -31,9 +31,8 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
     }
 
     void testScaleDbImageDefaultFiled() {
-
         def testDomain, result
-        /*
+        ConfigurationHolder.config.bi.TestDbContainerDomainFirst = null
         // instance not saved and there is no image
         testDomain = new TestDbContainerDomainFirst()
         shouldFail(IllegalArgumentException){
@@ -44,17 +43,61 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
         shouldFail(IllegalArgumentException){
             imageUploadService.save(testDomain)
         }
-        // should be ok
-        */
+        // should fail, there is no config provided for this domain object
         testDomain = new TestDbContainerDomainFirst()
-        //assertTrue(testDomain instanceof DBImageContainer)
         assertNotNull(testDomain.save(flush:true))
-        //testDomain.image = getMultipartFile('image.jpg')
-        /*
+        testDomain.image = getMultipartFile('image.jpg')
         shouldFail(IllegalArgumentException){
             imageUploadService.save(testDomain)
         }
-        */
+        // should be ok now
+        ConfigurationHolder.config.bi.TestDbContainerDomainFirst = [
+            images: [
+                'small':[scale:[width:100, height:100, type:ScaleType.ACCURATE]],
+                'medium':[scale:[width:300, height:300, type:ScaleType.ACCURATE]],
+                'large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE]]
+            ]
+        ]
+        testDomain = new TestDbContainerDomainFirst(image:getMultipartFile('image.jpg'))
+        assertNotNull(testDomain.save(flush:true))
+        def version = testDomain.version 
+        imageUploadService.save(testDomain)
+
+        assertEquals(version, testDomain.version) 
+        assertNotNull(testDomain.biImage)
+        assertEquals(3, testDomain.biImage.size())
+        assertNotNull(testDomain.biImage.small)
+        assertEquals('jpg', testDomain.biImage.small.type)
+        assertNotNull(testDomain.biImage.medium)
+        assertEquals('jpg', testDomain.biImage.medium.type)
+        assertNotNull(testDomain.biImage.large)
+        assertEquals('jpg', testDomain.biImage.large.type)
+
+        testDomain.image = getMultipartFile('image.png')
+        imageUploadService.save(testDomain)
+
+        assertEquals(version, testDomain.version)
+        assertNotNull(testDomain.biImage)
+        assertEquals(3, testDomain.biImage.size())
+        assertNotNull(testDomain.biImage.small)
+        assertEquals('png', testDomain.biImage.small.type)
+        assertNotNull(testDomain.biImage.medium)
+        assertEquals('png', testDomain.biImage.medium.type)
+        assertNotNull(testDomain.biImage.large)
+        assertEquals('png', testDomain.biImage.large.type)
+
+        testDomain.image = getMultipartFile('image.bmp')
+        imageUploadService.save(testDomain, true)
+
+        assertTrue(version < testDomain.version)
+        assertNotNull(testDomain.biImage)
+        assertEquals(3, testDomain.biImage.size())
+        assertNotNull(testDomain.biImage.small)
+        assertEquals('bmp', testDomain.biImage.small.type)
+        assertNotNull(testDomain.biImage.medium)
+        assertEquals('bmp', testDomain.biImage.medium.type)
+        assertNotNull(testDomain.biImage.large)
+        assertEquals('bmp', testDomain.biImage.large.type)
     }
 
     void testScale() {
