@@ -13,18 +13,20 @@ import java.awt.image.BufferedImage
  */
 class SaveToDbCommand implements SaveCommand {
 
-  private DBImageContainer container
+    private DBImageContainer container
 
-  private String size    
+    private String size
 
-  SaveToDbCommand(DBImageContainer container, String size){
-    this.container = container
-    this.size = size
-  }
+    SaveToDbCommand(DBImageContainer container, String size){
+        this.container = container
+        this.size = size
+    }
 
-  def void execute(byte[] source, String extension) {
-    Image image = new Image(data:source, type: extension)
-    image.save(flush:true)
-    container.biImage[size] = image
-  }
+    def void execute(byte[] source, String extension) {
+        if (!container.biImage){
+            container.biImage = [:]
+        }
+
+        container.biImage[size] = new Image(data:source, type: extension)
+    }
 }
