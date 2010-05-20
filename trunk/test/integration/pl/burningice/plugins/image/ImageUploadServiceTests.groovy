@@ -3,8 +3,9 @@ package pl.burningice.plugins.image
 import pl.burningice.plugins.image.test.BurningImageUnitTestCase
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import pl.burningice.plugins.image.engines.scale.ScaleType
-import pl.burningice.plugins.image.ast.TestDomain
-import grails.test.GroovyPagesTestCase
+import pl.burningice.plugins.image.ast.test.TestDomain
+import pl.burningice.plugins.image.ast.test.TestDbContainerDomainFirst
+import pl.burningice.plugins.image.ast.intarface.DBImageContainer
 
 /**
  *
@@ -16,7 +17,7 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
 
     protected static final def WEB_APP_RESULT_DIR = './upload/'
 
-    def imageUploadService
+    ImageUploadService imageUploadService
 
     protected void setUp() {
         super.setUp()
@@ -27,6 +28,33 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
 
     protected void tearDown() {
         super.tearDown()
+    }
+
+    void testScaleDbImageDefaultFiled() {
+
+        def testDomain, result
+        /*
+        // instance not saved and there is no image
+        testDomain = new TestDbContainerDomainFirst()
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+        // image uploaded but instance not saved
+        testDomain = new TestDbContainerDomainFirst(image:getMultipartFile('image.jpg'))
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+        // should be ok
+        */
+        testDomain = new TestDbContainerDomainFirst()
+        //assertTrue(testDomain instanceof DBImageContainer)
+        assertNotNull(testDomain.save(flush:true))
+        //testDomain.image = getMultipartFile('image.jpg')
+        /*
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+        */
     }
 
     void testScale() {

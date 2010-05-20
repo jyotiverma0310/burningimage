@@ -22,7 +22,8 @@ THE SOFTWARE.
 package pl.burningice.plugins.image.engines
 
 import javax.imageio.ImageIO
-import  pl.burningice.plugins.image.file.*
+import pl.burningice.plugins.image.file.*
+import pl.burningice.plugins.image.container.SaveCommand
 
 /**
  * Execute actions on image
@@ -31,72 +32,86 @@ import  pl.burningice.plugins.image.file.*
  */
 class Worker {
 
-    /**
-     * Path to output directory
-     *
-     * @var String
-     */
-    private def resultDir
+  /**
+   * Path to output directory
+   *
+   * @var String
+   */
+  private String resultDir
 
-    /**
-     * Object represents image to manipulate
-     *
-     * @var File/MultipartFile
-     */
-    private def loadedImage
+  /**
+   * Object represents image to manipulate
+   *
+   * @var File/MultipartFile
+   */
+  private def loadedImage
 
-    /**
-     * Methods execute action on image
-     * It use as a output file name name of original image
-     *
-     * @param Closure chain Chain of action on image
-     * @return BurningImageService
-     */
-    def execute (chain) {
-        def image = ImageFileFactory.produce(loadedImage)
-        work("${resultDir}/${image.name}", image.name, chain, image)
-        this
-    }
+  /**
+   * Methods execute action on image
+   * It use as a output file name name of original image
+   *
+   * @param Closure chain Chain of action on image
+   * @return BurningImageService
+   */
+  Worker execute(Closure chain) {
+    def image = ImageFileFactory.produce(loadedImage)
+    return work("${resultDir}/${image.name}", image.name, chain, image)
+  }
 
-    /**
-     * Methods execute action on image
-     * Allows to specify output name by the user
-     *
-     * @param String Name of output image (without extension)
-     * @param Closure chain Chain of action on image
-     * @return Worker
-     */
-    Worker execute (outputFileName, chain) {
-        def image = ImageFileFactory.produce(loadedImage)
-        def fileName = "${outputFileName}.${image.extension}"
-        work("${resultDir}/${fileName}", fileName, chain, image)
-    }
+  /**
+   * Methods execute action on image
+   * Allows to specify output name by the user
+   *
+   * @param String Name of output image (without extension)
+   * @param Closure chain Chain of action on image
+   * @return Worker
+   */
+  Worker execute(String outputFileName, Closure chain) {
+    def image = ImageFileFactory.produce(loadedImage)
+    def fileName = "${outputFileName}.${image.extension}"
+    return work("${resultDir}/${fileName}", fileName, chain, image)
+  }
 
-    /**
-     * Perform work
-     *
-     * @param outputFilePath Specify path to output image
-     * @param fileName Specify file name
-     * @param chain Specify work field
-     * @param image ImageFile object representing image to manipulate
-     * @return Self
-     */
-    private Worker work(outputFilePath, fileName, chain, image){
-        chain(new Action(loadedImage:image, fileName: fileName))
-        save(outputFilePath, image)
-        this
-    }
+  /**
+   * Methods execute action on image
+   * Allows to specify output name by the user
+   *
+   * @param String Name of output image (without extension)
+   * @param Closure chain Chain of action on image
+   * @return Worker
+   */
+  Worker execute(SaveCommand saveCommand, Closure chain) {
+    ImageFile image = ImageFileFactory.produce(loadedImage)
+    chain(new Action(loadedImage: image))
+    saveCommand.execute(image.getAsByteArray(), image.extension)
+    return this
+  }
 
-    /**
-     * Save changed image
-     *
-     * @param outputFilePath Specify path to output image
-     * @param image ImageFile object representing image to manipulate
-     */
-    private void save(outputFilePath, image){
-        ImageIO.write(ImageIO.read(image.inputStream),
-                      image.extension,
-                      new File(outputFilePath));
-    }
+  /**
+   * Perform work
+   *
+   * @param outputFilePath Specify path to output image
+   * @param fileName Specify file name
+   * @param chain Specify work field
+   * @param image ImageFile object representing image to manipulate
+   * @return Self
+   */
+  private Worker work(outputFilePath, fileName, chain, image) {
+    chain(new Action(loadedImage: image, fileName: fileName))
+    save(outputFilePath, image)
+    this
+  }
+
+  /**
+   * Save changed image
+   *
+   * @param outputFilePath Specify path to output image
+   * @param image ImageFile object representing image to manipulate
+   */
+  private void save(outputFilePath, image) {
+    ImageIO.write(ImageIO.read(image.inputStream),
+            image.extension,
+            new File(outputFilePath));
+  }
 }
 

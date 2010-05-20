@@ -19,30 +19,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package pl.burningice.plugins.image.ast
+package pl.burningice.plugins.image.ast.test
+
+import pl.burningice.plugins.image.ast.DBImageContainer
 
 /**
- * Domain class used in tests of FileImageContainer AST transformation
+ * Domain class used in tests of DBImageContainer AST transformation 
  *
  * @author pawel.gdula@burningice.pl
  */
-@FileImageContainer(field = 'avatar')
-class TestDomainSecond {
 
-    String email
-
-    String lastname
-
-    List<TestDomainSecond> images
-
-    List<Underscored_Test_Domain> undersored
-
-    static hasMany = [images:TestDomainSecond, imagesSet:TestDomainSecond, undersored:Underscored_Test_Domain]
-
-    static transients = ['lastname']
-
+@DBImageContainer
+class TestDbContainerDomainFirst {
     static constraints = {
-        email(email:true, blank:false)
     }
 }
-

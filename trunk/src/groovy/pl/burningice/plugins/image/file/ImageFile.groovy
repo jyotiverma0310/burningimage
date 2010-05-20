@@ -89,6 +89,10 @@ abstract class ImageFile {
         JAI.create("stream", inputStream)
     }
 
+    public byte[] getAsByteArray(){
+        return toByteArray(ImageIO.read(inputStream))
+    }
+
     /**
      * Returns InputStream object representing current file
      *
@@ -143,14 +147,13 @@ abstract class ImageFile {
         extensionEncoderMapping[extension]
     }
 
-    /**
-     * Allows to update image after some manipulation
-     *
-     * @param image Updated image
-     */
-    def update(BufferedImage image){
+    void update(BufferedImage image){
+        stream = new ByteArraySeekableStream(toByteArray(image))
+    }
+
+    private byte[] toByteArray(BufferedImage image){
         def output = new ByteArrayOutputStream()
         ImageIO.write(image, extension, output);
-        stream = new ByteArraySeekableStream(output.toByteArray())
+        return output.toByteArray()      
     }
 }
