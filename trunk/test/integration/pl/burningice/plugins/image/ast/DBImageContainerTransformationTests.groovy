@@ -39,7 +39,9 @@ class DBImageContainerTransformationTests extends BurningImageUnitTestCase {
         assertTrue TestDbContainerDomainFirst.methods.name.contains('setBiImage')
         assertTrue TestDbContainerDomainFirst.methods.name.contains('getHasMany')
         assertTrue TestDbContainerDomainFirst.methods.name.contains('setHasMany')
+        assertTrue TestDbContainerDomainFirst.methods.name.contains('beforeDelete')
         assertEquals(Image, TestDbContainerDomainFirst.hasMany?.biImage)
+        
 
         println "fields: " + TestDbContainerDomainSecond.fields.name
         println "methods: " + TestDbContainerDomainSecond.methods.name
@@ -48,10 +50,11 @@ class DBImageContainerTransformationTests extends BurningImageUnitTestCase {
         container = new TestDbContainerDomainSecond()
         assertTrue container instanceof  DBImageContainer
         assertFalse TestDbContainerDomainSecond.fields.name.contains('biImage')
-        assertTrue TestDbContainerDomainFirst.methods.name.contains('getBiImage')
-        assertTrue TestDbContainerDomainFirst.methods.name.contains('setBiImage')
-        assertTrue TestDbContainerDomainFirst.methods.name.contains('getHasMany')
-        assertTrue TestDbContainerDomainFirst.methods.name.contains('setHasMany')
+        assertTrue TestDbContainerDomainSecond.methods.name.contains('getBiImage')
+        assertTrue TestDbContainerDomainSecond.methods.name.contains('setBiImage')
+        assertTrue TestDbContainerDomainSecond.methods.name.contains('getHasMany')
+        assertTrue TestDbContainerDomainSecond.methods.name.contains('setHasMany')
+        assertTrue TestDbContainerDomainSecond.methods.name.contains('beforeDelete')
         assertEquals(TestDbContainerDomainSecond, TestDbContainerDomainSecond.hasMany?.children)
         assertEquals(Image, TestDbContainerDomainSecond.hasMany?.biImage)
     }
@@ -177,6 +180,4 @@ class DBImageContainerTransformationTests extends BurningImageUnitTestCase {
         assertEquals testDomain.logo, image
         assertEquals testDomain.image, image
     }
-
-
 }
