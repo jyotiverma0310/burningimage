@@ -2,6 +2,7 @@ package pl.burningice.plugins.image.container
 
 import pl.burningice.plugins.image.ast.intarface.DBImageContainer
 import pl.burningice.plugins.image.ast.intarface.ImageContainer
+import pl.burningice.plugins.image.ast.Image
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,7 +18,11 @@ class DbContainerUploadWorker extends UploadWorker {
     }
 
     void delete() {
-        
+        if (!hasImage()){
+            return
+        }
+        container.biImage.collect {it.value}.each {it.delete()}
+        container.biImage = null
     }
 
     SaveCommand getSaveCommand(String size) {

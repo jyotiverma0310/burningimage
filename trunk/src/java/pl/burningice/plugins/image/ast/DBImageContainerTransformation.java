@@ -23,12 +23,16 @@ package pl.burningice.plugins.image.ast;
 
 import org.codehaus.groovy.ast.ClassNode;
 import org.codehaus.groovy.ast.FieldNode;
-import org.codehaus.groovy.ast.expr.ClassExpression;
-import org.codehaus.groovy.ast.expr.ConstantExpression;
-import org.codehaus.groovy.ast.expr.MapExpression;
+import org.codehaus.groovy.ast.MethodNode;
+import org.codehaus.groovy.ast.expr.*;
+import org.codehaus.groovy.ast.stmt.BlockStatement;
+import org.codehaus.groovy.ast.stmt.ExpressionStatement;
+import org.codehaus.groovy.ast.stmt.Statement;
 import org.codehaus.groovy.control.CompilePhase;
 import org.codehaus.groovy.transform.GroovyASTTransformation;
 import pl.burningice.plugins.image.ast.intarface.DBImageContainer;
+import pl.burningice.plugins.image.container.DeleteDbImageCommand;
+import org.codehaus.groovy.ast.Parameter;
 
 import java.lang.reflect.Modifier;
 import java.util.Map;
@@ -55,5 +59,30 @@ public class DBImageContainerTransformation extends AbstractImageContainerTransf
         FieldNode hasManyField = getHasManyField(node);
         MapExpression mapValues = (MapExpression)hasManyField.getInitialExpression();
         mapValues.addMapEntryExpression(new ConstantExpression("biImage"), new ClassExpression(new ClassNode(Image.class)));
+        // add beforeDelete
+        MethodNode beforeDeleteMethod = getBeforeDeleteMethod(node);
+        ((BlockStatement)beforeDeleteMethod.getCode()).addStatement(createDeleteImageCommandCall());
+    }
+
+    private MethodNode getBeforeDeleteMethod(ClassNode node){
+        final String methodName = "beforeDelete";
+        MethodNode beforeDeleteMethod = node.getDeclaredMethod(methodName, new Parameter[0]);
+
+        if (beforeDeleteMethod == null){
+            beforeDeleteMethod = new MethodNode(methodName, Modifier.PUBLIC, new ClassNode(Object.class), new Parameter[0], new ClassNode[0], new BlockStatement());
+            node.addMethod(beforeDeleteMethod);
+        }
+
+        return beforeDeleteMethod;
+    }
+
+    private Statement createDeleteImageCommandCall() {
+        return new ExpressionStatement(
+            new StaticMethodCallExpression(
+                new ClassNode(DeleteDbImageCommand.class),
+                "execute",
+                new ArgumentListExpression(new VariableExpression("this"))
+            )
+        );
     }
 }

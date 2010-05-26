@@ -26,7 +26,6 @@ class SaveToDbCommand implements SaveCommand {
         if (!container.biImage){
             container.biImage = [:]
         }
-
         container.biImage[size] = new Image(data:source, type: extension)
     }
 }

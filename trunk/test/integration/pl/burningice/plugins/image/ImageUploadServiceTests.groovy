@@ -6,6 +6,11 @@ import pl.burningice.plugins.image.engines.scale.ScaleType
 import pl.burningice.plugins.image.ast.test.TestDomain
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainFirst
 import pl.burningice.plugins.image.ast.intarface.DBImageContainer
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
+import pl.burningice.plugins.image.ast.Image
+import pl.burningice.plugins.image.ast.test.TestDbContainerDomainSecond
+import pl.burningice.plugins.image.ast.test.TestDbContainerDomainThird
 
 /**
  *
@@ -28,6 +33,210 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
 
     protected void tearDown() {
         super.tearDown()
+    }
+
+    void testDeleteDbContainerAndRelatedImagesWithDeleteBeforeMethodExists() {
+        ConfigurationHolder.config.bi.TestDbContainerDomainThird = [
+            images: [
+                'small':[scale:[width:100, height:100, type:ScaleType.ACCURATE]],
+                'medium':[scale:[width:300, height:300, type:ScaleType.ACCURATE]],
+                'large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE]]
+            ]
+        ]
+
+        def testDomain1 = new TestDbContainerDomainThird(namePrefix: 'prefixed-', name:'test 1', logo:getMultipartFile('image.jpg'))
+        assertTrue(testDomain1.validate())
+        assertNotNull(testDomain1.save(flush:true))
+        imageUploadService.save(testDomain1)
+        assertNotNull(testDomain1.biImage)
+        assertEquals(3, testDomain1.biImage.size())
+        assertNotNull(testDomain1.biImage.small)
+        assertEquals('jpg', testDomain1.biImage.small.type)
+        assertNotNull(testDomain1.biImage.medium)
+        assertEquals('jpg', testDomain1.biImage.medium.type)
+        assertNotNull(testDomain1.biImage.large)
+        assertEquals('jpg', testDomain1.biImage.large.type)
+
+        assertEquals(TestDbContainerDomainThird.count(), 1)
+        assertEquals(Image.count(), 3)
+
+        testDomain1.delete()
+
+        assertEquals(TestDbContainerDomainThird.count(), 0)
+        assertEquals(Image.count(), 0)
+        // see definition of TestDbContainerDomainThird to understand this line
+        assertEquals('prefixed-test 1', testDomain1.name)
+    }
+
+    void testDeleteDbContainerAndRelatedImages() {
+        ConfigurationHolder.config.bi.TestDbContainerDomainSecond = [
+            images: [
+                'small':[scale:[width:100, height:100, type:ScaleType.ACCURATE]],
+                'medium':[scale:[width:300, height:300, type:ScaleType.ACCURATE]],
+                'large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE]]
+            ]
+        ]
+
+        def testDomain1 = new TestDbContainerDomainSecond(name:'test 1', logo:getMultipartFile('image.jpg'))
+        assertNotNull(testDomain1.save(flush:true))
+        imageUploadService.save(testDomain1)
+        assertNotNull(testDomain1.biImage)
+        assertEquals(3, testDomain1.biImage.size())
+        assertNotNull(testDomain1.biImage.small)
+        assertEquals('jpg', testDomain1.biImage.small.type)
+        assertNotNull(testDomain1.biImage.medium)
+        assertEquals('jpg', testDomain1.biImage.medium.type)
+        assertNotNull(testDomain1.biImage.large)
+        assertEquals('jpg', testDomain1.biImage.large.type)
+
+        assertEquals(TestDbContainerDomainSecond.count(), 1)
+        assertEquals(Image.count(), 3)
+
+        def testDomain2 = new TestDbContainerDomainSecond(name:'test 2', logo:getMultipartFile('image.png'))
+        assertNotNull(testDomain2.save(flush:true))
+        imageUploadService.save(testDomain2)
+        assertNotNull(testDomain2.biImage)
+        assertEquals(3, testDomain2.biImage.size())
+        assertNotNull(testDomain2.biImage.small)
+        assertEquals('png', testDomain2.biImage.small.type)
+        assertNotNull(testDomain2.biImage.medium)
+        assertEquals('png', testDomain2.biImage.medium.type)
+        assertNotNull(testDomain2.biImage.large)
+        assertEquals('png', testDomain2.biImage.large.type)
+
+        assertEquals(TestDbContainerDomainSecond.count(), 2)
+        assertEquals(Image.count(), 6)
+
+        testDomain1.delete()
+
+        assertEquals(TestDbContainerDomainSecond.count(), 1)
+        assertEquals(Image.count(), 3)
+
+        List<Image> testDomain2Images = testDomain2.biImage.collect {it.value} 
+        Image.list().each {Image img -> assertTrue(testDomain2Images.contains(img))}
+
+        testDomain2.delete(flush:true)
+
+        assertEquals(TestDbContainerDomainSecond.count(), 0)
+        assertEquals(Image.count(), 0)
+    }
+
+    void testDbImageDelete() {
+        def testDomain, result
+        // should be ok now
+        ConfigurationHolder.config.bi.TestDbContainerDomainSecond = [
+            images: [
+                'small':[scale:[width:100, height:100, type:ScaleType.ACCURATE]],
+                'medium':[scale:[width:300, height:300, type:ScaleType.ACCURATE]],
+                'large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE]]
+            ]
+        ]
+        testDomain = new TestDbContainerDomainSecond(name:'test', logo:getMultipartFile('image.jpg'))
+        assertNotNull(testDomain.save(flush:true))
+        imageUploadService.save(testDomain)
+        assertEquals(Image.count(), 3)
+        assertNotNull(testDomain.biImage)
+        assertEquals(3, testDomain.biImage.size())
+        assertNotNull(testDomain.biImage.small)
+        assertEquals('jpg', testDomain.biImage.small.type)
+        assertNotNull(testDomain.biImage.medium)
+        assertEquals('jpg', testDomain.biImage.medium.type)
+        assertNotNull(testDomain.biImage.large)
+        assertEquals('jpg', testDomain.biImage.large.type)
+
+        imageUploadService.delete(testDomain)
+        assertEquals(0, Image.count())
+        assertNull testDomain.biImage
+    }
+
+    void testScaleDbImageDefaultCustomFiled() {
+        def testDomain, result
+        ConfigurationHolder.config.bi.TestDbContainerDomainSecond = null
+        // instance not saved and there is no image
+        testDomain = new TestDbContainerDomainSecond()
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+        // image uploaded but instance not saved
+        testDomain = new TestDbContainerDomainSecond(name:'test', logo:getMultipartFile('image.jpg'))
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+        // should fail, there is no config provided for this domain object
+        testDomain = new TestDbContainerDomainSecond(name:'test')
+        assertNotNull(testDomain.save(flush:true))
+        testDomain.logo = getMultipartFile('image.jpg')
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+        // should be ok now
+        ConfigurationHolder.config.bi.TestDbContainerDomainSecond = [
+            images: [
+                'small':[scale:[width:100, height:100, type:ScaleType.ACCURATE]],
+                'medium':[scale:[width:300, height:300, type:ScaleType.ACCURATE]],
+                'large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE]]
+            ]
+        ]
+        testDomain = new TestDbContainerDomainSecond(name:'test', logo:getMultipartFile('image.jpg'))
+        assertNotNull(testDomain.save(flush:true))
+        def version = testDomain.version
+        imageUploadService.save(testDomain)
+
+        assertEquals(version, testDomain.version)
+        assertEquals(Image.count(), 3)
+        assertNotNull(testDomain.biImage)
+        assertEquals(3, testDomain.biImage.size())
+        assertNotNull(testDomain.biImage.small)
+        assertEquals('jpg', testDomain.biImage.small.type)
+        assertNotNull(testDomain.biImage.medium)
+        assertEquals('jpg', testDomain.biImage.medium.type)
+        assertNotNull(testDomain.biImage.large)
+        assertEquals('jpg', testDomain.biImage.large.type)
+
+        testDomain.logo = getMultipartFile('image.png')
+        version = testDomain.version
+        imageUploadService.save(testDomain)
+
+        assertEquals(version, testDomain.version)
+        assertEquals(Image.count(), 3)
+        assertNotNull(testDomain.biImage)
+        assertEquals(3, testDomain.biImage.size())
+        assertNotNull(testDomain.biImage.small)
+        assertEquals('png', testDomain.biImage.small.type)
+        assertNotNull(testDomain.biImage.medium)
+        assertEquals('png', testDomain.biImage.medium.type)
+        assertNotNull(testDomain.biImage.large)
+        assertEquals('png', testDomain.biImage.large.type)
+
+        testDomain.logo = getMultipartFile('image.bmp')
+        version = testDomain.version
+        imageUploadService.save(testDomain, true)
+
+        assertTrue(version < testDomain.version)
+        assertEquals(Image.count(), 3)
+        assertNotNull(testDomain.biImage)
+        assertEquals(3, testDomain.biImage.size())
+        assertNotNull(testDomain.biImage.small)
+        assertEquals('bmp', testDomain.biImage.small.type)
+        assertNotNull(testDomain.biImage.medium)
+        assertEquals('bmp', testDomain.biImage.medium.type)
+        assertNotNull(testDomain.biImage.large)
+        assertEquals('bmp', testDomain.biImage.large.type)
+
+        BufferedImage smallImage = ImageIO.read(new ByteArrayInputStream(testDomain.biImage.small.data))
+        println smallImage
+        assertTrue smallImage.width == ConfigurationHolder.config.bi.TestDbContainerDomainSecond.images.small.scale.width
+        assertTrue smallImage.height == ConfigurationHolder.config.bi.TestDbContainerDomainSecond.images.small.scale.height
+
+        BufferedImage mediumImage = ImageIO.read(new ByteArrayInputStream(testDomain.biImage.medium.data))
+        println mediumImage
+        assertTrue mediumImage.width == ConfigurationHolder.config.bi.TestDbContainerDomainSecond.images.medium.scale.width
+        assertTrue mediumImage.height == ConfigurationHolder.config.bi.TestDbContainerDomainSecond.images.medium.scale.height
+
+        BufferedImage largeImage = ImageIO.read(new ByteArrayInputStream(testDomain.biImage.large.data))
+        println largeImage
+        assertTrue largeImage.width <= ConfigurationHolder.config.bi.TestDbContainerDomainSecond.images.large.scale.width
+        assertTrue largeImage.height <= ConfigurationHolder.config.bi.TestDbContainerDomainSecond.images.large.scale.height
     }
 
     void testScaleDbImageDefaultFiled() {
@@ -63,7 +272,8 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
         def version = testDomain.version 
         imageUploadService.save(testDomain)
 
-        assertEquals(version, testDomain.version) 
+        assertEquals(version, testDomain.version)
+        assertEquals(Image.count(), 3)
         assertNotNull(testDomain.biImage)
         assertEquals(3, testDomain.biImage.size())
         assertNotNull(testDomain.biImage.small)
@@ -74,9 +284,11 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
         assertEquals('jpg', testDomain.biImage.large.type)
 
         testDomain.image = getMultipartFile('image.png')
+        version = testDomain.version
         imageUploadService.save(testDomain)
 
         assertEquals(version, testDomain.version)
+        assertEquals(Image.count(), 3)
         assertNotNull(testDomain.biImage)
         assertEquals(3, testDomain.biImage.size())
         assertNotNull(testDomain.biImage.small)
@@ -87,9 +299,11 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
         assertEquals('png', testDomain.biImage.large.type)
 
         testDomain.image = getMultipartFile('image.bmp')
+        version = testDomain.version
         imageUploadService.save(testDomain, true)
 
         assertTrue(version < testDomain.version)
+        assertEquals(Image.count(), 3)
         assertNotNull(testDomain.biImage)
         assertEquals(3, testDomain.biImage.size())
         assertNotNull(testDomain.biImage.small)
@@ -98,6 +312,21 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
         assertEquals('bmp', testDomain.biImage.medium.type)
         assertNotNull(testDomain.biImage.large)
         assertEquals('bmp', testDomain.biImage.large.type)
+
+        BufferedImage smallImage = ImageIO.read(new ByteArrayInputStream(testDomain.biImage.small.data))
+        println smallImage
+        assertTrue smallImage.width == ConfigurationHolder.config.bi.TestDbContainerDomainFirst.images.small.scale.width
+        assertTrue smallImage.height == ConfigurationHolder.config.bi.TestDbContainerDomainFirst.images.small.scale.height
+
+        BufferedImage mediumImage = ImageIO.read(new ByteArrayInputStream(testDomain.biImage.medium.data))
+        println mediumImage
+        assertTrue mediumImage.width == ConfigurationHolder.config.bi.TestDbContainerDomainFirst.images.medium.scale.width
+        assertTrue mediumImage.height == ConfigurationHolder.config.bi.TestDbContainerDomainFirst.images.medium.scale.height
+
+        BufferedImage largeImage = ImageIO.read(new ByteArrayInputStream(testDomain.biImage.large.data))
+        println largeImage
+        assertTrue largeImage.width <= ConfigurationHolder.config.bi.TestDbContainerDomainFirst.images.large.scale.width
+        assertTrue largeImage.height <= ConfigurationHolder.config.bi.TestDbContainerDomainFirst.images.large.scale.height
     }
 
     void testScale() {
