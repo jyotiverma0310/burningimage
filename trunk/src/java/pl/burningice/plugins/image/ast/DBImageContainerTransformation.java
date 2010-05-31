@@ -21,9 +21,8 @@ THE SOFTWARE.
 */
 package pl.burningice.plugins.image.ast;
 
-import org.codehaus.groovy.ast.ClassNode;
-import org.codehaus.groovy.ast.FieldNode;
-import org.codehaus.groovy.ast.MethodNode;
+import groovy.lang.Closure;
+import org.codehaus.groovy.ast.*;
 import org.codehaus.groovy.ast.expr.*;
 import org.codehaus.groovy.ast.stmt.BlockStatement;
 import org.codehaus.groovy.ast.stmt.ExpressionStatement;
@@ -32,13 +31,12 @@ import org.codehaus.groovy.control.CompilePhase;
 import org.codehaus.groovy.transform.GroovyASTTransformation;
 import pl.burningice.plugins.image.ast.intarface.DBImageContainer;
 import pl.burningice.plugins.image.container.DeleteDbImageCommand;
-import org.codehaus.groovy.ast.Parameter;
 
 import java.lang.reflect.Modifier;
 import java.util.Map;
 
 /**
- * Object execute transformation of object marked by DBImageContainer annotation
+ * Class execute transformation of objects marked by DBImageContainer annotation
  *
  * @author pawel.gdula@burningice.pl
  */
@@ -59,9 +57,36 @@ public class DBImageContainerTransformation extends AbstractImageContainerTransf
         FieldNode hasManyField = getHasManyField(node);
         MapExpression mapValues = (MapExpression)hasManyField.getInitialExpression();
         mapValues.addMapEntryExpression(new ConstantExpression("biImage"), new ClassExpression(new ClassNode(Image.class)));
-        // add beforeDelete
+        // add beforeDelete handler
         MethodNode beforeDeleteMethod = getBeforeDeleteMethod(node);
         ((BlockStatement)beforeDeleteMethod.getCode()).addStatement(createDeleteImageCommandCall());
+        // add caching
+        FieldNode mappingField = getMappingField(node);
+        ((BlockStatement)((ClosureExpression)mappingField.getInitialExpression()).getCode()).addStatement(createCacheBiImage());
+    }
+
+    private FieldNode getMappingField(ClassNode node){
+        final String fieldName = "mapping";
+        FieldNode mappingField = node.getDeclaredField(fieldName);
+
+        if (mappingField == null){
+            ClosureExpression mappingExpression = new ClosureExpression(new Parameter[0], new BlockStatement());
+            // this is very important in ClosureExpression  - in other case NPE! 
+            mappingExpression.setVariableScope(new VariableScope());
+
+            mappingField = new FieldNode(
+                fieldName,
+                Modifier.STATIC | Modifier.PRIVATE,
+                new ClassNode(Closure.class),
+                new ClassNode(DBImageContainer.class),
+                mappingExpression);
+
+            addGetter(mappingField, node, Modifier.STATIC | Modifier.PUBLIC);
+            addSetter(mappingField, node, Modifier.STATIC | Modifier.PUBLIC);
+            node.addField(mappingField);
+        }
+
+        return mappingField;
     }
 
     private MethodNode getBeforeDeleteMethod(ClassNode node){
@@ -84,5 +109,15 @@ public class DBImageContainerTransformation extends AbstractImageContainerTransf
                 new ArgumentListExpression(new VariableExpression("this"))
             )
         );
+    }
+
+    private Statement createCacheBiImage() {
+        NamedArgumentListExpression namedarg = new NamedArgumentListExpression();
+        namedarg.addMapEntryExpression(new ConstantExpression("cache"), new BooleanExpression(new ConstantExpression(true)));
+
+        MethodCallExpression constExpr = new MethodCallExpression(VariableExpression.THIS_EXPRESSION,
+                                                                  new ConstantExpression("biImage"),
+                                                                  namedarg);
+        return new ExpressionStatement(constExpr);
     }
 }

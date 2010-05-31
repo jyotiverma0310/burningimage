@@ -44,4 +44,8 @@ class TestDbContainerDomainThird {
     static constraints = {
         name(nullable:false)
     }
+
+    static mapping = {
+        name(column:'full_name') 
+    }
 }
