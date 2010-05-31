@@ -6,6 +6,11 @@ import pl.burningice.plugins.image.test.BurningImageUnitTestCase
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainFirst
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainSecond
 import pl.burningice.plugins.image.ast.intarface.ImageContainer
+import pl.burningice.plugins.image.ast.test.TestDbContainerDomainThird
+import org.codehaus.groovy.grails.commons.GrailsClassUtils
+import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
+import org.codehaus.groovy.grails.orm.hibernate.cfg.HibernateMappingBuilder
+import org.codehaus.groovy.grails.orm.hibernate.cfg.Mapping
 
 /**
  * @author pawel.gdula@burningice.pl
@@ -24,6 +29,26 @@ class DBImageContainerTransformationTests extends BurningImageUnitTestCase {
         super.tearDown()
     }
 
+    void testCachingEnabled(){
+        def o, builder, mapping
+
+        def validateCacheEnabled = {
+            o =  GrailsClassUtils.getStaticPropertyValue(it, GrailsDomainClassProperty.MAPPING)
+            builder = new HibernateMappingBuilder(it.name);
+            mapping =  builder.evaluate((Closure) o)
+            assertNotNull mapping.getPropertyConfig('biImage').cache
+        }
+
+        validateCacheEnabled TestDbContainerDomainFirst
+        validateCacheEnabled TestDbContainerDomainSecond
+        validateCacheEnabled TestDbContainerDomainThird
+
+        o =  GrailsClassUtils.getStaticPropertyValue(TestDbContainerDomainThird, GrailsDomainClassProperty.MAPPING)
+        builder = new HibernateMappingBuilder(TestDbContainerDomainThird.name);
+        mapping =  builder.evaluate((Closure) o)
+        assertEquals('full_name', mapping.getPropertyConfig('name').column)
+    }
+
     void testDBImageContainerInterface() {
         def container
 
@@ -35,6 +60,9 @@ class DBImageContainerTransformationTests extends BurningImageUnitTestCase {
         assertTrue container instanceof  DBImageContainer
         assertTrue container instanceof  ImageContainer
         assertFalse TestDbContainerDomainFirst.fields.name.contains('biImage')
+        assertFalse TestDbContainerDomainFirst.fields.name.contains('mapping')
+        assertTrue TestDbContainerDomainSecond.methods.name.contains('getMapping')
+        assertTrue TestDbContainerDomainSecond.methods.name.contains('setMapping')
         assertTrue TestDbContainerDomainFirst.methods.name.contains('getBiImage')
         assertTrue TestDbContainerDomainFirst.methods.name.contains('setBiImage')
         assertTrue TestDbContainerDomainFirst.methods.name.contains('getHasMany')
@@ -42,7 +70,6 @@ class DBImageContainerTransformationTests extends BurningImageUnitTestCase {
         assertTrue TestDbContainerDomainFirst.methods.name.contains('beforeDelete')
         assertEquals(Image, TestDbContainerDomainFirst.hasMany?.biImage)
         
-
         println "fields: " + TestDbContainerDomainSecond.fields.name
         println "methods: " + TestDbContainerDomainSecond.methods.name
         println "interfaces: " + TestDbContainerDomainSecond.interfaces.name
@@ -50,8 +77,11 @@ class DBImageContainerTransformationTests extends BurningImageUnitTestCase {
         container = new TestDbContainerDomainSecond()
         assertTrue container instanceof  DBImageContainer
         assertFalse TestDbContainerDomainSecond.fields.name.contains('biImage')
+        assertFalse TestDbContainerDomainFirst.fields.name.contains('mapping')
         assertTrue TestDbContainerDomainSecond.methods.name.contains('getBiImage')
         assertTrue TestDbContainerDomainSecond.methods.name.contains('setBiImage')
+        assertTrue TestDbContainerDomainSecond.methods.name.contains('getMapping')
+        assertTrue TestDbContainerDomainSecond.methods.name.contains('setMapping')
         assertTrue TestDbContainerDomainSecond.methods.name.contains('getHasMany')
         assertTrue TestDbContainerDomainSecond.methods.name.contains('setHasMany')
         assertTrue TestDbContainerDomainSecond.methods.name.contains('beforeDelete')
