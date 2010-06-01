@@ -38,7 +38,7 @@ class ImageUploadService {
 
     ResourcePathProvider resourcePathProvider
 
-    UploadWorkerFactory uploadWorkerFactory
+    ContainerWorkerFactory containerWorkerFactory
 
     BurningImageService burningImageService
 
@@ -95,7 +95,7 @@ class ImageUploadService {
         */
     ImageContainer delete(final ImageContainer imageContainer, shouldBeSaved = false) {
         // get worker that will provide actions for specified container
-        UploadWorker uploadWorker =  uploadWorkerFactory.produce(imageContainer)
+        ContainerWorker uploadWorker =  containerWorkerFactory.produce(imageContainer)
         // check if there are images - if not leave
         if (!uploadWorker.hasImage()){
             return uploadWorker.container 
@@ -120,7 +120,7 @@ class ImageUploadService {
          */
     private ImageContainer execute(final ImageContainer imageContainer, MultipartFile uploadedImage, Closure actionWrapper) {
         // get worker that will provide actions for specified container
-        UploadWorker uploadWorker =  uploadWorkerFactory.produce(imageContainer)
+        ContainerWorker uploadWorker =  containerWorkerFactory.produce(imageContainer)
         // check if container is saved        
         if (!uploadWorker.isPersisted()){
             throw new IllegalArgumentException("Container ${uploadWorker} should be persisted")

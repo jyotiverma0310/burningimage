@@ -1,6 +1,5 @@
 package pl.burningice.plugins.image.container
 
-import pl.burningice.plugins.image.ast.intarface.ImageContainer
 import pl.burningice.plugins.image.ResourcePathProvider
 
 /**
@@ -10,7 +9,7 @@ import pl.burningice.plugins.image.ResourcePathProvider
  * Time: 2:39:37 PM
  * To change this template use File | Settings | File Templates.
  */
-class FileContainerUploadWorker extends UploadWorker {
+class FileContainerWorker extends ContainerWorker {
 
     ResourcePathProvider resourcePathProvider 
 

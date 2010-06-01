@@ -23,6 +23,10 @@ package pl.burningice.plugins.image
 
 import pl.burningice.plugins.image.container.ContainerUtils
 import pl.burningice.plugins.image.ast.intarface.FileImageContainer
+import pl.burningice.plugins.image.container.ContainerWorker
+import pl.burningice.plugins.image.container.ContainerWorkerFactory
+import pl.burningice.plugins.image.ast.intarface.DBImageContainer
+import pl.burningice.plugins.image.ast.Image
 
 /**
  * Taglib for usage with annotated image container
@@ -33,6 +37,8 @@ class BurningImageTagLib {
 
     static namespace = 'bi'
 
+    ContainerWorkerFactory containerWorkerFactory   
+
     /**
      * Allows to check if specified image container has saved image
      *
@@ -40,9 +46,10 @@ class BurningImageTagLib {
      */
     def hasImage =  { attrs, body ->
         if (!attrs.bean
-            || !attrs.bean.imageExtension){
+            || !containerWorkerFactory.produce(attrs.bean).hasImage()){
             return
         }
+
         out << body()
     }
 
@@ -81,7 +88,7 @@ class BurningImageTagLib {
             return null
         }
 
-        out << g.resource(getResourceData(attrs.size, attrs.bean))
+        out << getResourceData(attrs.size, attrs.bean)
     }
 
     /**
@@ -98,6 +105,25 @@ class BurningImageTagLib {
             throw new IllegalArgumentException("There is no config for ${imageContainer.class.name}")
         }
 
-        [dir:config.outputDir, file:ContainerUtils.getFullName(size, imageContainer, config)]
+        return g.resource(dir:config.outputDir, file:ContainerUtils.getFullName(size, imageContainer, config))
     }
+
+     /**
+     * Retrieve information about file name and storage directory on base
+     * of image size name and image container object
+     *
+     * @param size Size of the image that should be displayed
+     * @param bean Image container that hold information about image
+     */
+    private def getResourceData(size, DBImageContainer imageContainer){
+        Image image = imageContainer.biImage[size]
+
+        if (!image){
+            throw new IllegalArgumentException("There is no image with size ${size} saved for container ${imageContainer.class.name}")          
+        }
+
+        g.createLink(controller:'dbContainerImageController', action:'index', params:[imageId:image.ident(), size:size, type:image.type])
+    }
+
+    
 }

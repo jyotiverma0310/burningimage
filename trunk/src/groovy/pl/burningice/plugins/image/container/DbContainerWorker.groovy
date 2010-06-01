@@ -1,9 +1,5 @@
 package pl.burningice.plugins.image.container
 
-import pl.burningice.plugins.image.ast.intarface.DBImageContainer
-import pl.burningice.plugins.image.ast.intarface.ImageContainer
-import pl.burningice.plugins.image.ast.Image
-
 /**
  * Created by IntelliJ IDEA.
  * User: gdulus
@@ -11,7 +7,7 @@ import pl.burningice.plugins.image.ast.Image
  * Time: 2:40:00 PM
  * To change this template use File | Settings | File Templates.
  */
-class DbContainerUploadWorker extends UploadWorker {
+class DbContainerWorker extends ContainerWorker {
 
     boolean hasImage() {
         return (container.biImage != null && !container.biImage.isEmpty())
