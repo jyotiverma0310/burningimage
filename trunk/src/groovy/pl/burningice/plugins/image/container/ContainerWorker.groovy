@@ -9,7 +9,7 @@ import pl.burningice.plugins.image.ast.intarface.ImageContainer
  * Time: 2:39:00 PM
  * To change this template use File | Settings | File Templates.
  */
-abstract class UploadWorker {
+abstract class ContainerWorker {
 
     ImageContainer container
 

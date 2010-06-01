@@ -6,6 +6,8 @@ import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
 import pl.burningice.plugins.image.ast.test.Underscored_Test_Domain
 import pl.burningice.plugins.image.ast.test.TestDomain
 import pl.burningice.plugins.image.ast.test.TestDomainSecond
+import pl.burningice.plugins.image.ast.test.TestDbContainerDomainThird
+import pl.burningice.plugins.image.engines.scale.ScaleType
 
 /**
  *
@@ -13,9 +15,52 @@ import pl.burningice.plugins.image.ast.test.TestDomainSecond
  */
 class BurningImageTagLibTests extends GroovyPagesTestCase {
 
+    ImageUploadService imageUploadService
+
     protected void setUp() {
         super.setUp()
         ConfigurationHolder.config = new ConfigObject()
+    }
+
+    void testDbResource(){
+
+        def template = '<bi:resource size="${size}" bean="${bean}" />'
+        def bean = new TestDbContainerDomainThird()
+        def size = 'small'
+
+        shouldFail(GrailsTagException){
+            applyTemplate(template, [size:null, bean:null] )
+        }
+
+        shouldFail(GrailsTagException){
+            applyTemplate(template, [size:size, bean:null] )
+        }
+
+        shouldFail(GrailsTagException){
+            applyTemplate(template, [size:null, bean:bean] )
+        }
+
+        ConfigurationHolder.config.bi.TestDbContainerDomainThird = [
+            images: [
+                (size):[scale:[width:100, height:100, type:ScaleType.ACCURATE]]
+            ]
+        ]
+
+        bean = new TestDbContainerDomainThird(namePrefix: 'prefixed-', name:'test 1', logo:getMultipartFile('image.jpg'))
+        assertTrue(testDomain1.validate())
+        assertNotNull(bean.save(flush:true))
+        imageUploadService.save(bean)
+        assertNotNull(bean.biImage)
+        assertEquals(1, bean.biImage.size())
+        assertNotNull(bean.biImage.small)
+        assertEquals('jpg', bean.biImage.small.type)
+
+        shouldFail(GrailsTagException){
+            applyTemplate(template, [size:'not-existing', bean:bean] )
+        }
+
+        result = applyTemplate(template, [size:size, bean:bean])
+        assertEquals "/images/${bean.ident()}-small.jpg", result
     }
 
     void testResource() {

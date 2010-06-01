@@ -24,7 +24,7 @@ class BurningImageGrailsPlugin {
     def doWithSpring = {
         resourcePathProvider(pl.burningice.plugins.image.ResourcePathProvider)
         
-        uploadWorkerFactory(pl.burningice.plugins.image.container.UploadWorkerFactory){
+        containerWorkerFactory(pl.burningice.plugins.image.container.ContainerWorkerFactory){
             resourcePathProvider = ref('resourcePathProvider')    
         }
     }
