@@ -8,11 +8,12 @@ import pl.burningice.plugins.image.ast.test.TestDomain
 import pl.burningice.plugins.image.ast.test.TestDomainSecond
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainThird
 import pl.burningice.plugins.image.engines.scale.ScaleType
+import pl.burningice.plugins.image.test.FileUploadUtils
 
 /**
- *
  * @author pawel.gdula@burningice.pl
  */
+@Mixin(FileUploadUtils)
 class BurningImageTagLibTests extends GroovyPagesTestCase {
 
     ImageUploadService imageUploadService
@@ -47,9 +48,9 @@ class BurningImageTagLibTests extends GroovyPagesTestCase {
         ]
 
         bean = new TestDbContainerDomainThird(namePrefix: 'prefixed-', name:'test 1', logo:getMultipartFile('image.jpg'))
-        assertTrue(testDomain1.validate())
+        assertTrue(bean.validate())
         assertNotNull(bean.save(flush:true))
-        imageUploadService.save(bean)
+        imageUploadService.save(bean, true)
         assertNotNull(bean.biImage)
         assertEquals(1, bean.biImage.size())
         assertNotNull(bean.biImage.small)
@@ -59,8 +60,8 @@ class BurningImageTagLibTests extends GroovyPagesTestCase {
             applyTemplate(template, [size:'not-existing', bean:bean] )
         }
 
-        result = applyTemplate(template, [size:size, bean:bean])
-        assertEquals "/images/${bean.ident()}-small.jpg", result
+        def result = applyTemplate(template, [size:size, bean:bean])
+        assertEquals "/images/${bean.biImage['small'].ident()}-small.jpg", result
     }
 
     void testResource() {

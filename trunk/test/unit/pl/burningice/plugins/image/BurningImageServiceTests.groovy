@@ -5,12 +5,15 @@ import org.springframework.mock.web.MockMultipartFile
 import pl.burningice.plugins.image.engines.*
 import java.awt.Color
 import java.awt.Font
+import grails.test.GrailsUnitTestCase
+import pl.burningice.plugins.image.test.FileUploadUtils
 
 /**
  *
  * @author pawel.gdula@burningice.pl
  */
-class BurningImageServiceTests extends BurningImageUnitTestCase {
+@Mixin(FileUploadUtils)
+class BurningImageServiceTests extends GrailsUnitTestCase {
 
     protected static final def RESULT_DIR = './resources/resultImages/'
 
@@ -18,6 +21,7 @@ class BurningImageServiceTests extends BurningImageUnitTestCase {
 
     protected void setUp() {
         super.setUp()
+        cleanUpTestDir()
         burningImageService = new BurningImageService()
     }
 
