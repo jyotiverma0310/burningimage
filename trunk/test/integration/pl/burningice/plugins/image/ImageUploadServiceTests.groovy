@@ -1,22 +1,22 @@
 package pl.burningice.plugins.image
 
-import pl.burningice.plugins.image.test.BurningImageUnitTestCase
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import pl.burningice.plugins.image.engines.scale.ScaleType
 import pl.burningice.plugins.image.ast.test.TestDomain
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainFirst
-import pl.burningice.plugins.image.ast.intarface.DBImageContainer
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 import pl.burningice.plugins.image.ast.Image
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainSecond
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainThird
+import pl.burningice.plugins.image.test.FileUploadUtils
+import grails.test.GrailsUnitTestCase
 
 /**
- *
  * @author pawel.gdula@burningice.pl
  */
-class ImageUploadServiceTests extends BurningImageUnitTestCase {
+@Mixin(FileUploadUtils)
+class ImageUploadServiceTests extends GrailsUnitTestCase {
 
     protected static final def RESULT_DIR = './web-app/upload/'
 
@@ -26,8 +26,11 @@ class ImageUploadServiceTests extends BurningImageUnitTestCase {
 
     protected void setUp() {
         super.setUp()
+        cleanUpTestDir()
+        ConfigurationHolder.config = new ConfigObject()
+
         if (ConfigurationHolder.config == null){
-            ConfigurationHolder.config = new ConfigObject()
+
         }
     }
 

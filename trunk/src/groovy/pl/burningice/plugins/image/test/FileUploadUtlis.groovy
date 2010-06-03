@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009 Pawel Gdula <pawel.gdula@burningice.pl>
+Copyright (c) 2010 Pawel Gdula <pawel.gdula@burningice.pl>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,19 @@ THE SOFTWARE.
 */
 package pl.burningice.plugins.image.test
 
-import grails.test.*
 import org.springframework.mock.web.MockMultipartFile
 import javax.imageio.ImageIO
 
 /**
- * Class provide additional methods to test image upload 
+ * Class provide additional methods for testing file upload
  *
  * @author pawel.gdula@burningice.pl
  */
-abstract class BurningImageUnitTestCase extends GrailsUnitTestCase {
+class FileUploadUtils {
 
-    protected static final def SOURCE_DIR = './resources/testImages/'
+    static final def SOURCE_DIR = './resources/testImages/'
 
-    protected void setUp() {
-        super.setUp()
-        cleanUpTestDir()
-    }
-
-    protected void cleanUpTestDir(){
+    void cleanUpTestDir(){
         new File(RESULT_DIR).list().toList().each {
             if(it != '.svn'){
                 def filePath = "${RESULT_DIR}${it}"
@@ -49,24 +43,24 @@ abstract class BurningImageUnitTestCase extends GrailsUnitTestCase {
         }
     }
 
-    protected def fileExists(fileName){
+    def fileExists(fileName){
         println "search for file ${RESULT_DIR}${fileName}"
         new File("${RESULT_DIR}${fileName}").exists()
     }
 
-    protected def getFilePath(fileName){
+    def getFilePath(fileName){
         "${SOURCE_DIR}${fileName}"
     }
 
-    protected def getFile(fileName, dir = null){
+    def getFile(fileName, dir = null){
         ImageIO.read(new File("${dir ?: RESULT_DIR}${fileName}"))
     }
 
-    protected def getEmptyMultipartFile(){
+    def getEmptyMultipartFile(){
         new MockMultipartFile('empty', new byte[0])
     }
 
-    protected def getMultipartFile(fileName){
+    def getMultipartFile(fileName){
         def fileNameParts = fileName.split(/\./)
         def contentTypes = ['jpg':'image/jpeg', 'png':'image/png', 'gif':'image/gif', 'bmp':'image/bmp']
         new MockMultipartFile(fileNameParts[0],
@@ -74,4 +68,5 @@ abstract class BurningImageUnitTestCase extends GrailsUnitTestCase {
                               contentTypes[fileNameParts[1]],
                               new FileInputStream(getFilePath(fileName)))
     }
+
 }

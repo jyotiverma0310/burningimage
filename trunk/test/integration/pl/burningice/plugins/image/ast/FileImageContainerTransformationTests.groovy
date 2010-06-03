@@ -1,22 +1,24 @@
 package pl.burningice.plugins.image.ast
 
 import pl.burningice.plugins.image.ast.intarface.FileImageContainer
-import pl.burningice.plugins.image.test.BurningImageUnitTestCase
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import pl.burningice.plugins.image.ast.test.TestDomainSecond
 import pl.burningice.plugins.image.ast.test.TestDomain
 import pl.burningice.plugins.image.ast.intarface.ImageContainer
+import grails.test.GrailsUnitTestCase
+import pl.burningice.plugins.image.test.FileUploadUtils
 
 /**
- *
  * @author pawel.gdula@burningice.pl
  */
-class FileImageContainerTransformationTests extends BurningImageUnitTestCase {
+@Mixin(FileUploadUtils)
+class FileImageContainerTransformationTests extends GrailsUnitTestCase {
 
     protected static final def RESULT_DIR = './resources/resultImages/'
 
     protected void setUp() {
         super.setUp()
+        cleanUpTestDir()
         ConfigurationHolder.config = new ConfigObject()
     }
 

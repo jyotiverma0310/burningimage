@@ -2,7 +2,6 @@ package pl.burningice.plugins.image.ast
 
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import pl.burningice.plugins.image.ast.intarface.DBImageContainer
-import pl.burningice.plugins.image.test.BurningImageUnitTestCase
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainFirst
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainSecond
 import pl.burningice.plugins.image.ast.intarface.ImageContainer
@@ -11,17 +10,20 @@ import org.codehaus.groovy.grails.commons.GrailsClassUtils
 import org.codehaus.groovy.grails.commons.GrailsDomainClassProperty
 import org.codehaus.groovy.grails.orm.hibernate.cfg.HibernateMappingBuilder
 import org.codehaus.groovy.grails.orm.hibernate.cfg.Mapping
+import pl.burningice.plugins.image.test.FileUploadUtils
+import grails.test.GrailsUnitTestCase
 
 /**
  * @author pawel.gdula@burningice.pl
  */
-
-class DBImageContainerTransformationTests extends BurningImageUnitTestCase {
+@Mixin(FileUploadUtils)
+class DBImageContainerTransformationTests extends GrailsUnitTestCase {
 
     protected static final def RESULT_DIR = './resources/resultImages/'
 
     protected void setUp() {
         super.setUp()
+        cleanUpTestDir()
         ConfigurationHolder.config = new ConfigObject()
     }
 
