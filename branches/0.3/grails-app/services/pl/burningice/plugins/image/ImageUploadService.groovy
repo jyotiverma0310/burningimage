@@ -187,14 +187,28 @@ class ImageUploadService implements ApplicationContextAware {
         config
     }
 
+
     /**
-     * Returns absolute path to resources
-     *
-     * @param relativePath Relative path to resources
-     * @return Absolute path to resources
-     */
-    private def getPath(relativePath){
-        applicationContext.getResource(relativePath).getFile().toString()
+        * Returns absolute path to resources
+        *
+        * @param uploadDir Relative path to resources
+        * @return Absolute path to resources
+        */
+    private def getPath(String uploadDir){
+        applicationContext.getResource(uploadDir).getFile().toString()
+    }
+
+    /**
+        * Returns absolute path to resources.
+        * Parameter uploadDir should contain two keys:
+        * path - absolute path to directory where image should saved
+        * alias - alias for the absolute path    
+        *
+        * @param uploadDir Map with upload dir configuration.
+        * @return Absolute path to resources
+        */
+    private def getPath(Map uploadDir){
+        uploadDir.path
     }
 
     /**

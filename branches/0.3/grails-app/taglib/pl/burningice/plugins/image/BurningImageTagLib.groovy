@@ -98,6 +98,29 @@ class BurningImageTagLib {
             throw new IllegalArgumentException("There is no config for ${imageContainer.class.name}")
         }
 
-        [dir:config.outputDir, file:ContainerUtils.getFullName(size, imageContainer, config)]
+        [dir:getOutputDir(config.outputDir), file:ContainerUtils.getFullName(size, imageContainer, config)]
+    }
+
+    /**
+        * Returns directory where image is stored. Overloaded to provide dispatching between String and Map outputDir
+        *
+        * @param uploadDir Path to upload dir
+        * @return Absolute path to resources
+        */
+    private def getOutputDir(String outputDir){
+        return outputDir     
+    }
+
+    /**
+        * Returns directory where image is stored. Overloaded to provide dispatching between String and Map outputDir
+        * Parameter uploadDir should contain two keys:
+        * path - absolute path to directory where image should saved
+        * alias - alias for the absolute path
+        *
+        * @param uploadDir Map with upload dir configuration.
+        * @return Absolute path to resources
+        */
+    private def getOutputDir(Map outputDir){
+        outputDir.alias
     }
 }

@@ -16,6 +16,42 @@ class BurningImageTagLibTests extends GroovyPagesTestCase {
         ConfigurationHolder.config = new ConfigObject()
     }
 
+    void testResourceAbsolutePath() {
+        def template = '<bi:resource size="${size}" bean="${bean}" />'
+        def bean = new TestDomain(imageExtension:'jpg')
+        def size = 'small'
+
+        shouldFail(GrailsTagException){
+            applyTemplate(template, [size:null, bean:null] )
+        }
+
+        shouldFail(GrailsTagException){
+            applyTemplate(template, [size:size, bean:null] )
+        }
+
+        shouldFail(GrailsTagException){
+            applyTemplate(template, [size:null, bean:bean] )
+        }
+
+        def result = applyTemplate(template, [size:size, bean:bean])
+        assertEquals '', result
+
+        bean.save(flush:true)
+
+        shouldFail(GrailsTagException){
+            applyTemplate(template, [size:size, bean:bean])
+        }
+
+        ConfigurationHolder.config.bi.TestDomain = [
+            outputDir: ['path':'/var/home/gdulus/Workspace/Grails/0.3/web-app/upload/', 'alias':'/upload/'],
+            prefix: 'prefixName',
+            images: ['small':[scale:[width:100, height:100, type:null]]]
+        ]
+
+        result = applyTemplate(template, [size:size, bean:bean])
+        assertEquals "/upload/prefixName-${bean.ident()}-small.jpg", result
+    }
+
     void testResource() {
         def template = '<bi:resource size="${size}" bean="${bean}" />'
         def bean = new TestDomain(imageExtension:'jpg')
