@@ -90,8 +90,8 @@ bi.NameOfDomainClass = [
 *outputDir*: configuration of directory where image should be stored.
 
 It can be provided in two forms: 
-- as a string (see example above), then it will be treated as relative path from GRAILS_PROJECT/web-app 
-- as a map with keys "path" that determine absolute path to image storage directory and "alias" key for aliasing path, e.g.:
+  * as a string (see example above), then it will be treated as relative path from GRAILS_PROJECT/web-app 
+  * as a map with keys "path" that determine absolute path to image storage directory and "alias" key for aliasing path, e.g.:
 
 {{{
 
