@@ -88,8 +88,9 @@ bi.NameOfDomainClass = [
 }}}
 
 *outputDir*: configuration of directory where image should be stored.
+
 It can be provided in two forms: 
-- as a string, then will be treated as relative path from GRAILS_PROJECT/web-app 
+- as a string (see example above), then it will be treated as relative path from GRAILS_PROJECT/web-app 
 - as a map with keys "path" that determine absolute path to image storage directory and "alias" key for aliasing path, e.g.:
 
 {{{
@@ -112,7 +113,7 @@ bi.NameOfDomainClass = [
 
 }}}
 
-This approach need additional server configuration to point alias on absolute path
+This approach need additional server configuration to point alias on absolute path.
 
 *prefix*: name of the image prefix that should be add to while saving image, optional
 
