@@ -2,7 +2,7 @@
 
 = Introduction = 
 
-!BurningImage provide simple way to associate image with domain object and write it on the disk. With version 0.3, there was provided @!FileImageContainer annotation that allows to mark domain object, that should be treat as image container. That prepared class can be handle by !ImageUploadService, that provide methods to save and delete image. To display images for specified domain object instance, just use !BurningImageTagLib, that provide necessary tags to display image, or retrieve path to it. 
+!BurningImage provide simple way to associate image with domain object and write it on the disk. With version 0.3, there was provided @!FileImageContainer annotation that allows to mark domain object, that should be treat as image container. That prepared class can be handled by !ImageUploadService, that provide methods to save and delete image. To display images for specified domain object instance, just use !BurningImageTagLib, that provide necessary tags to display image, or retrieve path to it. 
 
 == @!FileImageContainer ==
 
@@ -26,7 +26,7 @@ class Group {
 
 }}}
 
-Domain class User in now marked as image container. Now you can bind image to it using default "image" filed. Domain class Group is image container too, but with defined field "avatar" where image can be binded. This allows, to bind image directly form html form. 
+Domain class User in now marked as image container. Now you can bind image to it using default "image" filed. Domain class Group is image container too, but with defined field "avatar" where image can be binded. This allows, to bind image directly from html form. 
 
 For example, if we have class:
 
