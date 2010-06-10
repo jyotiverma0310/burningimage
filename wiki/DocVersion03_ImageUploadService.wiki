@@ -87,7 +87,32 @@ bi.NameOfDomainClass = [
 
 }}}
 
-*outputDir*: path to directory where image should be stored (relative from GRAILS_PROJECT/web-app), required parameter
+*outputDir*: configuration of directory where image should be stored.
+It can be provided in two forms: 
+- as a string, then will be treated as relative path from GRAILS_PROJECT/web-app 
+- as a map with keys "path" that determine absolute path to image storage directory and "alias" key for aliasing path, e.g.:
+
+{{{
+
+import pl.burningice.plugins.image.engines.scale.ScaleType
+
+bi.NameOfDomainClass = [
+    outputDir: ['path':'/var/www/my-app/images/', 'alias':'/upload/'],
+    prefix: 'mySuperImage',
+    images: ['large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE],
+                      watermark:[sign:'images/watermark.png', offset:[top:10, left:10]]],
+             'small':[scale:[width:100, height:100, type:ScaleType.ACCURATE],
+                      watermark:[sign:'images/watermark.png', offset:[top:10, left:10]]]],
+    constraints:[
+        nullable:true,
+        maxSize:5000,
+        contentType:['image/gif', 'image/png']
+    ]
+]
+
+}}}
+
+This approach need additional server configuration to point alias on absolute path
 
 *prefix*: name of the image prefix that should be add to while saving image, optional
 
