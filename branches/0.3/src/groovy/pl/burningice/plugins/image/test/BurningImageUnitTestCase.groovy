@@ -24,15 +24,19 @@ package pl.burningice.plugins.image.test
 import grails.test.*
 import org.springframework.mock.web.MockMultipartFile
 import javax.imageio.ImageIO
+import org.springframework.context.ApplicationContextAware
+import org.springframework.context.ApplicationContext
 
 /**
  * Class provide additional methods to test image upload 
  *
  * @author pawel.gdula@burningice.pl
  */
-abstract class BurningImageUnitTestCase extends GrailsUnitTestCase {
+abstract class BurningImageUnitTestCase extends GrailsUnitTestCase implements ApplicationContextAware {
 
     protected static final def SOURCE_DIR = './resources/testImages/'
+
+    ApplicationContext applicationContext
 
     protected void setUp() {
         super.setUp()
@@ -73,5 +77,9 @@ abstract class BurningImageUnitTestCase extends GrailsUnitTestCase {
                               fileName,
                               contentTypes[fileNameParts[1]],
                               new FileInputStream(getFilePath(fileName)))
+    }
+
+    protected def getAbsolutePath(String uploadDir){
+        applicationContext.getResource(uploadDir).getFile().toString()
     }
 }
