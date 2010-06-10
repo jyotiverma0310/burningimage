@@ -2,11 +2,10 @@
 
 = Future =
 
+= In progress =
+
 === Version 0.4 ===
  * @!DbImageContainer annotation - simple way to work with image stored in database
- * Rewrite core functionality in java
-
-= In progress =
 
 = Reached =
 
