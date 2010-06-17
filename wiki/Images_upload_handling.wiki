@@ -1,4 +1,4 @@
-#summary ImageUploadService usage documentation (version 0.3)
+#summary ImageUploadService usage documentation
 
 = Introduction = 
 
@@ -67,7 +67,7 @@ we can provide form like:
 
 == Configuration == 
 
-Each domain object marked by @!FileImageContainer annotation must provide configuration data about where uploaded image should be store, what type of operations should be performed on image, and what type of validation constraints image must meet. Name of the domain is without package name.
+Each domain object marked by !ImageContainer annotation must provide configuration data about where uploaded image should be store (for @!FileImageContainer), what type of operations should be performed on image, and what type of validation constraints image must meet. Name of the domain is without package name.
 
 {{{
 
@@ -131,7 +131,7 @@ This approach need additional server configuration to point alias on absolute pa
 
 == !ImageUploadService ==
 
-This service handle saving/deleting images associated with domain object marked by @!FileImageContainer. 
+This service handle saving/deleting images associated with domain object marked by !ImageContainer annotation. 
 
 Lets say that there is defined domain object User:
 
@@ -181,7 +181,7 @@ imageUploadService.save(userInstance, true)
 
 }}}
 
-As it was mentioned before, there is no possibility to configure image cropping/text writing in general !FileImageContainer configuration. But it can be done by using action wrapper in !ImageUploadService:
+As it was mentioned before, there is no possibility to configure image cropping/text writing in general !ImageContainer configuration. But it can be done by using action wrapper in !ImageUploadService:
 
 {{{
 
@@ -200,7 +200,7 @@ imageUploadService.save(userInstance, {image, name, action ->
 
 }}}
 
-It allows you to wrap configured actions (represented in example by closure action) by actions provided by [DocVersion03_BurningImageService BurningImageService] (scale, crop, watermark, write text). 
+It allows you to wrap configured actions (represented in example by closure action) by actions provided by [Images_manipulation_handling BurningImageService] (scale, crop, watermark, write text). 
 
 Parameter name represents name of image that is currently creating (key form bi.!DomainClassName.images map) and allows to specify with image should be affected by additional action.
 
