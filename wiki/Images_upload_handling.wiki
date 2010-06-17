@@ -1,4 +1,5 @@
 #summary ImageUploadService usage documentation
+#labels Featured
 
 = Introduction = 
 
