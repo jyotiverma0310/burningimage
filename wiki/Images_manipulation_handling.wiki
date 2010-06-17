@@ -1,4 +1,5 @@
 #summary BurningImageService usage documentation
+#labels Phase-Implementation,Featured
 
 = Introduction =
 
