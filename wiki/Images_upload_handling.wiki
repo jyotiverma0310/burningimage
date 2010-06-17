@@ -2,13 +2,16 @@
 
 = Introduction = 
 
-!BurningImage provide simple way to associate image with domain object and write it on the disk. With version 0.3, there was provided @!FileImageContainer annotation that allows to mark domain object, that should be treat as image container. That prepared class can be handled by !ImageUploadService, that provide methods to save and delete image. To display images for specified domain object instance, just use !BurningImageTagLib, that provide necessary tags to display image, or retrieve path to it. 
+!BurningImage provide simple way to associate image with domain object and write it on the disk or to DB. With version 0.4, there are provided @!FileImageContainer and @DBImageContainer annotations that allows to mark domain object, that should be treat as image container. That prepared class can be handled by !ImageUploadService, that provide methods to save and delete image. To display images for specified domain object instance, just use !BurningImageTagLib, that provide necessary tags to display image, or retrieve path to it. 
 
-== @!FileImageContainer ==
+All examples below uses @FileImageContainer() but for @DBImageContainer all steps are the same - BurningImage will handle it transparently. 
 
-This annotation allows you mark domain class, that should provide functionality of image container that store media in file system. 
+== Annotations ==
 
-{{{
+This annotations allows you mark domain class, that should provide functionality of image container that store media in file system. 
+
+{{{In examples below @!FileImageContainer annotation will be used, but for @DBImageContainer all actions are the smae
+
 
 import pl.burningice.plugins.image.ast.FileImageContainer 
 
@@ -87,7 +90,7 @@ bi.NameOfDomainClass = [
 
 }}}
 
-*outputDir*: configuration of directory where image should be stored.
+*outputDir*: configuration of directory where image should be stored. 
 
 It can be provided in two forms: 
   * as a string (see example above), then it will be treated as relative path from GRAILS_PROJECT/web-app 
@@ -113,7 +116,7 @@ bi.NameOfDomainClass = [
 
 }}}
 
-This approach need additional server configuration to point alias on absolute path.
+This approach need additional server configuration to point alias on absolute path. This field is *required only* for containers marked by @DBImageContainer annotation.
 
 *prefix*: name of the image prefix that should be add to while saving image, optional
 
