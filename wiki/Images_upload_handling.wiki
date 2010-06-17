@@ -1,5 +1,5 @@
 #summary ImageUploadService usage documentation
-#labels Featured
+#labels Phase-Implementation,Featured
 
 = Introduction = 
 
