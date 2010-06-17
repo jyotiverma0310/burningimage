@@ -24,16 +24,8 @@ package pl.burningice.plugins.image.ast;
 import org.codehaus.groovy.ast.*;
 import org.codehaus.groovy.transform.*;
 import org.codehaus.groovy.control.*;
-import org.codehaus.groovy.ast.expr.*;
-import org.codehaus.groovy.ast.stmt.*;
 import java.lang.reflect.Modifier;
-import org.codehaus.groovy.syntax.*;
-import org.objectweb.asm.Opcodes;
-import org.apache.commons.lang.StringUtils;
 import pl.burningice.plugins.image.ast.intarface.FileImageContainer;
-import java.util.List;
-import org.springframework.web.multipart.MultipartFile;
-import pl.burningice.plugins.image.validator.ImageValidator;
 
 /**
  * Object execute transformation of object marked by FileImageContainer annotation

@@ -1,6 +1,5 @@
 package pl.burningice.plugins.image
 
-import pl.burningice.plugins.image.test.BurningImageUnitTestCase
 import org.springframework.mock.web.MockMultipartFile
 import pl.burningice.plugins.image.engines.*
 import java.awt.Color

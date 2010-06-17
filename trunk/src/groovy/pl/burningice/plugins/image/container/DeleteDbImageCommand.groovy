@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009 Pawel Gdula <pawel.gdula@burningice.pl>
+Copyright (c) 2010 Pawel Gdula <pawel.gdula@burningice.pl>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,10 @@ import pl.burningice.plugins.image.ast.intarface.DBImageContainer
 import pl.burningice.plugins.image.ast.Image
 
 /**
- * Created by IntelliJ IDEA.
- * User: gdulus
- * Date: May 26, 2010
- * Time: 11:38:25 PM
- * To change this template use File | Settings | File Templates.
+ * Command object that allows to delete images associated with DB image container.
+ * Used in beforeDelete container handler
+ *
+ * @author pawel.gdula@burningice.pl
  */
 class DeleteDbImageCommand {
     static public void execute(DBImageContainer container){

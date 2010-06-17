@@ -28,15 +28,12 @@ import org.codehaus.groovy.ast.stmt.BlockStatement;
 import org.codehaus.groovy.ast.stmt.ExpressionStatement;
 import org.codehaus.groovy.ast.stmt.ReturnStatement;
 import org.codehaus.groovy.ast.stmt.Statement;
-import org.codehaus.groovy.control.CompilePhase;
 import org.codehaus.groovy.control.SourceUnit;
 import org.codehaus.groovy.syntax.Token;
 import org.codehaus.groovy.syntax.Types;
 import org.codehaus.groovy.transform.ASTTransformation;
-import org.codehaus.groovy.transform.GroovyASTTransformation;
 import org.objectweb.asm.Opcodes;
 import org.springframework.web.multipart.MultipartFile;
-import pl.burningice.plugins.image.ast.intarface.FileImageContainer;
 import pl.burningice.plugins.image.ast.intarface.ImageContainer;
 import pl.burningice.plugins.image.validator.ImageValidator;
 

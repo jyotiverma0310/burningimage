@@ -62,7 +62,7 @@ public class DBImageContainerTransformation extends AbstractImageContainerTransf
         ((BlockStatement)beforeDeleteMethod.getCode()).addStatement(createDeleteImageCommandCall());
         // add caching
         FieldNode mappingField = getMappingField(node);
-        ((BlockStatement)((ClosureExpression)mappingField.getInitialExpression()).getCode()).addStatement(createCacheBiImage());
+        ((BlockStatement)((ClosureExpression)mappingField.getInitialExpression()).getCode()).addStatement(createBiImageFieldMapping());
     }
 
     private FieldNode getMappingField(ClassNode node){
@@ -111,9 +111,10 @@ public class DBImageContainerTransformation extends AbstractImageContainerTransf
         );
     }
 
-    private Statement createCacheBiImage() {
+    private Statement createBiImageFieldMapping() {
         NamedArgumentListExpression namedarg = new NamedArgumentListExpression();
         namedarg.addMapEntryExpression(new ConstantExpression("cache"), new BooleanExpression(new ConstantExpression(true)));
+        namedarg.addMapEntryExpression(new ConstantExpression("lazy"), new BooleanExpression(new ConstantExpression(false)));
 
         MethodCallExpression constExpr = new MethodCallExpression(VariableExpression.THIS_EXPRESSION,
                                                                   new ConstantExpression("biImage"),
