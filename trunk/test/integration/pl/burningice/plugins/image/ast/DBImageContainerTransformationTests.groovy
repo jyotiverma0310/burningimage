@@ -31,6 +31,21 @@ class DBImageContainerTransformationTests extends GrailsUnitTestCase {
         super.tearDown()
     }
 
+    void testLazyFalse(){
+        def o, builder, mapping
+
+        def validateLazyLoadingDisabled = {
+            o =  GrailsClassUtils.getStaticPropertyValue(it, GrailsDomainClassProperty.MAPPING)
+            builder = new HibernateMappingBuilder(it.name);
+            mapping =  builder.evaluate((Closure) o)
+            assertFalse mapping.getPropertyConfig('biImage').lazy
+        }
+
+        validateLazyLoadingDisabled TestDbContainerDomainFirst
+        validateLazyLoadingDisabled TestDbContainerDomainSecond
+        validateLazyLoadingDisabled TestDbContainerDomainThird
+    }
+
     void testCachingEnabled(){
         def o, builder, mapping
 

@@ -29,10 +29,10 @@ import pl.burningice.plugins.image.ast.intarface.DBImageContainer
 import pl.burningice.plugins.image.ast.Image
 
 /**
- * Taglib for usage with annotated image container
- *
- * @author pawel.gdula@burningice.pl
- */
+  * Taglib for usage with annotated image container
+  *
+  * @author pawel.gdula@burningice.pl
+  */
 class BurningImageTagLib {
 
     static namespace = 'bi'
@@ -105,7 +105,7 @@ class BurningImageTagLib {
             throw new IllegalArgumentException("There is no config for ${imageContainer.class.name}")
         }
 
-        return g.resource(dir:config.outputDir, file:ContainerUtils.getFullName(size, imageContainer, config))
+        return g.resource(dir:getOutputDir(config.outputDir), file:ContainerUtils.getFullName(size, imageContainer, config))
     }
 
      /**
@@ -122,8 +122,29 @@ class BurningImageTagLib {
             throw new IllegalArgumentException("There is no image with size ${size} saved for container ${imageContainer.class.name}")          
         }
 
-        g.createLink(controller:'dbContainerImageController', action:'index', params:[imageId:image.ident(), size:size, type:image.type])
+        g.createLink(controller:'dbContainerImage', action:'index', params:[imageId:image.ident(), size:size, type:image.type])
     }
 
-    
+    /**
+        * Returns directory where image is stored. Overloaded to provide dispatching between String and Map outputDir
+        *
+        * @param uploadDir Path to upload dir
+        * @return Absolute path to resources
+        */
+    private def getOutputDir(String outputDir){
+        return outputDir
+    }
+
+    /**
+        * Returns directory where image is stored. Overloaded to provide dispatching between String and Map outputDir
+        * Parameter uploadDir should contain two keys:
+        * path - absolute path to directory where image should saved
+        * alias - alias for the absolute path
+        *
+        * @param uploadDir Map with upload dir configuration.
+        * @return Absolute path to resources
+        */
+    private def getOutputDir(Map outputDir){
+        outputDir.alias
+    }
 }

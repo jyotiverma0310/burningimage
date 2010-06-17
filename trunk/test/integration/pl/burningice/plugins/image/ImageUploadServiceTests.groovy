@@ -11,18 +11,22 @@ import pl.burningice.plugins.image.ast.test.TestDbContainerDomainSecond
 import pl.burningice.plugins.image.ast.test.TestDbContainerDomainThird
 import pl.burningice.plugins.image.test.FileUploadUtils
 import grails.test.GrailsUnitTestCase
+import org.springframework.context.ApplicationContextAware
+import org.springframework.context.ApplicationContext
 
 /**
  * @author pawel.gdula@burningice.pl
  */
 @Mixin(FileUploadUtils)
-class ImageUploadServiceTests extends GrailsUnitTestCase {
+class ImageUploadServiceTests extends GrailsUnitTestCase implements ApplicationContextAware {
 
     protected static final def RESULT_DIR = './web-app/upload/'
 
     protected static final def WEB_APP_RESULT_DIR = './upload/'
 
     ImageUploadService imageUploadService
+
+    ApplicationContext applicationContext
 
     protected void setUp() {
         super.setUp()
@@ -520,5 +524,65 @@ class ImageUploadServiceTests extends GrailsUnitTestCase {
 
         assertFalse fileExists("action-wraped-${testDomain.ident()}-large.jpg")
         assertFalse fileExists("action-wraped-${testDomain.ident()}-small.jpg")
+    }
+
+    void testAbsolutePath() {
+        def testDomain = new TestDomain(image:getMultipartFile('image.jpg'))
+
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+        assertNull testDomain.imageExtension
+
+        println getAbsolutePath(WEB_APP_RESULT_DIR)
+
+        ConfigurationHolder.config.bi.TestDomain = [
+            outputDir: ['path':getAbsolutePath(WEB_APP_RESULT_DIR), 'alias':'/upload/'],
+            prefix: 'prefixName',
+            images: ['small':[scale:[width:100, height:100, type:ScaleType.ACCURATE]],
+                     'medium':[scale:[width:300, height:300, type:ScaleType.ACCURATE]],
+                     'large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE]]
+            ]
+        ]
+
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+
+        assertNull testDomain.imageExtension
+
+        testDomain.save(flush:true)
+        def version = testDomain.version
+
+        assertNotNull testDomain.ident()
+        imageUploadService.save(testDomain)
+
+        assertTrue testDomain.imageExtension == 'jpg'
+        assertTrue testDomain.version == version
+
+        assertTrue fileExists("prefixName-${testDomain.ident()}-large.jpg")
+        assertTrue fileExists("prefixName-${testDomain.ident()}-medium.jpg")
+        assertTrue fileExists("prefixName-${testDomain.ident()}-small.jpg")
+
+        version = testDomain.version
+
+        testDomain.image = getMultipartFile('image.png')
+        assertNotNull testDomain.ident()
+        imageUploadService.save(testDomain, true)
+
+        assertFalse fileExists("prefixName-${testDomain.ident()}-large.jpg")
+        assertFalse fileExists("prefixName-${testDomain.ident()}-medium.jpg")
+        assertFalse fileExists("prefixName-${testDomain.ident()}-small.jpg")
+
+        assertTrue fileExists("prefixName-${testDomain.ident()}-large.png")
+        assertTrue fileExists("prefixName-${testDomain.ident()}-medium.png")
+        assertTrue fileExists("prefixName-${testDomain.ident()}-small.png")
+
+        assertTrue testDomain.imageExtension == 'png'
+        assertTrue testDomain.version > version
+    }
+
+    protected def getAbsolutePath(String uploadDir){
+        applicationContext.getResource(uploadDir).getFile().toString()
     }
 }

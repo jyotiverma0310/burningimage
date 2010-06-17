@@ -180,7 +180,10 @@ class ImageUploadService {
 
         if (params.type == ScaleType.APPROXIMATE){
             image.scaleApproximate(params.width, params.height)
+            return
         }
+
+        throw IllegalArgumentException("There is no scale type ${params.type},  check your configuration")
     }
 
     /**

@@ -1,7 +1,7 @@
 class UrlMappings {
     static mappings = {
         "/images/${imageId}-${size}.${type}" {
-            controller = 'dbContainerImageController'
+            controller = 'dbContainerImage'
             action = 'index'
         }
 
