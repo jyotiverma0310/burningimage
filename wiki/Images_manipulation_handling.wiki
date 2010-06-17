@@ -1,4 +1,4 @@
-#summary BurningImageService usage documentation (version 0.3)
+#summary BurningImageService usage documentation
 
 = Introduction =
 
