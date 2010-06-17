@@ -253,3 +253,35 @@ If you want to check if specified image container has associated images, just us
     And this is your image: <bi:img size="large" bean="${imageContainer}" />
 </bi:hasImage>
 }}}
+
+== !Url mapping for DB image storage ==
+
+When you mark domain class as DB image container, to display it, there will be created url  address to controller that will serve it to user. By default it will be like :
+
+{{{
+dbContainerImage/index?imageId=1&size=small&type=jpg
+}}}
+
+to change it, provide url mapping :
+
+{{{
+class UrlMappings {
+    static mappings = {
+        "/images/${imageId}-${size}.${type}" {
+            controller = 'dbContainerImage'
+            action = 'index'
+        }
+
+        "/$controller/$action?/$id?"{
+	        constraints {
+			  // apply constraints here
+		    }
+	    }
+        "/"(view:"/index")
+	    "500"(view:'/error')
+    }
+}
+
+}}}
+
+Parmeter "imageId" is required, "size" and "type" can be skipped in url mapping. 
