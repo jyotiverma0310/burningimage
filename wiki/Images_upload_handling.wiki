@@ -4,11 +4,11 @@
 
 !BurningImage provide simple way to associate image with domain object and write it on the disk or to DB. With version 0.4, there are provided @!FileImageContainer and @DBImageContainer annotations that allows to mark domain object, that should be treat as image container. That prepared class can be handled by !ImageUploadService, that provide methods to save and delete image. To display images for specified domain object instance, just use !BurningImageTagLib, that provide necessary tags to display image, or retrieve path to it. 
 
-All examples below uses @!FileImageContainer but for @DBImageContainer all steps are the same - BurningImage will handle it transparently. 
+All examples below uses @!FileImageContainer but for @DBImageContainer all steps are the same - !BurningImage will handle it transparently. 
 
 == Annotations ==
 
-Annotations allows you mark domain class, that should provide functionality of image container that store media in file system (pl.burningice.plugins.image.ast.FileImageContainer) or in database ( pl.burningice.plugins.image.ast.DBImageContainer). 
+Annotations allows you mark domain class, that should provide functionality of image container that store media in file system (pl.burningice.plugins.image.ast.!FileImageContainer) or in database ( pl.burningice.plugins.image.ast.DBImageContainer). 
 
 {{{
 
