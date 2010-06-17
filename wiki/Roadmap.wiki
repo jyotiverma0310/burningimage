@@ -1,13 +1,16 @@
 #summary Plugin roadmap
+#labels Phase-Requirements,Featured
 
 = Future =
+ * Provide !ImageMagick usage as alternative to JAI rendering engine
 
 = In progress =
+
+= Reached =
 
 === Version 0.4 ===
  * @!DbImageContainer annotation - simple way to work with image stored in database
 
-= Reached =
 
 === Version 0.3 ===
  * crop image
