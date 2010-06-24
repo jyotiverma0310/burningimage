@@ -29,7 +29,7 @@ class Group {
 
 }}}
 
-Domain class User in now marked as image container. Now you can bind image to it using default "image" filed. Domain class Group is image container too, but with defined field "avatar" where image can be binded. This allows, to bind image directly from html form. 
+Domain class User in now marked as image container. Now you can bind image to it using default "image" filed. Domain class Group is image container too, but with defined field "logo" where image can be binded. This allows, to bind image directly from html form. 
 
 For example, if we have class:
 
