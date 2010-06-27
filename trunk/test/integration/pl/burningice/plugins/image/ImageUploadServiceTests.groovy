@@ -353,18 +353,10 @@ class ImageUploadServiceTests extends GrailsUnitTestCase implements ApplicationC
             ]
         ]
 
-        assertFalse fileExists('prefixName-1-large.jpg')
-        assertFalse fileExists('prefixName-1-medium.jpg')
-        assertFalse fileExists('prefixName-1-small.jpg')
-
         shouldFail(IllegalArgumentException){
             imageUploadService.save(testDomain)
         }
         assertNull testDomain.imageExtension
-
-        assertFalse fileExists('prefixName-1-large.jpg')
-        assertFalse fileExists('prefixName-1-medium.jpg')
-        assertFalse fileExists('prefixName-1-small.jpg')
 
         testDomain.save(flush:true)
         def version = testDomain.version
@@ -375,9 +367,9 @@ class ImageUploadServiceTests extends GrailsUnitTestCase implements ApplicationC
         assertTrue testDomain.imageExtension == 'jpg'
         assertTrue testDomain.version == version
 
-        assertTrue fileExists('prefixName-1-large.jpg')
-        assertTrue fileExists('prefixName-1-medium.jpg')
-        assertTrue fileExists('prefixName-1-small.jpg')
+        assertTrue fileExists("prefixName-${testDomain.id}-large.jpg")
+        assertTrue fileExists("prefixName-${testDomain.id}-medium.jpg")
+        assertTrue fileExists("prefixName-${testDomain.id}-small.jpg")
 
         version = testDomain.version
 
@@ -385,13 +377,13 @@ class ImageUploadServiceTests extends GrailsUnitTestCase implements ApplicationC
         assertNotNull testDomain.ident()
         imageUploadService.save(testDomain, true)
 
-        assertFalse fileExists('prefixName-1-large.jpg')
-        assertFalse fileExists('prefixName-1-medium.jpg')
-        assertFalse fileExists('prefixName-1-small.jpg')
+        assertFalse fileExists("prefixName-${testDomain.id}-large.jpg")
+        assertFalse fileExists("prefixName-${testDomain.id}-medium.jpg")
+        assertFalse fileExists("prefixName-${testDomain.id}-small.jpg")
 
-        assertTrue fileExists('prefixName-1-large.png')
-        assertTrue fileExists('prefixName-1-medium.png')
-        assertTrue fileExists('prefixName-1-small.png')
+        assertTrue fileExists("prefixName-${testDomain.id}-large.png")
+        assertTrue fileExists("prefixName-${testDomain.id}-medium.png")
+        assertTrue fileExists("prefixName-${testDomain.id}-small.png")
 
         assertTrue testDomain.imageExtension == 'png'
         assertTrue testDomain.version > version
