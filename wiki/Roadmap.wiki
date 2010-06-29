@@ -1,7 +1,9 @@
 #summary Plugin roadmap
 #labels Phase-Requirements,Featured
 
-= Future =
+= Planned =
+
+=== Version 0.4 ===
  * Provide !ImageMagick support as alternative to JAI rendering engine
 
 = In progress =
