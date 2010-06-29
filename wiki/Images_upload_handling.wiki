@@ -255,7 +255,7 @@ If you want to check if specified image container has associated images, just us
 </bi:hasImage>
 }}}
 
-== !Url mapping for DB image storage ==
+== Url mapping for DB image storage ==
 
 When you mark domain class as DB image container, to display it, there will be created url  address to controller that will serve it to user. By default it will be like :
 
