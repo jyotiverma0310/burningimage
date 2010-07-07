@@ -22,7 +22,7 @@ THE SOFTWARE.
 package pl.burningice.plugins.image.container
 
 import pl.burningice.plugins.image.ast.intarface.ImageContainer
-import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
+import pl.burningice.plugins.image.ConfigUtils
 
 /**
  * Provide helper methods for working with ImageContainers
@@ -32,8 +32,6 @@ import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 class ContainerUtils {
 
     private static final def NAME_ELEMENTS_DELIMITER = '-'
-
-    private static final def CONFIG_NAMESPACE = 'bi'
 
     /**
      * Retrieve file extension from name of file
@@ -52,7 +50,7 @@ class ContainerUtils {
      * @return Configuration data for specified container
      */
     static def getConfig(ImageContainer imageContainer){
-        CH.config?."${CONFIG_NAMESPACE}"?."${getImageContainerName(imageContainer)}"
+        ConfigUtils.getContainerConfig(getImageContainerName(imageContainer))
     }
 
     /**

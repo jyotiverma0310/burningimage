@@ -13,6 +13,7 @@ import pl.burningice.plugins.image.test.FileUploadUtils
 import grails.test.GrailsUnitTestCase
 import org.springframework.context.ApplicationContextAware
 import org.springframework.context.ApplicationContext
+import pl.burningice.plugins.image.engines.RenderingEngine
 
 /**
  * @author pawel.gdula@burningice.pl
@@ -570,6 +571,53 @@ class ImageUploadServiceTests extends GrailsUnitTestCase implements ApplicationC
         assertTrue fileExists("prefixName-${testDomain.ident()}-medium.png")
         assertTrue fileExists("prefixName-${testDomain.ident()}-small.png")
 
+        assertTrue testDomain.imageExtension == 'png'
+        assertTrue testDomain.version > version
+    }
+
+    void testScaleImageMagickApproximate() {
+        def testDomain = new TestDomain(image:getMultipartFile('image.jpg'))
+
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+        assertNull testDomain.imageExtension
+
+        ConfigurationHolder.config.bi = [
+            renderingEngine: RenderingEngine.IMAGE_MAGICK,
+            TestDomain: [
+                outputDir: WEB_APP_RESULT_DIR,
+                prefix: 'imageMagick',
+                images: ['large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE]]
+                ]
+            ]
+        ]
+
+        shouldFail(IllegalArgumentException){
+            imageUploadService.save(testDomain)
+        }
+        assertNull testDomain.imageExtension
+
+        testDomain.save(flush:true)
+        def version = testDomain.version
+
+        assertNotNull testDomain.ident()
+        imageUploadService.save(testDomain)
+
+        assertTrue testDomain.imageExtension == 'jpg'
+        assertTrue testDomain.version == version
+
+        assertTrue fileExists("imageMagick-${testDomain.id}-large.jpg")
+
+        version = testDomain.version
+
+        testDomain.image = getMultipartFile('image.png')
+        assertNotNull testDomain.ident()
+        imageUploadService.save(testDomain, true)
+
+        assertFalse fileExists("imageMagick-${testDomain.id}-large.jpg")
+        assertTrue fileExists("imageMagick-${testDomain.id}-large.png")
+        
         assertTrue testDomain.imageExtension == 'png'
         assertTrue testDomain.version > version
     }
