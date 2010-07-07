@@ -27,6 +27,7 @@ import javax.imageio.ImageIO
 import com.sun.media.jai.codec.SeekableStream
 import com.sun.media.jai.codec.ByteArraySeekableStream
 import javax.media.jai.*
+import java.awt.Dimension
 
 /**
  * Base class for all image sources (File, MultipartFile)
@@ -85,10 +86,25 @@ abstract class ImageFile {
      *
      * @return RenderedOp
      */
-    def getAsJaiStream() {
+    public RenderedOp getAsJaiStream() {
         JAI.create("stream", inputStream)
     }
 
+    /**
+     * Allows to get size of current image
+     *
+     * @return Dimension object representing size of current image
+     */
+    public Dimension getSize(){
+        RenderedOp jaiStream = getAsJaiStream()
+        return new Dimension(jaiStream.width, jaiStream.height)
+    }
+
+    /**
+     * Returns uploaded image as byte array
+     *
+     * @return Uploaded image as byte array
+     */
     public byte[] getAsByteArray(){
         return toByteArray(ImageIO.read(inputStream))
     }
@@ -147,12 +163,23 @@ abstract class ImageFile {
         extensionEncoderMapping[extension]
     }
 
+    /**
+     * Allows to update current image data
+     *
+     * @param image Changed image that should be used as new one
+     */
     void update(BufferedImage image){
         stream = new ByteArraySeekableStream(toByteArray(image))
     }
 
+    /**
+     * Converts BufferedImage object pass as a parameter to byte array
+     *
+     * @param image BufferedImage object that should be transformed to byte array
+     * @return Image as byte array
+     */
     private byte[] toByteArray(BufferedImage image){
-        def output = new ByteArrayOutputStream()
+        ByteArrayOutputStream output = new ByteArrayOutputStream()
         ImageIO.write(image, extension, output);
         return output.toByteArray()      
     }

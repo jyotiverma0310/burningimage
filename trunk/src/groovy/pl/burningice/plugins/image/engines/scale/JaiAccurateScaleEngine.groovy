@@ -33,7 +33,7 @@ import javax.media.jai.*;
  *
  * @author Pawel Gdula <pawel.gdula@burningice.pl>
  */
-private class AccurateScaleEngine extends ApproximateScaleEngine {
+private class JaiAccurateScaleEngine extends JaiApproximateScaleEngine {
 
     /**
      * Sometimes scale of image is lowered by 1px and when
@@ -45,7 +45,7 @@ private class AccurateScaleEngine extends ApproximateScaleEngine {
     private static final SIZE_CORRECTION = 1
 
     /**
-     * @see ScaleEngine#scaleImage
+     * @see JaiScaleEngine#scaleImage
      * @overwrite
      */
     protected def scaleImage(image, width, height) {

@@ -36,6 +36,7 @@ class BurningImageService {
      */
     static {
         System.setProperty('com.sun.media.jai.disableMediaLib', 'true');
+        System.setProperty('jmagick.systemclassloader', 'false');
     } 
 
     boolean transactional = false

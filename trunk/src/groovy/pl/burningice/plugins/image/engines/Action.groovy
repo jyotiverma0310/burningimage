@@ -27,6 +27,7 @@ import pl.burningice.plugins.image.engines.crop.DefaultCropEngine
 import pl.burningice.plugins.image.engines.text.DefaultTextEngine
 import java.awt.Font
 import java.awt.Color
+import pl.burningice.plugins.image.ConfigUtils
 
 /**
  * Object allows to build chains of action
@@ -68,7 +69,7 @@ class Action {
             throw new IllegalArgumentException("Scale width = ${width}, height = ${height} is incorrent")
         }
 
-        loadedImage.update(new ApproximateScaleEngine().execute(loadedImage, width, height))
+        loadedImage.update(ScaleEngineFactory.produceApproximateEngine(ConfigUtils.getEngine()).execute(loadedImage, width, height))
         fileName
     }
 
@@ -89,7 +90,7 @@ class Action {
             throw new IllegalArgumentException("Scale width = ${width}, height = ${height} is incorrent")
         }
 
-        loadedImage.update(new AccurateScaleEngine().execute(loadedImage, width, height))
+        loadedImage.update(ScaleEngineFactory.produceAccurateEngine(ConfigUtils.getEngine()).execute(loadedImage, width, height))
         fileName
     }
 
