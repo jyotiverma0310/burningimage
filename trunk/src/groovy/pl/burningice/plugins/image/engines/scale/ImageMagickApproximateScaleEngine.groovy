@@ -48,15 +48,18 @@ private class ImageMagickApproximateScaleEngine extends ImageMagickScaleEngine {
 
         ImageInfo imageSource = new ImageInfo()
         MagickImage magickImage = new MagickImage(imageSource,  image)
-        magickImage.readImage(imageSource)
         MagickImage thumbnail = magickImage.scaleImage(scaledWidth, scaledHeight)
         return thumbnail.imageToBlob(imageSource)
     }
 
-    protected def calculateSize(Dimension currentSize, Dimension requestedSize) {
+    protected def evaluateScale(Dimension currentSize, Dimension requestedSize){
         def scaleX = requestedSize.width / currentSize.width
         def scaleY = requestedSize.height / currentSize.height
-        def scale = scaleX > scaleY ? scaleY : scaleX
+        return (scaleX > scaleY ? scaleY : scaleX)
+    }
+
+    private List calculateSize(Dimension currentSize, Dimension requestedSize) {
+        def scale = evaluateScale(currentSize, requestedSize)
         return [(currentSize.width * scale).toInteger(), (currentSize.height * scale).toInteger()]
     }
 }

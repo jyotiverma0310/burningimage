@@ -31,8 +31,12 @@ abstract class ImageMagickScaleEngine implements ScaleEngine {
 
     public BufferedImage execute(ImageFile loadedImage, int width, int height){
         byte[] scaledImage = scaleImage(loadedImage.getAsByteArray(), loadedImage.getSize(), new Dimension(width, height))
-        return ImageIO.read(new ByteArrayInputStream(scaledImage))
+        return bytesToBufferedImage(scaledImage)
     }
 
     abstract protected byte[] scaleImage(byte[] image, Dimension currentSize, Dimension requestedSize)
+
+    protected BufferedImage bytesToBufferedImage(byte[] image){
+        return ImageIO.read(new ByteArrayInputStream(image))    
+    }
 }

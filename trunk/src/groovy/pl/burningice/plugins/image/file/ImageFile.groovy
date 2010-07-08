@@ -28,6 +28,8 @@ import com.sun.media.jai.codec.SeekableStream
 import com.sun.media.jai.codec.ByteArraySeekableStream
 import javax.media.jai.*
 import java.awt.Dimension
+import pl.burningice.plugins.image.ConfigUtils
+import pl.burningice.plugins.image.engines.RenderingEngine
 
 /**
  * Base class for all image sources (File, MultipartFile)
@@ -146,7 +148,8 @@ abstract class ImageFile {
     def getExtension() {
         def fileExtension = sourceFileName.split(/\./)[-1].toLowerCase()
 
-        if (fileExtension == 'gif') {
+        if (fileExtension == 'gif'
+                && ConfigUtils.getEngine() == RenderingEngine.JAI) {
             return GIF_OUTPUT_FORMAT
         }
 
