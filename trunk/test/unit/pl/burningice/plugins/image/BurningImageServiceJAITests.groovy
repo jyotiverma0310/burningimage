@@ -12,7 +12,7 @@ import pl.burningice.plugins.image.test.FileUploadUtils
  * @author pawel.gdula@burningice.pl
  */
 @Mixin(FileUploadUtils)
-class BurningImageServiceTests extends GrailsUnitTestCase {
+class BurningImageServiceJAITests extends GrailsUnitTestCase {
 
     protected static final def RESULT_DIR = './resources/resultImages/'
 

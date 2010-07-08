@@ -33,10 +33,6 @@ class ImageUploadServiceTests extends GrailsUnitTestCase implements ApplicationC
         super.setUp()
         cleanUpTestDir()
         ConfigurationHolder.config = new ConfigObject()
-
-        if (ConfigurationHolder.config == null){
-
-        }
     }
 
     protected void tearDown() {
