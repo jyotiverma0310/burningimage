@@ -20,25 +20,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-package pl.burningice.plugins.image.file
+package pl.burningice.plugins.image.engines.watermark
 
-import org.springframework.web.multipart.MultipartFile
-import com.sun.media.jai.codec.*
+import javax.imageio.ImageIO
+import java.awt.AlphaComposite
+import pl.burningice.plugins.image.file.ImageFile
+import java.awt.image.BufferedImage
+import java.awt.Point
 
 /**
- * Representing image file uploaded na server as a MultipartFile
+ * Base, default and only watermark engine
  *
  * @author pawel.gdula@burningice.pl
  */
-class MultipartImageFile extends ImageFile {
+class JaiWatermarkEngine extends DefaultWatermarkEngine {
 
     /**
-     * Class constructor
+     * Execute watermark impose
      *
-     * @param source Uploaded image, source for this class
-     * @return MultipartImageFile
+     * @param File watermarkFile Object representing local watermark file
+     * @param ImageFile loadedImage Loaded image
+     * @param [:] position Map representing watermark location on image
+     * @return ImageFile
      */
-    def MultipartImageFile(MultipartFile source) {
-        super(source.originalFilename, source.bytes)
+    protected BufferedImage doWatermark(File watermarkFile, ImageFile loadedImage, Map position, float alpha, Point offset){
+        def fileToMark = ImageIO.read(loadedImage.inputStream);
+        def watermark = ImageIO.read(watermarkFile)
+
+        def g = fileToMark.createGraphics();
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)alpha));
+        g.drawImage(watermark, (int)offset.x, (int)offset.y, null);
+        g.dispose();
+
+        fileToMark
     }
 }
+

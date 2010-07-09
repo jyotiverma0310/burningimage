@@ -30,6 +30,7 @@ import javax.media.jai.*
 import java.awt.Dimension
 import pl.burningice.plugins.image.ConfigUtils
 import pl.burningice.plugins.image.engines.RenderingEngine
+import com.sun.media.jai.codec.MemoryCacheSeekableStream
 
 /**
  * Base class for all image sources (File, MultipartFile)
@@ -45,11 +46,7 @@ abstract class ImageFile {
      */
     private static final def GIF_OUTPUT_FORMAT = 'jpg'
 
-    /**
-     * Stream of image
-     *
-     */
-    SeekableStream stream
+    byte[] source
 
     /**
      * Name of the source file
@@ -76,11 +73,10 @@ abstract class ImageFile {
      * Default constructor
      *
      * @param name Original file name
-     * @param fileStream Representing an image
      */
-    ImageFile(String name, SeekableStream fileStream){
-        stream = fileStream
-        sourceFileName = name
+    ImageFile(String sourceFileName, byte[] source){
+        this.source = source
+        this.sourceFileName = sourceFileName
     }
 
     /**
@@ -89,7 +85,7 @@ abstract class ImageFile {
      * @return RenderedOp
      */
     public RenderedOp getAsJaiStream() {
-        JAI.create("stream", inputStream)
+        return JAI.create("stream", inputStream)
     }
 
     /**
@@ -108,7 +104,7 @@ abstract class ImageFile {
      * @return Uploaded image as byte array
      */
     public byte[] getAsByteArray(){
-        return toByteArray(ImageIO.read(inputStream))
+        return source
     }
 
     /**
@@ -116,8 +112,8 @@ abstract class ImageFile {
      *
      * @return InputStream
      */
-    def getInputStream() {
-        stream
+    public SeekableStream getInputStream(){
+        new ByteArraySeekableStream(source)    
     }
 
     /**
@@ -172,7 +168,7 @@ abstract class ImageFile {
      * @param image Changed image that should be used as new one
      */
     void update(BufferedImage image){
-        stream = new ByteArraySeekableStream(toByteArray(image))
+        source = toByteArray(image) 
     }
 
     /**
