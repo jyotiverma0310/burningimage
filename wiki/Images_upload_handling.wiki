@@ -116,7 +116,7 @@ bi.NameOfDomainClass = [
 
 }}}
 
-This approach need additional server configuration to point alias on absolute path. This field is *required only* for containers marked by @DBImageContainer annotation.
+This approach need additional server configuration to point alias on absolute path. This field is *required only* for containers marked by @FileImageContainer annotation.
 
 *prefix*: name of the image prefix that should be add to while saving image, optional
 
