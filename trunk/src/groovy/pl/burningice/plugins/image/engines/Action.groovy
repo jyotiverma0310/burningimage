@@ -22,12 +22,13 @@ THE SOFTWARE.
 package pl.burningice.plugins.image.engines
 
 import pl.burningice.plugins.image.engines.scale.*
-import pl.burningice.plugins.image.engines.watermark.DefaultWatermarkEngine
+import pl.burningice.plugins.image.engines.watermark.JaiWatermarkEngine
 import pl.burningice.plugins.image.engines.crop.DefaultCropEngine
 import pl.burningice.plugins.image.engines.text.DefaultTextEngine
 import java.awt.Font
 import java.awt.Color
 import pl.burningice.plugins.image.ConfigUtils
+import pl.burningice.plugins.image.engines.watermark.WatermarkEngineFactory
 
 /**
  * Object allows to build chains of action
@@ -117,7 +118,7 @@ class Action {
             throw new FileNotFoundException("There is no ${watermarkPath} watermark file")
         }
 
-        loadedImage.update(new DefaultWatermarkEngine().execute(watermarkFile, loadedImage, position, alpha))
+        loadedImage.update(WatermarkEngineFactory.produceEngine(ConfigUtils.getEngine()).execute(watermarkFile, loadedImage, position, alpha))
         fileName
     }
 

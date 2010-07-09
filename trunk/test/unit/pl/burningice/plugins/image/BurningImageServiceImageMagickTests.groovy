@@ -223,4 +223,64 @@ class BurningImageServiceImageMagickTests extends GrailsUnitTestCase {
         assertTrue file.width == 100
         assertTrue file.height == 100
     }
+
+    void testWatermarkJpg() {
+        assertEquals(ConfigUtils.getEngine(), RenderingEngine.IMAGE_MAGICK)
+        assertFalse(fileExists('image.jpg'))
+
+        def scaleResult, result
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.watermark('./resources/testImages/watermark.png')
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.jpg', scaleResult
+        assertTrue fileExists('image.jpg')
+    }
+
+    void testWatermarkBmp() {
+        assertEquals(ConfigUtils.getEngine(), RenderingEngine.IMAGE_MAGICK)
+        assertFalse(fileExists('image.bmp'))
+
+        def scaleResult, result
+
+        result = burningImageService.doWith(getMultipartFile('image.bmp'), RESULT_DIR).execute {
+            scaleResult = it.watermark('./resources/testImages/watermark.png')
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.bmp', scaleResult
+        assertTrue fileExists('image.bmp')
+    }
+
+    void testWatermarkGif() {
+        assertEquals(ConfigUtils.getEngine(), RenderingEngine.IMAGE_MAGICK)
+        assertFalse(fileExists('image.gif'))
+
+        def scaleResult, result
+
+        result = burningImageService.doWith(getMultipartFile('image.gif'), RESULT_DIR).execute {
+            scaleResult = it.watermark('./resources/testImages/watermark.png')
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.gif', scaleResult
+        assertTrue fileExists('image.gif')
+    }
+
+    void testWatermarkPng() {
+        assertEquals(ConfigUtils.getEngine(), RenderingEngine.IMAGE_MAGICK)
+        assertFalse(fileExists('image.png'))
+
+        def scaleResult, result
+
+        result = burningImageService.doWith(getMultipartFile('image.png'), RESULT_DIR).execute {
+            scaleResult = it.watermark('./resources/testImages/watermark.png')
+        }
+
+        assertTrue result instanceof Worker
+        assertEquals 'image.png', scaleResult
+        assertTrue fileExists('image.png')
+    }
 }

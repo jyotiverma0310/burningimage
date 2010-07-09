@@ -22,15 +22,20 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.engines.watermark
 
-import javax.imageio.ImageIO
 import java.awt.AlphaComposite
+import java.awt.image.BufferedImage
+import javax.imageio.ImageIO
+import pl.burningice.plugins.image.file.ImageFile
+import java.awt.Point
 
 /**
  * Base, default and only watermark engine
  *
  * @author pawel.gdula@burningice.pl
  */
-class DefaultWatermarkEngine {
+
+
+abstract class DefaultWatermarkEngine implements WatermarkEngine {
 
     /**
      * Execute watermark impose
@@ -40,18 +45,23 @@ class DefaultWatermarkEngine {
      * @param [:] position Map representing watermark location on image
      * @return ImageFile
      */
-    def execute(watermarkFile, loadedImage, position, alpha) {
-        def fileToMark = ImageIO.read(loadedImage.inputStream);
-        def watermark = ImageIO.read(watermarkFile)
-        def (left, top) = transformPosition(watermark, fileToMark, position)
-
-        def g = fileToMark.createGraphics();
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)alpha));
-        g.drawImage(watermark, (int)left, (int)top, null);
-        g.dispose();
-
-        fileToMark
+    public BufferedImage execute(File watermarkFile, ImageFile loadedImage, Map position, float alpha){
+        return doWatermark(watermarkFile,
+                            loadedImage,
+                            position,
+                            alpha,
+                            transformPosition(ImageIO.read(watermarkFile), loadedImage.getSize(), position))
     }
+
+    /**
+     * Execute watermark impose
+     *
+     * @param File watermarkFile Object representing local watermark file
+     * @param ImageFile loadedImage Loaded image
+     * @param [:] position Map representing watermark location on image
+     * @return ImageFile
+     */
+    abstract protected BufferedImage doWatermark(File watermarkFile, ImageFile loadedImage, Map position, float alpha, Point offset)
 
     /**
      * Method transforms watermark localization parameters
@@ -62,7 +72,7 @@ class DefaultWatermarkEngine {
      * @param [:] position Map representing watermark location on image
      * @return [] Array where 0 index delta from left and 1 index is delta from top of image
      */
-    private def transformPosition(watermark, fileToMark, position){
+    protected Point transformPosition(watermark, fileToMark, position){
         def left, top
 
         if (position['left'] != null) {
@@ -89,7 +99,6 @@ class DefaultWatermarkEngine {
             top = (fileToMark.height - watermark.height)/2
         }
 
-        [left, top]
+        return new Point((int)left, (int)top)
     }
 }
-

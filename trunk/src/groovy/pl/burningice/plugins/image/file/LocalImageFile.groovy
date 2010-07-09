@@ -29,7 +29,7 @@ import com.sun.media.jai.codec.*
  *
  * @author pawel.gdula@burningice.pl
  */
-private class LocalImageFile extends ImageFile {
+class LocalImageFile extends ImageFile {
 
     /**
      * Class constructor
@@ -38,6 +38,13 @@ private class LocalImageFile extends ImageFile {
      * @return LocalImageFile
      */
     def LocalImageFile(File source) {
-        super(source.name, new FileSeekableStream(source))
+        super(source.name, fileToByteArray(source))
+    }
+
+    private static byte[] fileToByteArray(File source){
+        FileInputStream stream = new FileInputStream(source);
+        byte[] sourceContent = new byte[(int)source.length()];
+        stream.read(sourceContent);
+        return sourceContent; 
     }
 }
