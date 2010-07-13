@@ -29,6 +29,7 @@ import magick.MagickImage
 import magick.ImageInfo
 import magick.CompositeOperator
 import java.awt.Point
+import pl.burningice.plugins.image.ConfigUtils
 
 /**
  * Class for image watermarking with ImageMagick rendering engine
@@ -40,6 +41,8 @@ class ImageMagickWatermarkEngine extends DefaultWatermarkEngine {
     protected BufferedImage doWatermark(File watermarkFile, ImageFile loadedImage, Map position, float alpha, Point offset){
         MagickImage watermark = new MagickImage(new ImageInfo(watermarkFile.absolutePath))
         ImageInfo imageSource = new ImageInfo()
+        imageSource.setQuality(ConfigUtils.imageMagickQuality)
+        imageSource.setCompression(ConfigUtils.imageMagickCompression)
         MagickImage magickImage = new MagickImage(imageSource,  loadedImage.getAsByteArray())
         magickImage.compositeImage(CompositeOperator.HardLightCompositeOp, watermark, (int)offset.x, (int)offset.y)
         return ImageIO.read(new ByteArrayInputStream(magickImage.imageToBlob(imageSource)))

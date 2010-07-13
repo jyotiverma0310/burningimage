@@ -30,6 +30,7 @@ import magick.PixelPacket
 import java.awt.Color
 import java.awt.Font
 import pl.burningice.plugins.image.file.ImageFile
+import pl.burningice.plugins.image.ConfigUtils
 
 /**
  * Engine for typing text on image
@@ -66,6 +67,7 @@ final class ImageMagickTextEngine extends DefaultTextEngine {
 
         aInfo.setGeometry("+${deltaX}+${deltaY}")
         aInfo.setText(text)
+        aInfo.setTextAntialias(true)
         magickImage.annotateImage(aInfo) 
     }
 
@@ -75,12 +77,16 @@ final class ImageMagickTextEngine extends DefaultTextEngine {
 
     protected void init() {
         imageSource = new ImageInfo()
+        imageSource.setQuality(ConfigUtils.imageMagickQuality)
+        imageSource.setCompression(ConfigUtils.imageMagickCompression)
+
         magickImage = new MagickImage(imageSource, loadedImage.getAsByteArray())
+
         if (color) {
             imageMagickColor = new PixelPacket(recalculateColorRange(color.red),
-                                               recalculateColorRange(color.green),
-                                               recalculateColorRange(color.blue),
-                                               0)
+                                                    recalculateColorRange(color.green),
+                                                    recalculateColorRange(color.blue),
+                                                    0)
         }
     }
 

@@ -27,6 +27,7 @@ import magick.MagickImage
 import magick.ImageInfo
 import java.awt.image.BufferedImage
 import java.awt.Rectangle
+import pl.burningice.plugins.image.ConfigUtils
 
 /**
  * Class allows to scale image with accurate width and height.
@@ -64,6 +65,8 @@ private class ImageMagickAccurateScaleEngine extends ImageMagickApproximateScale
         Rectangle cropData = new Rectangle(offsetX, offsetY, (int)requestedSize.width, (int)requestedSize.height)
 
         ImageInfo imageSource = new ImageInfo()
+        imageSource.setQuality(ConfigUtils.imageMagickQuality)
+        imageSource.setCompression(ConfigUtils.imageMagickCompression)
         MagickImage magickImage = new MagickImage(imageSource,  rawScaledImage)
         MagickImage croppedImage = magickImage.cropImage(cropData)
         return croppedImage.imageToBlob(imageSource)

@@ -25,6 +25,7 @@ package pl.burningice.plugins.image.engines.scale
 import java.awt.Dimension
 import magick.ImageInfo
 import magick.MagickImage
+import pl.burningice.plugins.image.ConfigUtils
 
 /**
  * Class allows to scale image with approximate width and height
@@ -44,6 +45,8 @@ private class ImageMagickApproximateScaleEngine extends ImageMagickScaleEngine {
         def (scaledWidth, scaledHeight) = calculateSize(currentSize, requestedSize)
 
         ImageInfo imageSource = new ImageInfo()
+        imageSource.setQuality(ConfigUtils.imageMagickQuality)
+        imageSource.setCompression(ConfigUtils.imageMagickCompression)
         MagickImage magickImage = new MagickImage(imageSource,  image)
         MagickImage thumbnail = magickImage.scaleImage(scaledWidth, scaledHeight)
         return thumbnail.imageToBlob(imageSource)
