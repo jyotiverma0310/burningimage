@@ -27,6 +27,13 @@ import pl.burningice.plugins.image.file.ImageFile
 import java.awt.Dimension
 import javax.imageio.ImageIO
 
+/**
+ * Class allows to scale image with approximate width and height
+ * Result image will not contain exact width and height given by user
+ * if there will be image deformation
+ *
+ * @author Pawel Gdula <pawel.gdula@burningice.pl>
+ */
 abstract class ImageMagickScaleEngine implements ScaleEngine {
 
     public BufferedImage execute(ImageFile loadedImage, int width, int height){

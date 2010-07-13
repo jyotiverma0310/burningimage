@@ -22,8 +22,6 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.engines.scale
 
-import java.awt.image.renderable.ParameterBlock
-import javax.media.jai.JAI
 import java.awt.Dimension
 import magick.MagickImage
 import magick.ImageInfo

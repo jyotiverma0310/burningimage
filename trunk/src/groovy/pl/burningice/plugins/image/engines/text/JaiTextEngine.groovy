@@ -19,32 +19,69 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-
-package pl.burningice.plugins.image.engines.watermark
+package pl.burningice.plugins.image.engines.text
 
 import javax.imageio.ImageIO
-import java.awt.AlphaComposite
+import java.awt.Color
+import java.awt.Font
 import pl.burningice.plugins.image.file.ImageFile
+import java.awt.Graphics2D
 import java.awt.image.BufferedImage
-import java.awt.Point
 
 /**
- * Class for image watermarking with JAI rendering engine
+ * Engine for typing text on image
  *
  * @author pawel.gdula@burningice.pl
  */
-class JaiWatermarkEngine extends DefaultWatermarkEngine {
+class JaiTextEngine extends DefaultTextEngine {
 
-    protected BufferedImage doWatermark(File watermarkFile, ImageFile loadedImage, Map position, float alpha, Point offset){
-        def fileToMark = ImageIO.read(loadedImage.inputStream);
-        def watermark = ImageIO.read(watermarkFile)
+    /**
+     * Object representing image file
+     *
+     */
+    BufferedImage fileToMark
 
-        def g = fileToMark.createGraphics();
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)alpha));
-        g.drawImage(watermark, (int)offset.x, (int)offset.y, null);
-        g.dispose();
+    /**
+     * Object representing image canvas
+     *
+     */
+    Graphics2D graphics
 
+    public JaiTextEngine(Color color, Font font, ImageFile loadedImage){
+        super(color, font, loadedImage)
+    }
+
+    /**
+     * Performs write actions
+     *
+     * @param text Text to type
+     * @param deltaX Offset from left border of image
+     * @param deltaY Offset from top border of image
+     */
+    void write(String text, int deltaX, int deltaY) {
+        graphics.drawString(text, deltaX, deltaY);
+    }
+
+    /**
+     * Returns write result
+     *
+     * @return BufferedImage objects representing current image
+     */
+    BufferedImage getResult(){
+        graphics.dispose();
         fileToMark
     }
-}
 
+    protected void init() {
+        fileToMark = ImageIO.read(loadedImage.inputStream);
+        graphics = fileToMark.createGraphics();
+
+        if (color) {
+            graphics.setColor(color);
+        }
+
+        if (font) {
+            graphics.setFont(font);
+        }
+    }
+}

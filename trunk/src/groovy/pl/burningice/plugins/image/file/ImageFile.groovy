@@ -39,12 +39,20 @@ import com.sun.media.jai.codec.MemoryCacheSeekableStream
  */
 abstract class ImageFile {
 
+    public static final String JPG_EXTENSION = 'jpg'
+
+    public static final String GIF_EXTENSION = 'gif'
+
+    public static final String BMP_EXTENSION = 'bmp'
+
+    public static final String PNG_EXTENSION = 'png'
+
     /**
      * Gif image output format
      *
      * @const String
      */
-    private static final def GIF_OUTPUT_FORMAT = 'jpg'
+    private static final def GIF_OUTPUT_FORMAT = JPG_EXTENSION
 
     byte[] source
 
@@ -62,11 +70,10 @@ abstract class ImageFile {
      */
     @Lazy
     def extensionEncoderMapping = [
-        'jpg': 'JPEG',
-        'jpeg': 'JPEG',
-        'gif': 'JPEG',
-        'bmp': 'BMP',
-        'png': 'PNG'
+        (JPG_EXTENSION) : 'JPEG',
+        (GIF_EXTENSION) : 'JPEG',
+        (BMP_EXTENSION) : 'BMP',
+        (PNG_EXTENSION) : 'PNG'
     ]
 
     /**
@@ -94,8 +101,8 @@ abstract class ImageFile {
      * @return Dimension object representing size of current image
      */
     public Dimension getSize(){
-        RenderedOp jaiStream = getAsJaiStream()
-        return new Dimension(jaiStream.width, jaiStream.height)
+        BufferedImage image = getAsBufferedImage();
+        return new Dimension(image.width, image.height)
     }
 
     /**
@@ -105,6 +112,15 @@ abstract class ImageFile {
      */
     public byte[] getAsByteArray(){
         return source
+    }
+
+    /**
+     * Returns uploaded image as BufferedImage
+     *
+     * @return Uploaded image as BufferedImage
+     */
+    public BufferedImage getAsBufferedImage(){
+       return ImageIO.read(getInputStream())
     }
 
     /**
@@ -144,7 +160,7 @@ abstract class ImageFile {
     def getExtension() {
         def fileExtension = sourceFileName.split(/\./)[-1].toLowerCase()
 
-        if (fileExtension == 'gif'
+        if (fileExtension == GIF_EXTENSION
                 && ConfigUtils.getEngine() == RenderingEngine.JAI) {
             return GIF_OUTPUT_FORMAT
         }

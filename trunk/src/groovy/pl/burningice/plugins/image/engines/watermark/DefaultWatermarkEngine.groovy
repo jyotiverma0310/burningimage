@@ -22,29 +22,18 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.engines.watermark
 
-import java.awt.AlphaComposite
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import pl.burningice.plugins.image.file.ImageFile
 import java.awt.Point
 
 /**
- * Base, default and only watermark engine
+ * Base class for any watermark engine used by BI
  *
  * @author pawel.gdula@burningice.pl
  */
-
-
 abstract class DefaultWatermarkEngine implements WatermarkEngine {
 
-    /**
-     * Execute watermark impose
-     *
-     * @param File watermarkFile Object representing local watermark file
-     * @param ImageFile loadedImage Loaded image
-     * @param [:] position Map representing watermark location on image
-     * @return ImageFile
-     */
     public BufferedImage execute(File watermarkFile, ImageFile loadedImage, Map position, float alpha){
         return doWatermark(watermarkFile,
                             loadedImage,
@@ -53,25 +42,8 @@ abstract class DefaultWatermarkEngine implements WatermarkEngine {
                             transformPosition(ImageIO.read(watermarkFile), loadedImage.getSize(), position))
     }
 
-    /**
-     * Execute watermark impose
-     *
-     * @param File watermarkFile Object representing local watermark file
-     * @param ImageFile loadedImage Loaded image
-     * @param [:] position Map representing watermark location on image
-     * @return ImageFile
-     */
     abstract protected BufferedImage doWatermark(File watermarkFile, ImageFile loadedImage, Map position, float alpha, Point offset)
 
-    /**
-     * Method transforms watermark localization parameters
-     * to image coordinates
-     *
-     * @param Image watermark Object representing local watermark file
-     * @param Image fileToMark Loaded image
-     * @param [:] position Map representing watermark location on image
-     * @return [] Array where 0 index delta from left and 1 index is delta from top of image
-     */
     protected Point transformPosition(watermark, fileToMark, position){
         def left, top
 

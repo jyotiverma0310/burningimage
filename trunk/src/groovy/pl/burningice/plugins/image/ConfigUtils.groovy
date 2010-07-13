@@ -24,6 +24,11 @@ package pl.burningice.plugins.image
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 import pl.burningice.plugins.image.engines.RenderingEngine
 
+/**
+ * Class that provide access to configuration specified for BI
+ *
+ * @author pawel.gdula@burningice.pl
+ */
 class ConfigUtils {
 
     private static final String CONFIG_NAMESPACE = 'bi'

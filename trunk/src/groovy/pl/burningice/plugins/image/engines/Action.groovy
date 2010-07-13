@@ -22,13 +22,15 @@ THE SOFTWARE.
 package pl.burningice.plugins.image.engines
 
 import pl.burningice.plugins.image.engines.scale.*
-import pl.burningice.plugins.image.engines.watermark.JaiWatermarkEngine
-import pl.burningice.plugins.image.engines.crop.DefaultCropEngine
-import pl.burningice.plugins.image.engines.text.DefaultTextEngine
+
 import java.awt.Font
 import java.awt.Color
 import pl.burningice.plugins.image.ConfigUtils
 import pl.burningice.plugins.image.engines.watermark.WatermarkEngineFactory
+import pl.burningice.plugins.image.engines.crop.CropEngineFactory
+import pl.burningice.plugins.image.file.ImageFile
+import pl.burningice.plugins.image.engines.text.TextEngine
+import pl.burningice.plugins.image.engines.text.TextEngineFactory
 
 /**
  * Object allows to build chains of action
@@ -44,7 +46,7 @@ class Action {
      *
      * @var ImageFile
      */
-    def loadedImage
+    ImageFile loadedImage
 
     /**
      * Name of output file
@@ -144,7 +146,7 @@ class Action {
             throw new IllegalArgumentException("Delta parameters smaller than 0, dimension smaller or equal 0: deltaX = ${deltaX}, deltaY = ${deltaY}, width = ${width}, height = ${height}")
         }
 
-        def image = loadedImage.getAsJaiStream()
+        def image = loadedImage.getSize()
 
         if (deltaX > image.width || deltaY > image.height
             || width > image.width || height > image.height
@@ -152,7 +154,7 @@ class Action {
             throw new IllegalArgumentException('Crop region not match to image size')
         }
 
-        loadedImage.update(new DefaultCropEngine().execute(loadedImage, deltaX, deltaY, width, height))
+        loadedImage.update(CropEngineFactory.produceEngine(ConfigUtils.getEngine()).execute(loadedImage, deltaX, deltaY, width, height))
         fileName
     }
 
@@ -165,7 +167,7 @@ class Action {
      * @return String Name of output file
      */
     def text(Color color, Font font, Closure typist){
-        def engine = new DefaultTextEngine(color, font, loadedImage)
+        TextEngine engine = TextEngineFactory.produceEngine(ConfigUtils.getEngine(), color, font, loadedImage)
         typist(engine)
         loadedImage.update(engine.getResult())
         fileName
