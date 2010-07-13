@@ -739,10 +739,11 @@ class BurningImageServiceImageMagickTests extends GrailsUnitTestCase {
         }
 
         void testTextLocalFile() {
-            assertEquals(ConfigUtils.getEngine(), RenderingEngine.IMAGE_MAGICK)
+            CH.config.bi.renderingEngine = RenderingEngine.JAI
+
             def result, scaleResult, image
 
-            result = burningImageService.doWith(getFilePath('image.jpg'), RESULT_DIR).execute('first', {img ->
+            result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR).execute('jai', {img ->
                 img.text(Color.RED, new Font('Arial', Font.PLAIN, 30)){
                     it.write("text one", 10, 10)
                 }
@@ -759,9 +760,11 @@ class BurningImageServiceImageMagickTests extends GrailsUnitTestCase {
             })
 
             assertTrue result instanceof Worker
-            assertTrue fileExists('first.jpg')
+            assertTrue fileExists('jai.png')
 
-            result = burningImageService.doWith(getFilePath('image.bmp'), RESULT_DIR).execute('second', {img ->
+            CH.config.bi.renderingEngine = RenderingEngine.IMAGE_MAGICK
+
+            result = burningImageService.doWith(getFilePath('image.png'), RESULT_DIR).execute('imagemaick', {img ->
                 img.text(Color.RED, new Font('Arial', Font.PLAIN, 30)){
                     it.write("text one", 10, 10)
                 }
@@ -778,7 +781,30 @@ class BurningImageServiceImageMagickTests extends GrailsUnitTestCase {
             })
 
             assertTrue result instanceof Worker
-            assertTrue fileExists('second.bmp')
+            assertTrue fileExists('imagemaick.png')
         }
+
+        void testTest(){
+            CH.config.bi.renderingEngine = RenderingEngine.JAI
+            burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('jai_approximate'){
+                it.scaleApproximate(200, 200)
+            }
+
+            CH.config.bi.renderingEngine = RenderingEngine.IMAGE_MAGICK
+            burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('imagemagick_approximate'){
+                it.scaleApproximate(200, 200)
+            }
+
+            CH.config.bi.renderingEngine = RenderingEngine.JAI
+            burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('jai_accurate'){
+                it.scaleAccurate(200, 200)
+            }
+
+            CH.config.bi.renderingEngine = RenderingEngine.IMAGE_MAGICK
+            burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute('imagemagick_accurate'){
+                it.scaleAccurate(200, 200)
+            }
+        }
+        
     }
 

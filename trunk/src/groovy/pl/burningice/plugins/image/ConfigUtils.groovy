@@ -33,7 +33,11 @@ class ConfigUtils {
 
     private static final String CONFIG_NAMESPACE = 'bi'
 
-    private static final RenderingEngine DEFAULT_RENDERING_ENGINE = RenderingEngine.JAI 
+    private static final RenderingEngine DEFAULT_RENDERING_ENGINE = RenderingEngine.JAI
+
+    private static final int DEFAULT_IMAGE_MAGICK_QUALITY = 100
+
+    private static final int DEFAULT_IMAGE_MAGICK_COMPRESSION = 0
 
     static Map getContainerConfig(String imageContainerName){
         CH.config?."${CONFIG_NAMESPACE}"?."${imageContainerName}"
@@ -41,5 +45,13 @@ class ConfigUtils {
 
     static RenderingEngine getEngine(){
         return CH.config?."${CONFIG_NAMESPACE}"?.renderingEngine ?: DEFAULT_RENDERING_ENGINE
+    }
+
+    static int getImageMagickQuality(){
+        return CH.config?."${CONFIG_NAMESPACE}"?.imageMagickQuality ?: DEFAULT_IMAGE_MAGICK_QUALITY
+    }
+
+    static int getImageMagickCompression(){
+        return CH.config?."${CONFIG_NAMESPACE}"?.imageMagickCompression ?: DEFAULT_IMAGE_MAGICK_COMPRESSION
     }
 }
