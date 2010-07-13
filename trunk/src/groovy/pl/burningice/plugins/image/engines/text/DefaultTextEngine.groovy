@@ -21,26 +21,35 @@ THE SOFTWARE.
 */
 package pl.burningice.plugins.image.engines.text
 
-import javax.imageio.ImageIO
+import java.awt.Color
+import java.awt.Font
+import java.awt.image.BufferedImage
+import pl.burningice.plugins.image.file.ImageFile
 
 /**
  * Engine for typing text on image
  *
  * @author pawel.gdula@burningice.pl
  */
-class DefaultTextEngine {
+abstract class DefaultTextEngine implements TextEngine{
 
     /**
      * Object representing image file
      *
      */
-    def fileToMark
+    protected Color color
 
     /**
      * Object representing image canvas
      *
      */
-    def graphics
+    protected  Font font
+
+    /**
+     * Object representing uploaded image
+     *
+     */
+    protected  ImageFile loadedImage
 
     /**
      * Default class constructor
@@ -49,18 +58,18 @@ class DefaultTextEngine {
      * @param font Representing current font of text. Can be null
      * @param loadedImage Image to type on it
      */
-    DefaultTextEngine(color, font, loadedImage){
-        fileToMark = ImageIO.read(loadedImage.inputStream);
-        graphics = fileToMark.createGraphics();
-
-        if (color) {
-            graphics.setColor(color);
-        }
-
-        if (font) {
-            graphics.setFont(font);
-        }
+    public DefaultTextEngine(Color color, Font font, ImageFile loadedImage){
+        this.color = color
+        this.font = font
+        this.loadedImage = loadedImage
+        init()
     }
+
+    /**
+     * 
+     *
+     */
+    abstract protected void init()
 
     /**
      * Performs write actions
@@ -69,17 +78,12 @@ class DefaultTextEngine {
      * @param deltaX Offset from left border of image
      * @param deltaY Offset from top border of image
      */
-    def write(text, deltaX, deltaY) {
-        graphics.drawString(text, deltaX, deltaY);
-    }
+    abstract void write(String text, int deltaX, int deltaY) 
 
     /**
-     * Retutrns write result
+     * Returns write result
      *
      * @return BufferedImage objects representing current image
      */
-    def getResult(){
-        graphics.dispose();
-        fileToMark
-    }
+    abstract BufferedImage getResult()
 }

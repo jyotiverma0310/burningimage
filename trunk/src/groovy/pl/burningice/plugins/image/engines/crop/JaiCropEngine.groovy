@@ -22,25 +22,18 @@ THE SOFTWARE.
 package pl.burningice.plugins.image.engines.crop
 
 import java.awt.image.renderable.ParameterBlock
-import javax.media.jai.*;
+import javax.media.jai.*
+import java.awt.image.BufferedImage
+import pl.burningice.plugins.image.file.ImageFile;
 
 /**
- * Engine to cropping image
+ * Engine to cropping image by using JAI rendering engine
  *
  * @author pawel.gdula@burningice.pl
  */
-class DefaultCropEngine {
+class JaiCropEngine implements CropEngine{
 
-    /**
-     * Performs crop action on image
-     *
-     * @param loadedImage Object representing current image
-     * @param deltaX Offset from left border of image
-     * @param deltaY Offset from top border of image
-     * @param width Size (horizontal) of crop region
-     * @param width Size (vertical) of crop region
-     */
-    def execute(loadedImage, deltaX, deltaY, width, height){
+    BufferedImage execute(ImageFile loadedImage, deltaX, deltaY, width, height){
         ParameterBlock cropParams = new ParameterBlock();
         cropParams.addSource(loadedImage.getAsJaiStream());
         cropParams.add((float)deltaX) // delta x

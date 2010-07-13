@@ -22,7 +22,6 @@ THE SOFTWARE.
 
 package pl.burningice.plugins.image.engines.watermark
 
-import java.awt.AlphaComposite
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import pl.burningice.plugins.image.file.ImageFile
@@ -32,22 +31,12 @@ import magick.CompositeOperator
 import java.awt.Point
 
 /**
- * Base, default and only watermark engine
+ * Class for image watermarking with ImageMagick rendering engine
  *
  * @author pawel.gdula@burningice.pl
  */
-
-
 class ImageMagickWatermarkEngine extends DefaultWatermarkEngine {
 
-    /**
-     * Execute watermark impose
-     *
-     * @param File watermarkFile Object representing local watermark file
-     * @param ImageFile loadedImage Loaded image
-     * @param [:] position Map representing watermark location on image
-     * @return ImageFile
-     */
     protected BufferedImage doWatermark(File watermarkFile, ImageFile loadedImage, Map position, float alpha, Point offset){
         MagickImage watermark = new MagickImage(new ImageInfo(watermarkFile.absolutePath))
         ImageInfo imageSource = new ImageInfo()

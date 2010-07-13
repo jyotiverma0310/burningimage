@@ -96,7 +96,7 @@ class Worker {
    * @param image ImageFile object representing image to manipulate
    * @return Self
    */
-  private Worker work(outputFilePath, fileName, chain, image) {
+  private Worker work(outputFilePath, fileName, chain, ImageFile image) {
     chain(new Action(loadedImage: image, fileName: fileName))
     save(outputFilePath, image)
     this
@@ -104,14 +104,13 @@ class Worker {
 
   /**
    * Save changed image
+   * TODO: Check if this can be replaced by SaveCommand object
    *
    * @param outputFilePath Specify path to output image
    * @param image ImageFile object representing image to manipulate
    */
-  private void save(outputFilePath, image) {
-    ImageIO.write(ImageIO.read(image.inputStream),
-            image.extension,
-            new File(outputFilePath));
+  private void save(String outputFilePath, ImageFile image) {
+        ImageIO.write(ImageIO.read(new ByteArrayInputStream(image.getAsByteArray())), image.extension, new File(outputFilePath));
   }
 }
 

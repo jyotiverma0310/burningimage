@@ -22,7 +22,7 @@ THE SOFTWARE.
 package pl.burningice.plugins.image.engines.scale
 
 /**
- * 
+ * Specify scale type provided by BI 
  *
  * @author Pawel Gdula <pawel.gdula@burningice.pl>
  */
