@@ -1,4 +1,5 @@
 #summary Rendering engines
+#labels Featured,Phase-Deploy
 
 *Note*: Due probles with text writing on bmp files with !ImageMagick, currently, only for this file type, JAI rendering engine is used 
 
