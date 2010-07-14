@@ -39,7 +39,7 @@ Returns path to image in source directory
 
 === getFile ===
 
-Returns BufferedImage object representing image in result directory
+Returns !BufferedImage object representing image in result directory
 
 === getEmptyMultipartFile ===
 
