@@ -3,7 +3,7 @@
 
 = Introduction = 
 
-!BurningImage ships with simple mixin that can help you with image upload/manipulation testing. To enable image testing functionalities in your test just mix !FileUploadUtils into your tests, and specify result dir (see example below). By default source images are loaded from *./resources/testImages/*
+!BurningImage ships with simple mixin that can help you with image upload/manipulation testing. To enable image testing functionalities in your test just mix !FileUploadUtils into your tests, and specify result dir (see example below). 
 
 {{{
 
@@ -22,7 +22,7 @@ class MyTest extends GrailsUnitTestCase {
 
 }}}
 
-RESULT_DIR is relative path from root of your Grails app.
+RESULT_DIR is relative path from root of your Grails app. By default source images are loaded from *./resources/testImages/*
 
 === cleanUpTestDir ===
 
