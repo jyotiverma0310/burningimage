@@ -107,47 +107,7 @@ class MyTest extends GrailsUnitTestCase {
         file = getFile('image.jpg')
         assertTrue file.width <= 50
         assertTrue file.height <= 50
-
-        cleanUpTestDir()
-        assertFalse fileExists('image.jpg')
-
-        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
-            scaleResult = it.scaleApproximate(50, 2000)
-        }
-        assertEquals 'image.jpg', scaleResult
-        assertTrue result instanceof Worker
-        assertTrue fileExists('image.jpg')
-        file = getFile('image.jpg')
-        assertTrue file.width <= 50
-        assertTrue file.height <= 2000
-
-        cleanUpTestDir()
-        assertFalse fileExists('image.jpg')
-
-        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
-            scaleResult = it.scaleApproximate(2000, 50)
-        }
-        assertEquals 'image.jpg', scaleResult
-        assertTrue result instanceof Worker
-        assertTrue fileExists('image.jpg')
-        file = getFile('image.jpg')
-        assertTrue file.width <= 2000
-        assertTrue file.height <= 50
-
-        cleanUpTestDir()
-        assertFalse fileExists('image.jpg')
-
-        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
-            scaleResult = it.scaleApproximate(2000, 2000)
-        }
-        assertEquals 'image.jpg', scaleResult
-        assertTrue result instanceof Worker
-        assertTrue fileExists('image.jpg')
-        file = getFile('image.jpg')
-        assertTrue file.width <= 2000
-        assertTrue file.height <= 2000
     }
-
 }
 
 }}}
