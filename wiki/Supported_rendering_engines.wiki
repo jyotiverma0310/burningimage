@@ -11,7 +11,7 @@
 This engine is used by default, don't require any additional settings but produce images with quality lower than !ImageMagick. This engine don't allow for any additional configuration.
 
 == !ImageMagick ==
-!BurningImage uses !ImageMagick in version 6.3.9-Q16 through JMagick library. To enable this engine put this in your Config.groovy file:
+!BurningImage uses !ImageMagick in version 6.3.9-Q16 through JMagick library. It require additional server configuration. To enable this engine in BI put this in your Config.groovy file:
 
 {{{
 ...
