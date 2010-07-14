@@ -3,7 +3,7 @@
 
 = Introduction = 
 
-!BurningImage ships with simple mixin that can help you with image upload/manipulation testing. To enable image testing functionalities in your test just mix !FileUploadUtils into your tests, and specify result dir (see example below). 
+!BurningImage ships with simple mixin that can help you with image upload/manipulation testing. To enable image testing functionalities in your test just mix !FileUploadUtils in it, and specify result dir (see example below). 
 
 {{{
 
