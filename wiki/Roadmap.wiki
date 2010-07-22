@@ -3,13 +3,12 @@
 
 = Planned =
 
-=== Version 0.5 ===
- * Provide !ImageMagick support as alternative to JAI rendering engine
- * Make operations fully configurable
-
 = In progress =
 
 = Reached =
+
+=== Version 0.5 ===
+ * Provide !ImageMagick support as alternative to JAI rendering engine
 
 === Version 0.4 ===
  * @!DbImageContainer annotation - simple way to work with image stored in database
