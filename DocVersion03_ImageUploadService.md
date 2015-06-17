@@ -1,0 +1,251 @@
+# Introduction #
+
+BurningImage provide simple way to associate image with domain object and write it on the disk. With version 0.3, there was provided @FileImageContainer annotation that allows to mark domain object, that should be treat as image container. That prepared class can be handled by ImageUploadService, that provide methods to save and delete image. To display images for specified domain object instance, just use BurningImageTagLib, that provide necessary tags to display image, or retrieve path to it.
+
+## @FileImageContainer ##
+
+This annotation allows you mark domain class, that should provide functionality of image container that store media in file system.
+
+```
+
+import pl.burningice.plugins.image.ast.FileImageContainer 
+
+@FileImageContainer()
+class User {
+    static constraints = {
+    }
+}
+
+@FileImageContainer(field = 'logo')
+class Group {
+    static constraints = {
+    }
+}
+
+```
+
+Domain class User in now marked as image container. Now you can bind image to it using default "image" filed. Domain class Group is image container too, but with defined field "avatar" where image can be binded. This allows, to bind image directly from html form.
+
+For example, if we have class:
+
+```
+
+@FileImageContainer(field = 'photo')
+class Product {
+    
+    String name
+
+    Double price
+    
+    static constraints = {
+    }
+}
+
+```
+
+
+we can provide form like:
+
+```
+
+<form action="saveProduct" method="post" enctype="multipart/form-data">
+    Product name
+    <input type="text" name="name" />
+
+    Product price
+    <input type="text" name="price" />
+
+    Product image
+    <input type="file" name="photo" />
+</form>
+
+```
+
+## Configuration ##
+
+Each domain object marked by @FileImageContainer annotation must provide configuration data about where uploaded image should be store, what type of operations should be performed on image, and what type of validation constraints image must meet. Name of the domain is without package name.
+
+```
+
+import pl.burningice.plugins.image.engines.scale.ScaleType
+
+bi.NameOfDomainClass = [
+    outputDir: 'path/to/output/dir',
+    prefix: 'mySuperImage',
+    images: ['large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE],
+                      watermark:[sign:'images/watermark.png', offset:[top:10, left:10]]],
+             'small':[scale:[width:100, height:100, type:ScaleType.ACCURATE],
+                      watermark:[sign:'images/watermark.png', offset:[top:10, left:10]]]],
+    constraints:[
+        nullable:true,
+        maxSize:5000,
+        contentType:['image/gif', 'image/png']
+    ]
+]
+
+```
+
+**outputDir**: configuration of directory where image should be stored.
+
+It can be provided in two forms:
+  * as a string (see example above), then it will be treated as relative path from GRAILS\_PROJECT/web-app
+  * as a map with keys "path" that determine absolute path to image storage directory and "alias" key for aliasing path, e.g.:
+
+```
+
+import pl.burningice.plugins.image.engines.scale.ScaleType
+
+bi.NameOfDomainClass = [
+    outputDir: ['path':'/var/www/my-app/images/', 'alias':'/upload/'],
+    prefix: 'mySuperImage',
+    images: ['large':[scale:[width:800, height:600, type:ScaleType.APPROXIMATE],
+                      watermark:[sign:'images/watermark.png', offset:[top:10, left:10]]],
+             'small':[scale:[width:100, height:100, type:ScaleType.ACCURATE],
+                      watermark:[sign:'images/watermark.png', offset:[top:10, left:10]]]],
+    constraints:[
+        nullable:true,
+        maxSize:5000,
+        contentType:['image/gif', 'image/png']
+    ]
+]
+
+```
+
+This approach need additional server configuration to point alias on absolute path.
+
+**prefix**: name of the image prefix that should be add to while saving image, optional
+
+**images**: map with information how many images should be saved (in this case two) and what type of operations should be performed on it. Configuration allows to specify two types of operations: scale and watermark. Key in map will be used to identify image. Required parameter.
+
+**constraints**: optional parameter that hold information about validation rules. If skipped, no validation is performed.
+
+**constraints.nullable**: specify if image can be can by null/empty. Error code: _className.fieldName.nullable_
+
+**constraints.maxSize**: specify max allowed size of uploaded image in  bytes. Error code: _className.fieldName.maxSize.exceeded_
+
+**constraints.contentType**: specify allowed content type of image. Error code: _className.fieldName.contentType.invalid_
+
+## ImageUploadService ##
+
+This service handle saving/deleting images associated with domain object marked by @FileImageContainer.
+
+Lets say that there is defined domain object User:
+
+```
+
+@FileImageContainer(field = 'avatar')
+class User {
+    static constraints = {
+    }
+}
+
+```
+
+to save image binded to field avatar, call:
+
+```
+....
+
+imageUploadService.save(userInstance)
+
+....
+
+```
+
+Passed userInstance must be saved already. This is required to get unique part in image file name. If it will not be save, IlleagalArgumentException will be throw.
+
+This action will save image, but will not save information about him in domain object - it must be saved outside service:
+
+```
+....
+
+imageUploadService.save(userInstance)
+userInstance.save()
+
+....
+
+```
+
+or you can call save method with shouldBeSaved parameter set on true:
+
+```
+....
+
+imageUploadService.save(userInstance, true)
+
+....
+
+```
+
+As it was mentioned before, there is no possibility to configure image cropping/text writing in general FileImageContainer configuration. But it can be done by using action wrapper in ImageUploadService:
+
+```
+
+imageUploadService.save(userInstance, {image, name, action ->
+    if (name == 'large'){
+       image.text({it.write("Text on large image", 300, 300)})
+    }
+
+    action()
+    
+
+    if (name == 'small'){
+        image.text({it.write("Text on small image", 10, 50)})
+    }
+})
+
+```
+
+It allows you to wrap configured actions (represented in example by closure action) by actions provided by [BurningImageService](DocVersion03_BurningImageService.md) (scale, crop, watermark, write text).
+
+Parameter name represents name of image that is currently creating (key form bi.DomainClassName.images map) and allows to specify with image should be affected by additional action.
+
+In this example, image with name "large" will have write text and next configured actions will be performed. Image with name "small" will have actions performed and next text will be written on action result.
+
+To delete image files, execute:
+
+```
+
+....
+
+imageUploadService.delete(userInstance)
+userInstance.save()
+
+....
+
+```
+
+or, with flag shouldBeSaved set on true
+
+```
+
+....
+
+imageUploadService.delete(userInstance, true)
+
+....
+
+```
+
+
+## BurningImageTagLib ##
+
+Resource tag will return path to image. Size attribute represents name of image (key form bi.DomainClassName.images map) and bean attribute specify domain object that image is associated with.
+
+```
+<bi:resource size="" bean="" />
+```
+
+Img tag will render img html tag, that will display specified image. As above, size attribute represents name of image (key form bi.DomainClassName.images map) and bean attribute specify domain object that image is associated with. Tag allows to provide standard html attributes (id, name, title, onclick)
+
+```
+<bi:img size="" bean="" />
+```
+
+If you want to check if specified image container has associated images, just use hasImage tag:
+
+```
+<bi:hasImage bean="${imageContainer}">
+    And this is your image: <bi:img size="large" bean="${imageContainer}" />
+</bi:hasImage>
+```

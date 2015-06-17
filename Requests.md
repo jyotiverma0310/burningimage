@@ -1,0 +1,1 @@
+If you have some ideas, request, comments about how this plugin should evolve, and what type functionality should provide, leave comment (but before that, please check if your request isn't on plugin [roadmap](http://code.google.com/p/burningimage/wiki/Roadmap))

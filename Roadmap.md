@@ -1,0 +1,24 @@
+# Planned #
+
+# In progress #
+
+# Reached #
+
+### Version 0.5 ###
+  * Provide ImageMagick support as alternative to JAI rendering engine
+
+### Version 0.4 ###
+  * @DbImageContainer annotation - simple way to work with image stored in database
+
+
+### Version 0.3 ###
+  * crop image
+  * write text on image
+  * ImageUploadService for handling saving and manipulating images uploaded by user
+  * @FileImageContainer annotation - simple way to work with images stored in specified directory
+
+### Version 0.2 ###
+
+  * scale image with approximate width and height
+  * scale image with accurate width and height
+  * add image watermark

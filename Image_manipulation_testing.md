@@ -1,0 +1,110 @@
+# Introduction #
+
+BurningImage ships with simple mixin that can help you with image upload/manipulation testing. To enable image testing functionalities in your test just mix FileUploadUtils in it, and specify result dir (see example below).
+
+```
+
+import grails.test.GrailsUnitTestCase
+import pl.burningice.plugins.image.test.FileUploadUtils
+
+@Mixin(FileUploadUtils)
+class MyTest extends GrailsUnitTestCase {
+   
+    protected static final def RESULT_DIR = './resources/resultImages/'
+
+    void testSomething(){
+    }
+
+}
+
+```
+
+RESULT\_DIR is relative path from root of your Grails app. By default source images are loaded from **./resources/testImages/**
+
+### cleanUpTestDir ###
+
+Allows to clean up result dir (it will delete everything inside test dir apart from .svn dir)
+
+### fileExists ###
+
+Allows to check if specified file exists in result directory
+
+
+### getFilePath ###
+
+Returns path to image in source directory
+
+### getFile ###
+
+Returns BufferedImage object representing image in result directory
+
+### getEmptyMultipartFile ###
+
+Returns empty (0 bytes length) MultipartFile
+
+### getMultipartFile ###
+
+Returns image from source directory as MultipartFile
+
+
+## Example usage ##
+
+```
+
+import grails.test.GrailsUnitTestCase
+import pl.burningice.plugins.image.test.FileUploadUtils
+
+@Mixin(FileUploadUtils)
+class MyTest extends GrailsUnitTestCase {
+   
+    protected static final def RESULT_DIR = './resources/resultImages/'
+
+    private def burningImageService
+
+    protected void setUp() {
+        super.setUp()
+        cleanUpTestDir()
+        burningImageService = new BurningImageService()
+    }
+
+    void testBaseSetupMultipart(){
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(null, null)
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getEmptyMultipartFile(), null)
+        }
+
+        shouldFail(IllegalArgumentException){
+            burningImageService.doWith(getMultipartFile('image.jpg'), null)
+        }
+
+        shouldFail(FileNotFoundException){
+            burningImageService.doWith(getMultipartFile('image.jpg'), 'not/exists/dir')
+        }
+
+        shouldFail(FileNotFoundException){
+            burningImageService.doWith(getEmptyMultipartFile(), RESULT_DIR)
+        }
+
+        assertTrue burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR) instanceof Worker
+    }
+
+    void testScaleApproximateMultipartFile() {
+        assertFalse fileExists('image.jpg')
+        def scaleResult, result, file
+
+        result = burningImageService.doWith(getMultipartFile('image.jpg'), RESULT_DIR).execute {
+            scaleResult = it.scaleApproximate(50, 50)
+        }
+        assertEquals 'image.jpg', scaleResult
+        assertTrue result instanceof Worker
+        assertTrue fileExists('image.jpg')
+        file = getFile('image.jpg')
+        assertTrue file.width <= 50
+        assertTrue file.height <= 50
+    }
+}
+
+```

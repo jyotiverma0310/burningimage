@@ -1,0 +1,144 @@
+# Introduction #
+
+To start using BurningImageService in your grails application just add property
+
+```
+def burningImageService
+```
+
+in your controller / service. Grails will initialize and inject it to this variable. Now we must specify what we want to manipulate and where it should be stored. Plug-in could manipulate images from two source. It could be file already stored on server:
+
+```
+burningImageService.doWith('path/to/image', 'path/to/output/dir')
+```
+
+or submitted by user as MultiparFile:
+
+```
+def file = request.getFile('foto')
+burningImageService.doWith(file, 'path/to/output/dir')
+```
+
+If there is no file in specified path or submitted file is empty FileNotFoundException will be throw.
+
+There are four type of files supported: GIF, JPG, PNG, BMP. All files will be saved in specified location in the same format, expect of GIF (because JAI read only support), that will be saved as JPG.
+
+This is example of action on image:
+
+```
+
+def orginalFileName
+
+burningImageService.doWith('path/to/my/file.jpg', 'path/to/output/dir')
+                   .execute {
+                       it.scaleApproximate(800, 600)
+                       orginalFileName = it.watermark('path/to/watermark', ['right':10, 'bottom': 10])
+                    }
+                   .execute ('thumbnail', {
+                       it.scaleAccurate(200, 200)
+                    })
+```
+
+This action produce two result images in specified directory - file.jpg with size not greater than 800x600 and watermark placed in right bottom (10 pixels from right and 10 pixels from bottom) and thumbnail.jpg with dimension 200x200.
+
+Each execute method perform action on image. If there will not by image name specified for action (like in second execute method) original file name will be used.
+
+Inside closure we specify types of action. You could specify this actions in any order. So watermark could be added before scaling or after. Each action in closure as a result return name of output file (see orginalFileName variable)
+
+
+
+## Scaling ##
+
+#### Approximate image scaling ####
+
+This type of scaling not guarantee that result thumbnail will have requested size but it guarantee that size will not be greater than specified by user. Output image will not be deformed and proportions of image will be the same:
+
+```
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {
+                       it.scaleApproximate(800, 600)
+                    }
+
+```
+
+#### Accurate image scaling ####
+
+This type of scaling guarantee that result image will be exact size as user request. If proportions of image not allow to scale image to requested size, it will scale it to greater image side and next cut from the center rectangle with size specified by user. There will not be image deformation.
+
+```
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {
+                       it.scaleAccurate(200,200)
+                    }
+```
+
+
+## Watermarking ##
+
+Only path to watermark is required. Watermark location is optional. If there is no location map, watermark will be put on the center of image. If you want to specify location, remember that mix of positions top-bottom and left-right is not allowed. There could be specified only one location option - in other case it will be centered.
+
+
+```
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {
+                       it.watermark('path/to/watermark', ['top':10, 'bottom': 10])
+                    }
+```
+
+## Cropping ##
+
+The two first parameters defines offset from left top corner of image, two last parameters defines crop size. If cropped region not fit on image (offset is over image or crop size is to big) IllegalArgumentException will be thrown.
+
+```
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {
+                       it.crop(0,0,50,50)
+                   }
+```
+
+## Text writing ##
+
+This functionality allows to write text on image. Write method take three parameters: text to write, and offset from top left corner. Color and font can be set.
+
+```
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {img ->
+                        img.text(Color.WHITE, new Font('Arial', Font.PLAIN, 30), {
+                            it.write("text one", 10, 10)
+                            it.write("text two", 100, 100)
+                            it.write("text three", 200, 200)
+                        })
+                   }
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {img ->
+                        img.text(Color.WHITE, {
+                            it.write("text one", 10, 10)
+                            it.write("text two", 100, 100)
+                            it.write("text three", 200, 200)
+                        })
+                   }
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {img ->
+                        img.text(new Font('Arial', Font.PLAIN, 30),{
+                            it.write("text one", 10, 10)
+                            it.write("text two", 100, 100)
+                            it.write("text three", 200, 200)
+                        })
+                   }
+
+burningImageService.doWith('path/to/my/file', 'path/to/output/dir')
+                   .execute {img ->
+                        img.text({
+                            it.write("text one", 10, 10)
+                            it.write("text two", 100, 100)
+                            it.write("text three", 200, 200)
+                        })
+                   }
+```
